@@ -1,0 +1,9 @@
+{
+	"name":"LiquidBounce",
+	"version":"0.0.1",
+	"author":"Jake Callery <jake@subvoicestudios.com>",
+	"description":"LiquidBounce",
+	"dependencies": {
+		"requirejs" :"*"
+	}
+}
