@@ -48,6 +48,12 @@ define(['jac/events/JacEvent'], function (JacEvent) {
 			}
 		};
 
+		EventDispatcher.prototype.removeAllHandlersByType = function($type){
+			if(this.handlers[$type] instanceof Array){
+				this.handlers[$type] = [];
+			}
+		};
+
 		/**
 		 * Fire an event to all attached handlers
 		 * @param {JacEvent|Event} $event
