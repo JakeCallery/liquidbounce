@@ -17,6 +17,8 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, Game
 
 	var game = new Game();
 	game.init();
-	var bp = game.createGameObj(GameObjTypes.BLOB_PART, {x:0,y:0});
-	game.removeGameObj(bp);
+	var bp = game.createGameObj(GameObjTypes.BLOB_PART, {x:20,y:45});
+	L.log('BP (should now be 20,45): ' + bp.x + '/' + bp.y);
+	bp.destroy();
+	L.log('BP (should now be -1,-1): ' + bp.x + ' / ' + bp.y);
 });

@@ -11,14 +11,13 @@ function(){
 	    /**
 	     *
 	     * @param {Object} $obj item to compare to interface
-	     * @param {Array.<Object>} $interfaceList interface object to get a property list from
-	     * @param {Boolean} [$throwError=true] throw an error if it does not match
+	     * @param {...} $interfaceList interface object to get a property list from
 	     * @returns {Boolean|String} true if valid, reason string if not
 	     */
-	    InterfaceUtils.implements = function($obj, $interfaceList, $throwError){
-			if($throwError === undefined){
-				$throwError = true;
-			}
+	    InterfaceUtils.isImplemented = function($obj, $interfaceList){
+
+		    $interfaceList = Array.prototype.slice.call(arguments);
+		    $interfaceList.shift();
 
 		    var failReason = '';
 
@@ -29,7 +28,7 @@ function(){
 			    for(var prop in iface){
 				    if(iface.hasOwnProperty(prop)){
 					    //Check to see if the $obj has the same property
-					    if($obj.hasOwnProperty(prop)){
+					    if($obj.hasOwnProperty(prop)){ //TODO: maybe also check prototype? will that fix it? (maybe use 'in' instead)
 						    //make sure the property types are similar'ish at a basic level
 						    if(typeof iface[prop] === typeof $obj[prop]){
 							    if(typeof prop === 'function'){
@@ -51,14 +50,11 @@ function(){
 
 		    if(failReason !== ''){
 			    //failed
-			    if($throwError === true){
-				    throw new Error(failReason);
-			    }
-
 			    return failReason;
+		    } else {
+			    return true;
 		    }
 
-		    return true;
 	    };
         
         
