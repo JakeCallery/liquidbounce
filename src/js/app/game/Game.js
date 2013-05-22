@@ -8,7 +8,7 @@ define([
 'jac/utils/ObjUtils',
 'app/game/GameObjTypes',
 'jac/logger/Logger',
-'app/parts/BlobPart',
+'app/parts/blob/BlobPart',
 'jac/pool/Pool',
 'jac/utils/EventUtils',
 'app/game/events/GameObjEvent'],

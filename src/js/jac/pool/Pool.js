@@ -16,7 +16,7 @@ function(IPoolable, InterfaceUtils){
         function Pool($objCtor){
 
 	        //Quick poolable sanity check
-	        var poolableResult = InterfaceUtils.isImplemented($objCtor, IPoolable);
+	        var poolableResult = InterfaceUtils.classImplements($objCtor, IPoolable);
 			if(poolableResult !== true){
 				throw new Error(poolableResult);
 			}
