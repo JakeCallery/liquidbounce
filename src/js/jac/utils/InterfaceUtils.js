@@ -9,50 +9,82 @@ function(){
         var InterfaceUtils = {};
 
 	    /**
-	     *
-	     * @param {Object} $obj item to compare to interface
-	     * @param {...} $interfaceList interface object to get a property list from
+	     * Determine if a class has all of the required functions defined by the passed in interfaces
+	     * if inheritance is used, the constructor must have a superclass (from ObjUtils.inheritPrototype)
+	     * @param {Object} $class item to compare to interface
+	     * @param {...} $interfaceArgs interface object to get a property list from
 	     * @returns {Boolean|String} true if valid, reason string if not
 	     */
-	    InterfaceUtils.isImplemented = function($obj, $interfaceList){
+	    InterfaceUtils.isImplemented = function($class, $interfaceArgs){
 
 		    $interfaceList = Array.prototype.slice.call(arguments);
 		    $interfaceList.shift();
 
 		    var failReason = '';
 
-		    for(var i = 0; i < $interfaceList.length; i++){
-			    if(failReason !== ''){break;}
+		    var propMap = {};
+			var propCount = 0;
 
-			    var iface = $interfaceList[i];
-			    for(var prop in iface){
-				    if(iface.hasOwnProperty(prop)){
-					    //Check to see if the $obj has the same property
-					    var objProp = null;
-					    if($obj.hasOwnProperty(prop)){
-							objProp = $obj[prop];
-					    } else if($obj.prototype.hasOwnProperty(prop)){
-							objProp = $obj.prototype[prop];
-					    }
+		    for(var l = 0; l < $interfaceList.length; l++){
+				for (var p in $interfaceList[l]){
+					if($interfaceList[l].hasOwnProperty(p)){
+						if(!propMap.hasOwnProperty(p)){
+							propMap[p] = $interfaceList[l][p];
+							propCount++;
+						} else {
+							//TODO: this should allow interfaces with the same function names as long as the signatures/param counts match
+							throw new Error('two or more interfaces have the same property');
+						}
 
-					    if(objProp !== null){
-						    //make sure the property types are similar'ish at a basic level
-						    if(typeof iface[prop] === typeof objProp){
-							    if(typeof prop === 'function'){
-								    //check argument length
-								    if(iface[prop].length !== objProp.length){
-									    failReason = 'Argument count mismatch for function: ' + prop + ' with interface index ' + i;
-								    }
-							    }
-						    } else {
-							    failReason = 'Property types don\'t match for: ' + prop + ' with interface index ' + i;
-						    }
+					}
+				}
+		    }
 
-					    } else {
-						    failReason = 'Property \'' + prop + '\' not found on object with interface index ' + i;
-					    }
+		    var tmp = $class;
+		    do {
+				for(var prop in propMap){
+					var propFound = true;
+					if(propMap.hasOwnProperty(prop)){
+						if(tmp.hasOwnProperty(prop)){
+							//basic type check prop
+							if(typeof propMap[prop] !== typeof tmp[prop]){
+								failReason = 'Property types don\'t match for: ' + prop;
+								propFound = false;
+							} else if(typeof propMap[prop] === 'function'){
+								//if function, check param counts
+								if(propMap[prop].length !== tmp[prop].length){
+									propFound = false;
+									failReason = 'Argument count mismatch for function: ' + prop + ' in interface list';
+								}
+							}
+
+							//Found one
+							if(propFound === true){
+								delete propMap[prop];
+								propCount--;
+							}
+						}
+					}
+				}
+				if(tmp.prototype){
+					tmp = tmp.prototype
+				} else if(tmp.hasOwnProperty('constructor') && tmp.constructor.hasOwnProperty('superClass')){
+					tmp = tmp.constructor.superClass;
+				} else {
+					tmp = null;
+				}
+
+		    } while(propCount > 0 && tmp !== null);
+
+		    if(propCount > 0){
+			    //not all props found
+			    var notFoundList = [];
+			    for(var pr in propMap){
+				    if(propMap.hasOwnProperty(pr)){
+					    notFoundList.push(pr);
 				    }
 			    }
+			    failReason = 'Interfaces not fully implemented, missing: ' + notFoundList;
 		    }
 
 		    if(failReason !== ''){
@@ -63,7 +95,6 @@ function(){
 		    }
 
 	    };
-        
         
         //Return constructor
         return InterfaceUtils;
