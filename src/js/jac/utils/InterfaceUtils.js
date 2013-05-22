@@ -28,12 +28,19 @@ function(){
 			    for(var prop in iface){
 				    if(iface.hasOwnProperty(prop)){
 					    //Check to see if the $obj has the same property
-					    if($obj.hasOwnProperty(prop)){ //TODO: maybe also check prototype? will that fix it? (maybe use 'in' instead)
+					    var objProp = null;
+					    if($obj.hasOwnProperty(prop)){
+							objProp = $obj[prop];
+					    } else if($obj.prototype.hasOwnProperty(prop)){
+							objProp = $obj.prototype[prop];
+					    }
+
+					    if(objProp !== null){
 						    //make sure the property types are similar'ish at a basic level
-						    if(typeof iface[prop] === typeof $obj[prop]){
+						    if(typeof iface[prop] === typeof objProp){
 							    if(typeof prop === 'function'){
 								    //check argument length
-								    if(iface[prop].length !== $obj[prop].length){
+								    if(iface[prop].length !== objProp.length){
 									    failReason = 'Argument count mismatch for function: ' + prop + ' with interface index ' + i;
 								    }
 							    }
