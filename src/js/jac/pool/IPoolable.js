@@ -12,7 +12,7 @@ function(){
         var IPoolable = {};
 
         IPoolable.init = function($args){};
-	    IPoolable.recycle = function($args){};
+	    IPoolable.recycle = function(){};
 
         //Return constructor
         return IPoolable;
