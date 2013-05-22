@@ -41,20 +41,26 @@ function(){
 		    }
 
 		    var tmp = $class;
+		    var breakOut = false;
 		    do {
 				for(var prop in propMap){
+					if(breakOut === true){break;}
 					var propFound = true;
 					if(propMap.hasOwnProperty(prop)){
 						if(tmp.hasOwnProperty(prop)){
 							//basic type check prop
 							if(typeof propMap[prop] !== typeof tmp[prop]){
+								if(failReason !== ''){failReason += '\n';}
 								failReason = 'Property types don\'t match for: ' + prop;
 								propFound = false;
+								breakOut = true;
 							} else if(typeof propMap[prop] === 'function'){
 								//if function, check param counts
 								if(propMap[prop].length !== tmp[prop].length){
+									if(failReason !== ''){failReason += '\n';}
 									propFound = false;
 									failReason = 'Argument count mismatch for function: ' + prop + ' in interface list';
+									breakOut = true;
 								}
 							}
 
@@ -74,7 +80,7 @@ function(){
 					tmp = null;
 				}
 
-		    } while(propCount > 0 && tmp !== null);
+		    } while(propCount > 0 && tmp !== null && breakOut === false);
 
 		    if(propCount > 0){
 			    //not all props found
@@ -84,7 +90,9 @@ function(){
 					    notFoundList.push(pr);
 				    }
 			    }
-			    failReason = 'Interfaces not fully implemented, missing: ' + notFoundList;
+
+			    if(failReason !== ''){failReason += '\n';}
+			    failReason += 'Interfaces not fully implemented, missing: ' + notFoundList;
 		    }
 
 		    if(failReason !== ''){
