@@ -21,11 +21,13 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
          * @extends {EventDispatcher}
          * @constructor
          */
-        function Game($gameCanvas, $gameWidth, $gameHeight){
+        function Game($window, $gameCanvas, $gameWidth, $gameHeight){
             //super
             EventDispatcher.call(this);
 
 	        var self = this;
+
+		    this.window = $window;
 
 		    /**@type int*/
 		    var blobPartNextIndex = -1;
@@ -34,9 +36,10 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    var blobParts = [];
 
 		    var delegateMap = {};
-
 		    var blobPartPool = new Pool(BlobPart);
 
+		    this.updateId = -1;
+		    //this.updateDelegate = EventUtils.bind(self, self.update);
 		    this.renderEngine = new RenderEngine($gameCanvas, $gameWidth, $gameHeight);
 
 		    /**
@@ -62,8 +65,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    };
 
 		    var updateGame = function(){
-			    //TODO: update game
-			    L.log('Update Game', '@game');
+			    //L.log('Update Game', '@frame');
 
 			    var i = 0;
 			    var l = 0;
@@ -79,7 +81,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    };
 
 		    var renderGame = function(){
-			    L.log('Render Game', '@game');
+			    //L.log('Render Game', '@frame');
 
 			    self.renderEngine.clearFrame();
 			    self.renderEngine.renderBlobParts(blobParts);
@@ -93,11 +95,18 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
 		    };
 
-		    this.startGame = function(){
-			    //TODO: Update via requestAnimationFrame or some other kind of timer system
-			    //TMP, just manually update once for now
+		    this.update = function(){
+				self.updateId = self.window.requestAnimationFrame(self.update);
 			    updateGame();
-			    renderGame();   //TODO: START HERE - follow the render path and fill in the rest of the holes
+			    renderGame();
+		    };
+
+		    this.startGame = function(){
+			    self.update();
+		    };
+
+		    this.pauseGame = function(){
+			    self.window.cancelAnimationFrame(self.updateId);
 		    };
 
 		    /**

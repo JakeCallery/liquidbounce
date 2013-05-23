@@ -35,7 +35,9 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 
 	    RenderEngine.prototype.clearFrame = function(){
 		    //Clear
-		    this.renderCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+		    this.renderCtx.fillStyle = '#000000';
+		    //this.renderCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+		    this.renderCtx.fillRect(0,0,this.canvasWidth, this.canvasHeight);
 	    };
 
 	    /**
