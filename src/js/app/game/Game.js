@@ -42,14 +42,16 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    /**
 		     * create and add a blob part to the game
 		     * @param {Object} $configObj data object that has key/vals to define the object
+		     * @param {BlobRenderSource} $renderSource
 		     * returns {BlobPart}
 		     */
-		    var createAndAddBlobPart = function($configObj){
-				var bp = blobPartPool.getObject($configObj);
+		    var createAndAddBlobPart = function($configObj, $renderSource){
+				var bp = blobPartPool.getObject($configObj, $renderSource);
 			    blobParts.push(bp);
 
 			    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
+			    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
 
 			    return bp;
 		    };
@@ -62,21 +64,37 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    var updateGame = function(){
 			    //TODO: update game
 			    L.log('Update Game', '@game');
+
+			    var i = 0;
+			    var l = 0;
+				var obj;
+
+			    //Blob Parts
+			    for(i = 0, l = blobParts.length; i < l; i++){
+					obj = blobParts[i];
+				    obj.renderX = obj.x + obj.renderOffsetX;
+				    obj.renderY = obj.y + obj.renderOffsetY;
+			    }
+
 		    };
 
 		    var renderGame = function(){
 			    L.log('Render Game', '@game');
+
+			    self.renderEngine.clearFrame();
+			    self.renderEngine.renderBlobParts(blobParts);
+
 		    };
 
 		    this.init = function(){
-			    blobPartPool.fill(100,{x:0,y:0});
+			    //blobPartPool.fill(100,{x:0,y:0});
 
 			    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
 		    };
 
 		    this.startGame = function(){
-			    //TODO: Update via requestAnimationFrame
+			    //TODO: Update via requestAnimationFrame or some other kind of timer system
 			    //TMP, just manually update once for now
 			    updateGame();
 			    renderGame();   //TODO: START HERE - follow the render path and fill in the rest of the holes
@@ -85,14 +103,17 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    /**
 		     * Create a game object, and properly set it up in the game
 		     * @param {String} $objType (enum'd in GameObjTypes)
-		     * @param {Object} $configObj
+		     * @param {...} $args
 		     * @returns {Object} the newly created object
 		     */
-		    this.createGameObj = function($objType, $configObj){
-				var obj = null;
+		    this.createGameObj = function($objType, $args){
+				var self = this;
+			    var obj = null;
+			    $args = Array.prototype.slice.call(arguments,1);
+
 			    switch($objType){
 				    case GameObjTypes.BLOB_PART:
-					    obj = createAndAddBlobPart($configObj);
+					    obj = createAndAddBlobPart.apply(self, $args);
 					    obj.addHandler(GameObjEvent.DESTROYED, EventUtils.bind(self, handleGameObjDestroyed));
 					    break;
 
@@ -117,6 +138,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 						    L.log('BlobParts Length: ' + blobParts.length, '@game');
 						    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
 						    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
+						    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
 
 					    } else {
 						    throw new Error('Can\'t remove obj, couldn\'t find in list');

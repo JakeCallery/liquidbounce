@@ -25,11 +25,8 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, Game
 	var testBlobConfig = {};
 	testBlobConfig.x = 50;
 	testBlobConfig.y = 50;
-	testBlobConfig.width = testBlobSrc.width;
-	testBlobConfig.height = testBlobSrc.height;
-	testBlobConfig.renderSrc = testBlobSrc.srcContext;
 
-	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig);
+	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig, testBlobSrc);
 	//bp.destroy();
 
 	game.startGame();

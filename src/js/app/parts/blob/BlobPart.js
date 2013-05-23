@@ -30,11 +30,15 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes){
 
 	        /**@type {CanvasRenderingContext2D}*/
 	        this.renderSrc = null;
+	        this.renderImg = null;
 	        this.renderWidth = 0;
 	        this.renderHeight = 0;
 	        this.renderX = 0;
 	        this.renderY = 0;
 	        this.renderZ = 0;
+
+	        this.renderOffsetX = 0;
+	        this.renderOffsetY = 0;
 
         }
         
@@ -47,13 +51,23 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes){
 	    };
 
 	    //// IPoolable ////
-	    BlobPart.prototype.init = function($configObj){
+	    /**
+	     * set up blob (called from pool on add)
+	     * @param {Object} $configObj
+	     * @param {BlobRenderSource} $renderSource
+	     */
+	    BlobPart.prototype.init = function($configObj, $renderSource){
 			this.x = this.prevX = $configObj.x;
 		    this.y = this.prevY = $configObj.y;
-		    this.renderWidth = $configObj.width;
-		    this.renderHeight = $configObj.height;
-		    this.renderSrc = $configObj.srcContext;
-		    L.log('Inint Blobpart', '@bpart');
+
+		    this.renderSrc = $renderSource;
+		    this.renderImg = $renderSource.srcImage;
+		    this.renderWidth = $renderSource.width;
+		    this.renderHeight = $renderSource.height;
+		    this.renderOffsetX = -(Math.round((this.renderWidth/2)));
+		    this.renderOffsetY = -(Math.round((this.renderHeight/2)));
+
+		    L.log('Init Blobpart', '@bpart');
 	    };
 
 	    BlobPart.prototype.recycle = function(){

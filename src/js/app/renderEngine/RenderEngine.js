@@ -28,38 +28,29 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 	        /**@type {canvas}*/this.renderCanvas = $renderCanvas;
 	        this.renderCtx = this.renderCanvas.getContext('2d');
 
-	        this.renderItems = [];
-
         }
 
         //Inherit / Extend
         ObjUtils.inheritPrototype(RenderEngine,EventDispatcher);
 
-	    RenderEngine.prototype.addBitmapRenderable = function($item){
-			var result = InterfaceUtils.objectImplements($item, IBitmapRenderable)
-		    if(result !== true){
-			    throw new Error(result);
-		    }
-
-		    //TODO: add to render list
-
+	    RenderEngine.prototype.clearFrame = function(){
+		    //Clear
+		    this.renderCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 	    };
 
 	    /**
-	     * Renders all renderable things
+	     * Renders blobParts
+	     * @param {Array.<BlobPart>} $blobPartList
 	     */
-	    RenderEngine.prototype.render = function(){
+	    RenderEngine.prototype.renderBlobParts = function($blobPartList){
 			var self = this;
-			//Clear
-		    this.renderCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
 		    var item = null;
 
-		    for(var i = 0, l = this.renderItems.length; i < l; i++){
-				item = this.renderItems[i];
+		    for(var i = 0, l = $blobPartList.length; i < l; i++){
+				item = $blobPartList[i];
 
-			    //TODO: copy bitmap data to game canvas, use render.x/.y
-
+			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
 		    }
 
 

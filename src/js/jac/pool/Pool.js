@@ -15,6 +15,7 @@ function(IPoolable, InterfaceUtils){
          */
         function Pool($objCtor){
 
+	        var self = this;
 	        //Quick poolable sanity check
 	        var poolableResult = InterfaceUtils.classImplements($objCtor, IPoolable);
 			if(poolableResult !== true){
@@ -33,8 +34,9 @@ function(IPoolable, InterfaceUtils){
 	         * @private
 	         */
 	        var addOneToPool = function($args){
+		        $args = Array.prototype.slice.call(arguments);
 		        var obj = new ObjCtor();
-		        obj.init.apply(obj, arguments);
+		        obj.init.apply(obj, $args);
 		        allPoolable.push(obj);
 		        availStack.push(obj);
 
@@ -49,16 +51,17 @@ function(IPoolable, InterfaceUtils){
 	         */
 	        this.getObject = function($args){
 		        var obj = null;
-
+				$args = Array.prototype.slice.call(arguments);
 		        if(availStack.length > 0){
 			        //Get from pool
 			        obj = availStack.pop();
 
 			        //init obj
-			        obj.init.apply(obj, arguments);
+			        obj.init.apply(obj, $args);
 		        } else {
 			        //Make new
-			        obj = addToPool(arguments);
+			        obj = addOneToPool.apply(self, $args);
+			        availStack.pop();
 		        }
 
 		        return obj;
@@ -80,8 +83,7 @@ function(IPoolable, InterfaceUtils){
 	         */
 	        this.fill = function($count, $args){
 				for(var i = 0; i < $count; i++){
-					var args = Array.prototype.slice.call(arguments);
-					args.shift();
+					var args = Array.prototype.slice.call(arguments,1);
 					addOneToPool.apply(this, args);
 				}
 

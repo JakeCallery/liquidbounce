@@ -15,8 +15,12 @@ function(){
 	     * @returns {Boolean|String} true if valid, reason string if not
 	     */
 	    InterfaceUtils.objectImplements = function($obj, $interfaceArgs){
-		    $interfaceArgs = Array.prototype.slice.call(arguments);
-		    $interfaceArgs.shift();
+		    var paramCountMustBeExactMatch = false;
+		    $interfaceArgs = Array.prototype.slice.call(arguments,1);
+
+		    if($interfaceArgs[$interfaceArgs.length-1] === true){
+			    paramCountMustBeExactMatch = true;
+		    }
 
 		    var propMap = {};
 		    var propCount = 0;
@@ -52,7 +56,8 @@ function(){
 						    propFound = false;
 					    } else if(typeof propMap[prop] === 'function'){
 						    //if function, check param counts
-						    if(propMap[prop].length !== $obj[prop].length){
+						    if((paramCountMustBeExactMatch === true && propMap[prop].length !== $obj[prop].length) ||
+							    (paramCountMustBeExactMatch === false && propMap[prop].length > $obj[prop].length)){
 							    if(failReason !== ''){failReason += '\n';}
 							    failReason = 'Argument count mismatch for function: ' + prop + ' in interface list';
 							    propFound = false;
@@ -105,14 +110,19 @@ function(){
 	     * if inheritance is used, the constructor must have a superclass (from ObjUtils.inheritPrototype)
 	     * !!CAUTION!! props must be on Class prototype to be considered implemented, props assigned in the
 	     * constructor will not be detected! !!CAUTION!!
+	     * Last argument should be set to {Boolean} true if the param counts must match exactly, otherwise
+	     * <= will pass
 	     * @param {Object} $class item to compare to interface
 	     * @param {...} $interfaceArgs interface object to get a property list from
 	     * @returns {Boolean|String} true if valid, reason string if not
 	     */
 	    InterfaceUtils.classImplements = function($class, $interfaceArgs){
+			var paramCountMustBeExactMatch = false;
+		    $interfaceArgs = Array.prototype.slice.call(arguments,1);
 
-		    $interfaceArgs = Array.prototype.slice.call(arguments);
-		    $interfaceArgs.shift();
+		    if($interfaceArgs[$interfaceArgs.length-1] === true){
+			    paramCountMustBeExactMatch = true;
+		    }
 
 		    var failReason = '';
 
@@ -153,7 +163,8 @@ function(){
 								breakOut = true;
 							} else if(typeof propMap[prop] === 'function'){
 								//if function, check param counts
-								if(propMap[prop].length !== tmp[prop].length){
+								if((paramCountMustBeExactMatch === true && propMap[prop].length !== tmp[prop].length) ||
+									(paramCountMustBeExactMatch === false && propMap[prop].length > tmp[prop].length)){
 									if(failReason !== ''){failReason += '\n';}
 									propFound = false;
 									failReason = 'Argument count mismatch for function: ' + prop + ' in interface list';
