@@ -10,15 +10,24 @@ define([
 'jac/polyfills/RequestAnimationFrame',
 'jac/utils/BrowserUtils',
 'app/game/Game',
-'app/game/GameObjTypes'],
-function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, GameObjTypes){
+'app/game/GameObjTypes',
+'app/renderEngine/RenderEngine'],
+function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, GameObjTypes, RenderEngine){
     L.addLogTarget(new ConsoleTarget());
     L.log('New Main!');
 
-	var game = new Game();
+	var mainCanvas = document.getElementById('gameCanvasDiv');
+	var game = new Game(mainCanvas, 600, 600);
 	game.init();
-	var bp = game.createGameObj(GameObjTypes.BLOB_PART, {x:20,y:45});
-	L.log('BP (should now be 20,45): ' + bp.x + '/' + bp.y);
-	bp.destroy();
-	L.log('BP (should now be -1,-1): ' + bp.x + ' / ' + bp.y);
+
+	var testBlobSrc = new BlobRenderSource(30,30,'#0000FF');
+	var testBlobConfig = {};
+	testBlobConfig.x = 50;
+	testBlobConfig.y = 50;
+	testBlobConfig.width = testBlobSrc.width;
+	testBlobConfig.height = testBlobSrc.height;
+	testBlobConfig.renderSrc = testBlobSrc.srcContext;
+
+	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig);
+	//bp.destroy();
 });

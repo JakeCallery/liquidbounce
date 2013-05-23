@@ -41,6 +41,7 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 			    throw new Error(result);
 		    }
 
+		    //TODO: add to render list
 
 	    };
 
@@ -56,6 +57,9 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 
 		    for(var i = 0, l = this.renderItems.length; i < l; i++){
 				item = this.renderItems[i];
+
+			    //TODO: copy bitmap data to game canvas, use render.x/.y
+
 		    }
 
 

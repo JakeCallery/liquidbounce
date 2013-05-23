@@ -11,8 +11,9 @@ define([
 'app/parts/blob/BlobPart',
 'jac/pool/Pool',
 'jac/utils/EventUtils',
-'app/game/events/GameObjEvent'],
-function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, GameObjEvent){
+'app/game/events/GameObjEvent',
+'app/renderEngine/RenderEngine'],
+function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, GameObjEvent, RenderEngine){
     return (function(){
 
 	    /**
@@ -20,7 +21,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
          * @extends {EventDispatcher}
          * @constructor
          */
-        function Game(){
+        function Game($gameCanvas, $gameWidth, $gameHeight){
             //super
             EventDispatcher.call(this);
 
@@ -35,6 +36,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    var delegateMap = {};
 
 		    var blobPartPool = new Pool(BlobPart);
+
+		    this.renderEngine = new RenderEngine($gameCanvas, $gameWidth, $gameHeight);
 
 		    /**
 		     * create and add a blob part to the game
@@ -56,11 +59,27 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 			    self.removeGameObj($e.target);
 		    };
 
+		    var updateGame = function(){
+			    //TODO: update game
+			    L.log('Update Game', '@game');
+		    };
+
+		    var renderGame = function(){
+			    L.log('Render Game', '@game');
+		    };
+
 		    this.init = function(){
 			    blobPartPool.fill(100,{x:0,y:0});
 
 			    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
+		    };
+
+		    this.startGame = function(){
+			    //TODO: Update via requestAnimationFrame
+			    //TMP, just manually update once for now
+			    updateGame();
+			    renderGame();   //TODO: START HERE - follow the render path and fill in the rest of the holes
 		    };
 
 		    /**

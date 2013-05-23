@@ -25,13 +25,17 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes){
 
 	        this.x = 0;
 	        this.y = 0;
+	        this.prevX = 0;
+	        this.prevY = 0;
 
+	        /**@type {CanvasRenderingContext2D}*/
 	        this.renderSrc = null;
-	        this.renderWidth = 30;
-	        this.renderHeight = 30;
+	        this.renderWidth = 0;
+	        this.renderHeight = 0;
 	        this.renderX = 0;
 	        this.renderY = 0;
 	        this.renderZ = 0;
+
         }
         
         //Inherit / Extend
@@ -44,14 +48,17 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes){
 
 	    //// IPoolable ////
 	    BlobPart.prototype.init = function($configObj){
-			this.x = $configObj.x;
-		    this.y = $configObj.y;
+			this.x = this.prevX = $configObj.x;
+		    this.y = this.prevY = $configObj.y;
+		    this.renderWidth = $configObj.width;
+		    this.renderHeight = $configObj.height;
+		    this.renderSrc = $configObj.srcContext;
 		    L.log('Inint Blobpart', '@bpart');
 	    };
 
 	    BlobPart.prototype.recycle = function(){
-			this.x = -1;
-		    this.y = -1;
+			this.x = this.prevX = -1;
+		    this.y = this.prevY = -1;
 		    L.log('Recycle BlobPart', '@bpart');
 	    };
 
