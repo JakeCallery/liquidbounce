@@ -11,12 +11,13 @@ define([
 'jac/utils/BrowserUtils',
 'app/game/Game',
 'app/game/GameObjTypes',
-'app/renderEngine/RenderEngine'],
-function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, GameObjTypes, RenderEngine){
+'app/renderEngine/RenderEngine',
+'app/parts/blob/BlobRenderSource'],
+function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, GameObjTypes, RenderEngine, BlobRenderSource){
     L.addLogTarget(new ConsoleTarget());
     L.log('New Main!');
 
-	var mainCanvas = document.getElementById('gameCanvasDiv');
+	var mainCanvas = document.getElementById('gameCanvas');
 	var game = new Game(mainCanvas, 600, 600);
 	game.init();
 
@@ -30,4 +31,6 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, Game
 
 	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig);
 	//bp.destroy();
+
+	game.startGame();
 });

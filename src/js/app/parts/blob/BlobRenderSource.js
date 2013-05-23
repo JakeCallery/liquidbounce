@@ -19,10 +19,10 @@ function(doc){
 			this.srcContext = this.canvas.getContext('2d');
 
 	        //Fill context with blob bitmap
-	        this.renderSrc.beginPath();
-	        this.renderSrc.arc(this.width/2, this.height/2, this.width/2, 0, 2*Math.PI,false);
-	        this.renderSrc.fillStyle = this.color;
-	        this.renderSrc.fill();
+	        this.srcContext.beginPath();
+	        this.srcContext.arc(this.width/2, this.height/2, this.width/2, 0, 2*Math.PI,false);
+	        this.srcContext.fillStyle = this.color;
+	        this.srcContext.fill();
         }
         
         
