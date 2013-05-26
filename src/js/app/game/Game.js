@@ -132,7 +132,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 			    switch($objType){
 				    case GameObjTypes.BLOB_PART:
 					    obj = createAndAddBlobPart.apply(self, $args);
-					    obj.addHandler(GameObjEvent.DESTROYED, EventUtils.bind(self, handleGameObjDestroyed));
+					    //obj.addHandler(GameObjEvent.DESTROYED, EventUtils.bind(self, handleGameObjDestroyed));
+					    obj.addHandler(GameObjEvent.DESTROYED, handleGameObjDestroyed);
 					    break;
 
 				    default:

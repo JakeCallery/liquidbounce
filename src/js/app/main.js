@@ -41,5 +41,9 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 		game.pauseGame();
 	});
 
+	var clearButtonEl = document.getElementById('clearButton');
+	EventUtils.addDomListener(clearButtonEl, 'click', function(e){
+		bp.destroy();
+	});
 	game.startGame();
 });
