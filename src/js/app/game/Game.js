@@ -109,10 +109,12 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    };
 
 		    this.startGame = function(){
+			    L.log('Starting Game...', '@game');
 			    self.update();
 		    };
 
 		    this.pauseGame = function(){
+			    L.log('Pausing Game...', '@game');
 			    self.window.cancelAnimationFrame(self.updateId);
 		    };
 

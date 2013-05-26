@@ -12,8 +12,10 @@ define([
 'app/game/Game',
 'app/game/GameObjTypes',
 'app/renderEngine/RenderEngine',
-'app/parts/blob/BlobRenderSource'],
-function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, GameObjTypes, RenderEngine, BlobRenderSource){
+'app/parts/blob/BlobRenderSource',
+'jac/utils/EventUtils'],
+function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
+         GameObjTypes, RenderEngine, BlobRenderSource, EventUtils){
     L.addLogTarget(new ConsoleTarget());
     L.log('New Main!');
 
@@ -28,6 +30,16 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, Game
 
 	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig, testBlobSrc);
 	//bp.destroy();
+
+	var startButtonEl = document.getElementById('startButton');
+	EventUtils.addDomListener(startButtonEl, 'click', function(e){
+		game.startGame();
+	});
+
+	var stopButtonEl = document.getElementById('stopButton');
+	EventUtils.addDomListener(stopButtonEl, 'click', function(e){
+		game.pauseGame();
+	});
 
 	game.startGame();
 });
