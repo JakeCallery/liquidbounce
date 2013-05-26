@@ -94,6 +94,10 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 
 		    };
 
+		    var updatePhysics = function(){
+
+		    };
+
 		    this.init = function(){
 			    //blobPartPool.fill(100,{x:0,y:0});
 
@@ -103,6 +107,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 
 		    this.update = function(){
 				self.updateId = self.window.requestAnimationFrame(self.update);
+			    updatePhysics();
 			    updateGame();
 			    renderGame();
 			    self.stats.update();
