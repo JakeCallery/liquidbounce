@@ -12,8 +12,9 @@ define([
 'jac/pool/Pool',
 'jac/utils/EventUtils',
 'app/game/events/GameObjEvent',
-'app/renderEngine/RenderEngine'],
-function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, GameObjEvent, RenderEngine){
+'app/renderEngine/RenderEngine',
+'stats'],
+function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, GameObjEvent, RenderEngine, Stats){
     return (function(){
 
 	    /**
@@ -21,13 +22,18 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
          * @extends {EventDispatcher}
          * @constructor
          */
-        function Game($window, $gameCanvas, $gameWidth, $gameHeight){
+        function Game($doc, $window, $gameCanvas, $gameWidth, $gameHeight){
             //super
             EventDispatcher.call(this);
 
 	        var self = this;
 
+		    this.doc = $doc;
 		    this.window = $window;
+
+		    this.stats = new Stats();
+		    this.stats.setMode(0);
+			this.doc.getElementById('statsDiv').appendChild(this.stats.domElement);
 
 		    /**@type int*/
 		    var blobPartNextIndex = -1;
@@ -99,6 +105,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 				self.updateId = self.window.requestAnimationFrame(self.update);
 			    updateGame();
 			    renderGame();
+			    self.stats.update();
 		    };
 
 		    this.startGame = function(){

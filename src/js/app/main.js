@@ -18,7 +18,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game, Game
     L.log('New Main!');
 
 	var mainCanvas = document.getElementById('gameCanvas');
-	var game = new Game(window, mainCanvas, 600, 600);
+	var game = new Game(document, window, mainCanvas, 600, 600);
 	game.init();
 
 	var testBlobSrc = new BlobRenderSource(30,30,'#0000FF');
