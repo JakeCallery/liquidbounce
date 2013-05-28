@@ -72,11 +72,11 @@ function(FastMath, Vec2DObj){
 		    return ($vec2Da.x * $vec2Db.x) + ($vec2Da.y * $vec2Db.y);
 	    };
 
-	    Vec2D.length = function($vec2D){
+	    Vec2D.lengthOf = function($vec2D){
 			return Math.sqrt(($vec2D.x * $vec2D.x) + ($vec2D.y * $vec2D.y));
 	    };
 
-	    Vec2D.lengthSqr = function($vec2D){
+	    Vec2D.lengthSqrOf = function($vec2D){
 			return (($vec2D.x * $vec2D.x) + ($vec2D.y * $vec2D.y));
 	    };
 
