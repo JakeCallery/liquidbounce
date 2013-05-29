@@ -105,6 +105,7 @@ function(EventDispatcher,ObjUtils, InfluenceList, L){
 			    for(var k = 0, c = bp.influenceList.length; k < c; k++){
 				    ifo = bp.influenceList[k];
 				    //TODO: Apply influences to blob part
+				    //Put InfluenceList.getResult here, (take it out of the list object)
 			    }
 
 		    }

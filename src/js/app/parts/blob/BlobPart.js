@@ -10,8 +10,9 @@ define([
 'jac/logger/Logger',
 'app/renderEngine/IBitmapRenderable',
 'app/renderEngine/RenderTypes',
-'app/physicsEngine/InfluenceObject'],
-function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, InfluenceObject){
+'app/physicsEngine/InfluenceObject',
+'app/physicsEngine/InfluenceList'],
+function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, InfluenceObject, InfluenceList){
     return (function(){
         /**
          * Creates a BlobPart object
@@ -41,8 +42,8 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 	        this.renderOffsetX = 0;
 	        this.renderOffsetY = 0;
 
-	        /** @type {Array.<InfluenceObject} */
-	        this.influenceList = [];
+	        /** @type {InfluenceList} */
+	        this.influenceList = new InfluenceList();
 
         }
         
