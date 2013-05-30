@@ -59,7 +59,7 @@ function(FastMath, Vec2DObj){
 	    };
 
 	    Vec2D.normalize = function($vec2D){
-			var len = Vec2D.length($vec2D);
+			var len = Vec2D.lengthOf($vec2D);
 		    $vec2D.x = $vec2D.x / len;
 		    $vec2D.y = $vec2D.y / len;
 	    };

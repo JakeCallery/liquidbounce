@@ -14,9 +14,11 @@ define([
 'app/renderEngine/RenderEngine',
 'app/parts/blob/BlobRenderSource',
 'jac/utils/EventUtils',
-'app/physicsEngine/InfluenceObject'],
+'app/physicsEngine/InfluenceObject',
+'jac/math/Vec2DObj'],
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
-         GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject){
+         GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject,
+		 Vec2DObj){
     L.addLogTarget(new ConsoleTarget());
     L.log('New Main!');
 

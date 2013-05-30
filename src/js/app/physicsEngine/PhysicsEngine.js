@@ -33,7 +33,7 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUt
 
 	    PhysicsEngine.prototype.addInfluenceable = function($influenceableObj){
 			var result = InterfaceUtils.objectImplements($influenceableObj, IInfluenceable);
-		    if(result !== true){
+		    if(result === true){
 			    this.influenceableObjs.push($influenceableObj);
 		    } else {
 				throw new Error(result);

@@ -5,8 +5,8 @@
 
 define([
 'jac/utils/ArrayUtils',
-'jac/math/Vec2D'],
-function(ArrayUtils, Vec2D){
+'jac/math/Vec2DObj'],
+function(ArrayUtils, Vec2DObj){
     return (function(){
         /**
          * Creates a InfluenceList object
