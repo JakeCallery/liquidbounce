@@ -13,8 +13,10 @@ define([
 'jac/utils/EventUtils',
 'app/game/events/GameObjEvent',
 'app/renderEngine/RenderEngine',
-'stats'],
-function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, GameObjEvent, RenderEngine, Stats){
+'stats',
+'app/physicsEngine/PhysicsEngine'],
+function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
+         EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine){
     return (function(){
 
 	    /**
@@ -47,6 +49,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    this.updateId = -1;
 		    //this.updateDelegate = EventUtils.bind(self, self.update);
 		    this.renderEngine = new RenderEngine($gameCanvas, $gameWidth, $gameHeight);
+			this.physicsEngine = new PhysicsEngine();
 
 		    /**
 		     * create and add a blob part to the game
@@ -61,6 +64,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 			    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
 			    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
+
+			    self.physicsEngine.addInfluenceable(bp);
 
 			    return bp;
 		    };
@@ -95,7 +100,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 		    };
 
 		    var updatePhysics = function(){
-
+			    self.physicsEngine.tickInfluenceLists(1);   //TODO: delta ticks might need to be dynamic in the future, for now just 1
+				self.physicsEngine.updateBlobParts(blobParts);
 		    };
 
 		    this.init = function(){
@@ -105,12 +111,25 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool, EventUtils, 
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
 		    };
 
-		    this.update = function(){
-				self.updateId = self.window.requestAnimationFrame(self.update);
+		    /**
+		     * step the game forward
+		     * @param {Boolean} [$isManualUpdate=false]
+		     */
+		    this.update = function($isManualUpdate){
+
+			    if($isManualUpdate === undefined || $isManualUpdate === false){
+				    self.updateId = self.window.requestAnimationFrame(self.update);
+			    }
+
 			    updatePhysics();
 			    updateGame();
 			    renderGame();
 			    self.stats.update();
+		    };
+
+		    this.stepGame = function(){
+			    L.log('Stepping Game 1 Tick...');
+			    self.update(true);
 		    };
 
 		    this.startGame = function(){

@@ -26,6 +26,14 @@ function(ArrayUtils, Vec2D){
 	        this.cachedResult = new Vec2DObj(0,0);
         }
 
+	    InfluenceList.prototype.getLength = function(){
+		    return this._list.length;
+	    };
+
+	    InfluenceList.prototype.getList = function(){
+		    return this._list;
+	    };
+
 	    InfluenceList.prototype.clear = function(){
 		    this._list.length = 0;
 	    };

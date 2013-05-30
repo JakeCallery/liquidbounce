@@ -13,9 +13,10 @@ define([
 'app/game/GameObjTypes',
 'app/renderEngine/RenderEngine',
 'app/parts/blob/BlobRenderSource',
-'jac/utils/EventUtils'],
+'jac/utils/EventUtils',
+'app/physicsEngine/InfluenceObject'],
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
-         GameObjTypes, RenderEngine, BlobRenderSource, EventUtils){
+         GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject){
     L.addLogTarget(new ConsoleTarget());
     L.log('New Main!');
 
@@ -31,6 +32,14 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig, testBlobSrc);
 	//bp.destroy();
 
+	var infObj = new InfluenceObject(new Vec2DObj(5,0),0,InfluenceObject.INFINITE_LIFETIME,'testPush');
+	bp.influenceList.addInfluence(infObj);
+
+	var stepButtonEl = document.getElementById('stepButton');
+	EventUtils.addDomListener(stepButtonEl, 'click', function(e){
+		game.update();
+	});
+
 	var startButtonEl = document.getElementById('startButton');
 	EventUtils.addDomListener(startButtonEl, 'click', function(e){
 		game.startGame();
@@ -45,5 +54,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	EventUtils.addDomListener(clearButtonEl, 'click', function(e){
 		bp.destroy();
 	});
-	game.startGame();
+
+	//auto start game
+	//game.startGame();
 });

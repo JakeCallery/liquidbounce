@@ -8,9 +8,9 @@ define([
 'jac/utils/ObjUtils',
 'app/physicsEngine/InfluenceList',
 'jac/logger/Logger',
-'app/physicsEngine/IInfluencable',
+'app/physicsEngine/IInfluenceable',
 'jac/utils/InterfaceUtils'],
-function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluencable, InterfaceUtils){
+function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUtils){
     return (function(){
         /**
          * Creates a PhysicsEngine object
@@ -21,18 +21,20 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluencable, InterfaceUti
             //super
             EventDispatcher.call(this);
 
-	        /**@type {Array.<IInfluencable>}*/
-	        this.influencableObjs = [];
+	        /**
+	         * @type {Array.<IInfluenceable>}
+	         */
+	        this.influenceableObjs = [];
 
         }
         
         //Inherit / Extend
         ObjUtils.inheritPrototype(PhysicsEngine,EventDispatcher);
 
-	    PhysicsEngine.prototype.addInfluenceable = function($influencableObj){
-			var result = InterfaceUtils.objectImplements($influencableObj, IInfluencable);
+	    PhysicsEngine.prototype.addInfluenceable = function($influenceableObj){
+			var result = InterfaceUtils.objectImplements($influenceableObj, IInfluenceable);
 		    if(result !== true){
-			    this.influencableObjs.push($influencableObj);
+			    this.influenceableObjs.push($influenceableObj);
 		    } else {
 				throw new Error(result);
 			}
@@ -40,11 +42,11 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluencable, InterfaceUti
 	    };
 
 	    PhysicsEngine.prototype.removeInfluenceable = function($influenceableObj){
-		    var idx = this.influencableObjs.indexOf($influenceableObj);
+		    var idx = this.influenceableObjs.indexOf($influenceableObj);
 
 		    if(idx !== -1){
 			    //remove
-			    this.influencableObjs.splice(idx, 1);
+			    this.influenceableObjs.splice(idx, 1);
 		    } else {
 			    L.warn('influence list not found in physics engine, could not remove...');
 		    }
@@ -57,12 +59,12 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluencable, InterfaceUti
 		    //put InfluenceObject "tick" method here
 		    /**@type {InfluenceObject}*/ var ifo = null;
 		    /**@type {InfluenceList}*/ var ifl = null;
-		    for(var i = 0, l = this.influencableObjs.length; i < l; i++){
-			    ifl = this.influencableObjs[i].influenceList;
+		    for(var i = 0, l = this.influenceableObjs.length; i < l; i++){
+			    ifl = this.influenceableObjs[i].influenceList;
 			    for(var k = 0, c = ifl.length; k < c; k++){
 					ifo = ifl[k];
-
-				    if(ifo.magnitude === 0 && isNaN(ifo.maxLifetime)){
+				    /**@type {Number}*/var mag = ifo.getMagnitude();
+				    if(mag === 0 && isNaN(ifo.maxLifetime)){
 					    //force expire
 					    ifo.expire();
 				    }
@@ -72,11 +74,12 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluencable, InterfaceUti
 					    //If NaN, keep alive this tick, and expire next
 					    if(isNaN(ifo.decayRate)){
 						    ifo.expire();
-					    } else if(ifo.magnitude === 0 && !isNaN(ifo.maxLifetime) && ifo.maxLifetime != InfluenceObject.INFINITE_LIFETIME){
+					    } else if(mag === 0 && !isNaN(ifo.maxLifetime) && ifo.maxLifetime != InfluenceObject.INFINITE_LIFETIME){
 						    ifo.expire();
 					    } else {
 						    //decay
-						    ifo.magnitude = ((ifo.magnitude - ifo.decayRate) >= 0)?(ifo.magnitude-ifo.decayRate):0;
+						    var newMag = ((mag - ifo.decayRate) >= 0)?(mag-ifo.decayRate):0;
+						    ifo.updateMagnitude(newMag, true);
 					    }
 
 					    //handle lifetime
@@ -108,14 +111,25 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluencable, InterfaceUti
 
 		    for(var i = 0, l = $blobPartList.length; i < l; i++){
 			    bp = $blobPartList[i];
+			    if(bp.influenceList.getLength() === 0){continue;}
 
 			    //Apply influences
-			    for(var k = 0, c = bp.influenceList.length; k < c; k++){
-				    ifo = bp.influenceList[k];
+			    var influences = bp.influenceList.getList();
+			    bp.influenceList.cachedResult = influences[0].getCachedVector();
+			    for(var k = 1, c = influences.length; k < c; k++){
+				    ifo = influences[k];
 				    //TODO: Apply influences to blob part (START HERE)
 				    //Put InfluenceList.getResult here, (take it out of the list object)
+					var cached = ifo.getCachedVector();
+				    bp.influenceList.cachedResult.x += cached.x;
+				    bp.influenceList.cachedResult.y += cached.y;
 			    }
 
+			    //Handle actual movement
+			    bp.prevX = bp.x;
+			    bp.prevY = bp.y;
+			    bp.x += bp.influenceList.cachedResult.x;
+			    bp.y += bp.influenceList.cachedResult.y;
 		    }
 	    };
 

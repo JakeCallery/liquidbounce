@@ -11,14 +11,17 @@ define([
 'app/renderEngine/IBitmapRenderable',
 'app/renderEngine/RenderTypes',
 'app/physicsEngine/InfluenceObject',
-'app/physicsEngine/InfluenceList'],
-function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, InfluenceObject, InfluenceList){
+'app/physicsEngine/InfluenceList',
+'app/physicsEngine/IInfluenceable'],
+function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, InfluenceObject,
+         InfluenceList, IInfluenceable){
     return (function(){
         /**
          * Creates a BlobPart object
          * @extends {GameObject}
          * @implements {IPoolable}
          * @implements {IBitmapRenderable}
+         * @implements {IInfluenceable}
          * @constructor
          */
         function BlobPart(){
