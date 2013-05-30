@@ -9,8 +9,9 @@ define([
 'app/physicsEngine/InfluenceList',
 'jac/logger/Logger',
 'app/physicsEngine/IInfluenceable',
-'jac/utils/InterfaceUtils'],
-function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUtils){
+'jac/utils/InterfaceUtils',
+'app/physicsEngine/InfluenceObject'],
+function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUtils, InfluenceObject){
     return (function(){
         /**
          * Creates a PhysicsEngine object
@@ -61,8 +62,9 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUt
 		    /**@type {InfluenceList}*/ var ifl = null;
 		    for(var i = 0, l = this.influenceableObjs.length; i < l; i++){
 			    ifl = this.influenceableObjs[i].influenceList;
-			    for(var k = 0, c = ifl.length; k < c; k++){
-					ifo = ifl[k];
+			    var iflList = ifl.getList();
+			    for(var k = 0, c = ifl.getLength(); k < c; k++){
+					ifo = iflList[k];
 				    /**@type {Number}*/var mag = ifo.getMagnitude();
 				    if(mag === 0 && isNaN(ifo.maxLifetime)){
 					    //force expire
@@ -91,6 +93,9 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUt
 							    //expire (too old)
 							    ifo.expire();
 						    }
+					    } else if(isNaN(ifo.maxLifetime)){
+						    //ONE_SHOT, expire now
+						    ifo.expire();
 					    }
 
 					    //deal with expire on next tick if needed
@@ -98,6 +103,10 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUt
 						    //expire now
 						    ifo.expire();
 					    }
+				    }
+
+				    if(ifo.isExpired){
+					    ifl.removeInfluence(ifo);
 				    }
 			    }
 		    }
@@ -137,8 +146,8 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUt
 			    var tmpX = bp.x;
 			    var tmpY = bp.y;
 
-			    bp.vx = tmpX - bp.prevX / 1; //TODO: '1' is the tick/time delta, might need to make that variable at some point
-			    bp.vy = tmpY - bp.prevY / 1; //TODO: '1' is the tick/time delta, might need to make that variable at some point
+			    bp.vx = tmpX - bp.prevX / $tickDelta;
+			    bp.vy = tmpY - bp.prevY / $tickDelta;
 
 			    bp.prevX = bp.x;
 			    bp.prevY = bp.y;

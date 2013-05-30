@@ -40,7 +40,8 @@ function(Vec2D,Vec2DObj,L){
 
 		    //TODO: maybe just mark these as private and move the privileged functions to the prototype saving memory
 		    /**@type {Vec2DObj}*/var _cachedVector = $vector;
-		    /**@type {Vec2DObj}*/var _direction = Vec2D.normalize(Vec2D.duplicate(_cachedVector));
+		    /**@type {Vec2DObj}*/var _direction = Vec2D.duplicate(_cachedVector);
+		    Vec2D.normalize(_direction);
 		    /**@type {Number}*/var _magnitude = Vec2D.lengthOf(_cachedVector);
 
 		    /**
@@ -113,6 +114,7 @@ function(Vec2D,Vec2DObj,L){
 
 	    InfluenceObject.prototype.expire = function(){
 		    this.isExpired = true;
+		    L.log(this.id + ' Expired!', '@influence');
 	    };
         
         //Return constructor

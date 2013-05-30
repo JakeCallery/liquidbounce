@@ -19,7 +19,8 @@ define([
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
          GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject,
 		 Vec2DObj){
-    L.addLogTarget(new ConsoleTarget());
+
+	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!');
 
 	var mainCanvas = document.getElementById('gameCanvas');
@@ -34,7 +35,9 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig, testBlobSrc);
 	//bp.destroy();
 
-	var infObj = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,InfluenceObject.INFINITE_LIFETIME,'testPush');
+	//var infObj = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,InfluenceObject.INFINITE_LIFETIME,'testPush');
+	var infObj = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,20,'testPush');
+	//var infObj = new InfluenceObject(new Vec2DObj(0,0.3),0.01,InfluenceObject.INFINITE_LIFETIME,'testPush');
 	bp.influenceList.addInfluence(infObj);
 
 	var stepButtonEl = document.getElementById('stepButton');
