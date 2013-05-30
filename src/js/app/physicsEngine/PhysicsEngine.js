@@ -104,8 +104,16 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUt
 
 	    };
 
-	    PhysicsEngine.prototype.updateBlobParts = function($blobPartList){
+	    /**
+	     *
+	     * @param {Array.<BlobPart>} $blobPartList
+	     * @param {Number} [$tickDelta=1]
+	     */
+	    PhysicsEngine.prototype.updateBlobParts = function($blobPartList, $tickDelta){
 		    var self = this;
+
+		    if($tickDelta === undefined){$tickDelta = 1;}
+
 		    /**@type {BlobPart}*/ var bp = null;
 			/**@type {InfluenceObject}*/ var ifo = null;
 
@@ -126,10 +134,20 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable, InterfaceUt
 			    }
 
 			    //Handle actual movement
+			    var tmpX = bp.x;
+			    var tmpY = bp.y;
+
+			    bp.vx = tmpX - bp.prevX / 1; //TODO: '1' is the tick/time delta, might need to make that variable at some point
+			    bp.vy = tmpY - bp.prevY / 1; //TODO: '1' is the tick/time delta, might need to make that variable at some point
+
 			    bp.prevX = bp.x;
 			    bp.prevY = bp.y;
-			    bp.x += bp.influenceList.cachedResult.x;
-			    bp.y += bp.influenceList.cachedResult.y;
+
+			    bp.vx += bp.influenceList.cachedResult.x;
+			    bp.vy += bp.influenceList.cachedResult.y;
+
+			    bp.x += bp.vx;
+			    bp.y += bp.vy;
 		    }
 	    };
 

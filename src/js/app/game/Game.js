@@ -117,7 +117,10 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		     */
 		    this.update = function($isManualUpdate){
 
-			    if($isManualUpdate === undefined || $isManualUpdate !== true){
+			    if($isManualUpdate === undefined){$isManualUpdate = false;}
+
+
+			    if($isManualUpdate !== true){
 				    self.updateId = self.window.requestAnimationFrame(self.update);
 			    }
 

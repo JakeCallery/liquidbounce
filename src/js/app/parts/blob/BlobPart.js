@@ -32,6 +32,8 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 	        this.y = 0;
 	        this.prevX = 0;
 	        this.prevY = 0;
+	        this.vx = 0;
+	        this.vy = 0;
 
 	        /**@type {CanvasRenderingContext2D}*/
 	        this.renderSrc = null;

@@ -34,12 +34,12 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig, testBlobSrc);
 	//bp.destroy();
 
-	var infObj = new InfluenceObject(new Vec2DObj(5,0),0,InfluenceObject.INFINITE_LIFETIME,'testPush');
+	var infObj = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,InfluenceObject.INFINITE_LIFETIME,'testPush');
 	bp.influenceList.addInfluence(infObj);
 
 	var stepButtonEl = document.getElementById('stepButton');
 	EventUtils.addDomListener(stepButtonEl, 'click', function(e){
-		game.update();
+		game.update(true);
 	});
 
 	var startButtonEl = document.getElementById('startButton');
