@@ -7,8 +7,10 @@ define([
 'jac/events/EventDispatcher',
 'jac/utils/ObjUtils',
 'app/physicsEngine/InfluenceList',
-'jac/logger/Logger'],
-function(EventDispatcher,ObjUtils, InfluenceList, L){
+'jac/logger/Logger',
+'app/physicsEngine/IInfluencable',
+'jac/utils/InterfaceUtils'],
+function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluencable, InterfaceUtils){
     return (function(){
         /**
          * Creates a PhysicsEngine object
@@ -19,24 +21,30 @@ function(EventDispatcher,ObjUtils, InfluenceList, L){
             //super
             EventDispatcher.call(this);
 
-	        /**@type {Array.<InfluenceList>}*/
-	        this.influenceLists = [];
+	        /**@type {Array.<IInfluencable>}*/
+	        this.influencableObjs = [];
 
         }
         
         //Inherit / Extend
         ObjUtils.inheritPrototype(PhysicsEngine,EventDispatcher);
 
-	    PhysicsEngine.prototype.addInfluenceList = function($influenceList){
-			this.influenceLists.push($influenceList);
+	    PhysicsEngine.prototype.addInfluenceable = function($influencableObj){
+			var result = InterfaceUtils.objectImplements($influencableObj, IInfluencable);
+		    if(result !== true){
+			    this.influencableObjs.push($influencableObj);
+		    } else {
+				throw new Error(result);
+			}
+
 	    };
 
-	    PhysicsEngine.prototype.removeInfluenceList = function($influenceList){
-		    var idx = this.influenceLists.indexOf($influenceList);
+	    PhysicsEngine.prototype.removeInfluenceable = function($influenceableObj){
+		    var idx = this.influencableObjs.indexOf($influenceableObj);
 
 		    if(idx !== -1){
 			    //remove
-			    this.influenceLists.splice(idx, 1);
+			    this.influencableObjs.splice(idx, 1);
 		    } else {
 			    L.warn('influence list not found in physics engine, could not remove...');
 		    }
@@ -49,8 +57,8 @@ function(EventDispatcher,ObjUtils, InfluenceList, L){
 		    //put InfluenceObject "tick" method here
 		    /**@type {InfluenceObject}*/ var ifo = null;
 		    /**@type {InfluenceList}*/ var ifl = null;
-		    for(var i = 0, l = this.influenceLists.length; i < l; i++){
-			    ifl = this.influenceLists[i];
+		    for(var i = 0, l = this.influencableObjs.length; i < l; i++){
+			    ifl = this.influencableObjs[i].influenceList;
 			    for(var k = 0, c = ifl.length; k < c; k++){
 					ifo = ifl[k];
 

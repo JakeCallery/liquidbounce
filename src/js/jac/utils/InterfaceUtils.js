@@ -11,7 +11,7 @@ function(){
 	    /**
 	     * Determine if an object has all of the required properties defined by the provided interfaces
 	     * @param {Object} $obj an object to check to be sure it has all props in the provided interfaces
-	     * @param {...} $interfaceArgs interface objects to get a property list from
+	     * @param {...Object} $interfaceArgs interface objects to get a property list from
 	     * @returns {Boolean|String} true if valid, reason string if not
 	     */
 	    InterfaceUtils.objectImplements = function($obj, $interfaceArgs){
@@ -113,7 +113,7 @@ function(){
 	     * Last argument should be set to {Boolean} true if the param counts must match exactly, otherwise
 	     * <= will pass
 	     * @param {Object} $class item to compare to interface
-	     * @param {...} $interfaceArgs interface object to get a property list from
+	     * @param {...Object} $interfaceArgs interface object to get a property list from
 	     * @returns {Boolean|String} true if valid, reason string if not
 	     */
 	    InterfaceUtils.classImplements = function($class, $interfaceArgs){
