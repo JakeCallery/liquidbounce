@@ -14,9 +14,12 @@ define([
 'app/game/events/GameObjEvent',
 'app/renderEngine/RenderEngine',
 'stats',
-'app/physicsEngine/PhysicsEngine'],
+'app/physicsEngine/PhysicsEngine',
+'app/game/managers/BlobManager',
+'app/game/managers/InfluenceManager'],
 function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
-         EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine){
+         EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine,
+		 BlobManager, InfluenceManager){
     return (function(){
 
 	    /**
@@ -50,6 +53,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    //this.updateDelegate = EventUtils.bind(self, self.update);
 		    this.renderEngine = new RenderEngine($gameCanvas, $gameWidth, $gameHeight);
 			this.physicsEngine = new PhysicsEngine();
+		    this.blobManager = new BlobManager();
+		    this.influenceManager = new InfluenceManager();
 
 		    /**
 		     * create and add a blob part to the game
@@ -58,14 +63,15 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		     * returns {BlobPart}
 		     */
 		    var createAndAddBlobPart = function($configObj, $renderSource){
-				var bp = blobPartPool.getObject($configObj, $renderSource);
+				/**@type {BlobPart|Object}*/var bp = blobPartPool.getObject($configObj, $renderSource);
 			    blobParts.push(bp);
 
 			    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
 			    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
 
-			    self.physicsEngine.addInfluenceable(bp);
+				self.blobManager.addBlobPart(bp);
+			    self.influenceManager.addInfluenceable(bp);
 
 			    return bp;
 		    };
@@ -100,8 +106,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    };
 
 		    var updatePhysics = function(){
-			    self.physicsEngine.tickInfluenceLists(1);   //TODO: delta ticks might need to be dynamic in the future, for now just 1
-				self.physicsEngine.updateBlobParts(blobParts);
+			    self.influenceManager.tickInfluenceLists(1); //TODO: delta ticks might need to be dynamic in the future, for now just 1
+			    self.blobManager.updateBlobParts(1);
 		    };
 
 		    this.init = function(){
@@ -177,6 +183,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    case ($objToRemove instanceof BlobPart):
 					    var idx = blobParts.indexOf($objToRemove);
 					    if(idx != -1){
+						    self.blobManager.removeBlobPart($objToRemove);
+						    self.influenceManager.removeInfluenceable($objToRemove);
 							blobPartPool.recycle($objToRemove);
 						    blobParts.splice(idx, 1);
 						    $objToRemove.removeAllHandlersByType(GameObjEvent.DESTROYED);
