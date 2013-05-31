@@ -47,7 +47,7 @@ function(){
 		    for(var prop in propMap){
 			    if(propMap.hasOwnProperty(prop)){
 				    propFound = true;
-				    if(foundProps.indexOf(prop) !== -1){continue;}  //previously found (probably not needed here
+				    if(foundProps.indexOf(prop) !== -1){continue;}  //previously found (probably not needed here)
 				    if(prop in $obj){
 					    //basic type check
 					    if(typeof propMap[prop] !== typeof $obj[prop]){

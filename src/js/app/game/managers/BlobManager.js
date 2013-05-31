@@ -11,9 +11,11 @@ define([
 'app/physicsEngine/IInfluenceable',
 'jac/utils/InterfaceUtils',
 'app/physicsEngine/InfluenceObject',
-'app/parts/blob/BlobPart'],
+'app/parts/blob/BlobPart',
+'jac/linkedList/ILinkedListable',
+'jac/linkedList/LinkedList'],
 function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
-         InterfaceUtils, InfluenceObject, BlobPart){
+         InterfaceUtils, InfluenceObject, BlobPart, ILinkedListable, LinkedList){
     return (function(){
         /**
          * Creates a BlobManager object
@@ -26,10 +28,10 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 
 	        /**
 	         *
-	         * @type {Array.<BlobPart>}
+	         * @type {LinkedList}
 	         * @private
 	         */
-	        this._blobList = [];
+	        this._blobList = new LinkedList();
 
         }
         
@@ -41,7 +43,7 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 	     * @param {BlobPart} $blobPart
 	     */
 	    BlobManager.prototype.addBlobPart = function($blobPart){
-			this._blobList.push($blobPart);
+			this._blobList.addNode($blobPart);
 	    };
 
 	    /**
@@ -49,12 +51,7 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 	     * @param {BlobPart} $blobPart
 	     */
 	    BlobManager.prototype.removeBlobPart = function($blobPart){
-			var idx = this._blobList.indexOf($blobPart);
-		    if(idx != -1){
-	            this._blobList.splice(idx,1);
-		    } else {
-			    L.warn('Blob not found in list, could not remove');
-		    }
+			this._blobList.delNodeByObject($blobPart);
 	    };
 
 	    /**
@@ -67,17 +64,17 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 
 		    /**@type {BlobPart}*/ var bp = null;
 		    /**@type {InfluenceObject}*/ var ifo = null;
-
-		    for(var i = 0, l = self._blobList.length; i < l; i++){
-			    bp = self._blobList[i];
+			self._blobList.resetCurrent();
+		    //for(var i = 0, l = self._blobList.length; i < l; i++){
+		    var node = self._blobList.getNext();
+		    while(node !== null){
+			    bp = node.obj;
 			    if(bp.influenceList.getLength() > 0){
 				    //Apply influences
 				    var influences = bp.influenceList.getList();
 				    bp.influenceList.cachedResult = influences[0].getCachedVector();
 				    for(var k = 1, c = influences.length; k < c; k++){
 					    ifo = influences[k];
-					    //TODO: Apply influences to blob part (START HERE)
-					    //Put InfluenceList.getResult here, (take it out of the list object)
 					    var cached = ifo.getCachedVector();
 					    bp.influenceList.cachedResult.x += cached.x;
 					    bp.influenceList.cachedResult.y += cached.y;
@@ -100,6 +97,8 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 			    //Move the object
 			    bp.x += bp.vx;
 			    bp.y += bp.vy;
+
+			    node = self._blobList.getNext();
 		    }
 	    };
 
