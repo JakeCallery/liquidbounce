@@ -7,8 +7,9 @@ define([
 'jac/events/EventDispatcher',
 'jac/utils/ObjUtils',
 'jac/linkedList/Node',
-'jac/utils/InterfaceUtils'],
-function(EventDispatcher,ObjUtils,Node,InterfaceUtils){
+'jac/utils/InterfaceUtils',
+'jac/linkedList/ILinkedListable'],
+function(EventDispatcher,ObjUtils,Node,InterfaceUtils, ILinkedListable){
     return (function(){
         /**
          * Creates a LinkedList object
@@ -100,6 +101,11 @@ function(EventDispatcher,ObjUtils,Node,InterfaceUtils){
 		    if(this.current === $node){
 			    this.current = this.head;
 		    }
+
+		    if($node.obj !== undefined && $node.obj !== null && InterfaceUtils.objectImplements($node.obj, ILinkedListable)){
+			    $node.obj.linkedListNodeRef = null;
+		    }
+
 	    };
 
 	    /**

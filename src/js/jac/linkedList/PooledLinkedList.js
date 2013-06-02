@@ -6,8 +6,9 @@
 define([
 'jac/linkedList/LinkedList',
 'jac/utils/ObjUtils',
-'jac/pool/Pool'],
-function(LinkedList,ObjUtils,Pool){
+'jac/pool/Pool',
+'jac/linkedList/PoolableNode'],
+function(LinkedList,ObjUtils,Pool,PoolableNode){
     return (function(){
         /**
          * Creates a PooledLinkedList object

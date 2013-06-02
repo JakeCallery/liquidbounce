@@ -10,7 +10,7 @@ function(InterfaceUtils, ILinkedListable){
     return (function(){
         /**
          * Creates a Node object for a linked list
-         * @param {Object} $obj object to be stored in this node
+         * @param {Object} [$obj] object to be stored in this node
          * @constructor
          */
         function Node($obj){
@@ -19,7 +19,7 @@ function(InterfaceUtils, ILinkedListable){
 	        this.next = null;
 	        this.obj = $obj;
 
-	        if(InterfaceUtils.objectImplements(this.obj, ILinkedListable)){
+	        if($obj !== undefined && $obj !== null && InterfaceUtils.objectImplements(this.obj, ILinkedListable)){
 		        this.obj.linkedListNodeRef = self;
 	        }
 
