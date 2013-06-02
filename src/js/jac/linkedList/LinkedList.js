@@ -136,7 +136,7 @@ function(EventDispatcher,ObjUtils,Node,InterfaceUtils){
 						//set up for next round
 						node = node.next;
 
-					}while(node !== null);
+					} while(node !== null);
 				}
 		    }
 

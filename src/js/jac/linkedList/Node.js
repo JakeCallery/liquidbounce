@@ -14,12 +14,13 @@ function(InterfaceUtils, ILinkedListable){
          * @constructor
          */
         function Node($obj){
+	        var self = this;
 	        this.prev = null;
 	        this.next = null;
 	        this.obj = $obj;
 
 	        if(InterfaceUtils.objectImplements(this.obj, ILinkedListable)){
-		        this.obj.linkedListNodeRef = this; //may need to be 'self'
+		        this.obj.linkedListNodeRef = self;
 	        }
 
         }

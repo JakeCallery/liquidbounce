@@ -26,7 +26,7 @@ function(Node,ObjUtils, IPoolable){
 	    PoolableNode.prototype.init = function($args){
 		    this.prev = null;
 		    this.next = null;
-		    this.obj = null;
+		    this.obj = arguments[0];
 	    };
 
 	    PoolableNode.prototype.recycle = function(){
