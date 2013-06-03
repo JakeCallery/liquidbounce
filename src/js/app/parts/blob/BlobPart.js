@@ -64,7 +64,7 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 
 	    BlobPart.prototype.destroy = function(){
 		    BlobPart.superClass.destroy.call(this);
-		    L.log('Destroy Blobpart', '@bpart');
+		    L.log('Destroy Blobpart', '@dead');
 	    };
 
 	    //// IPoolable ////
@@ -95,13 +95,16 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 
 	    //// IManageable ////
 	    BlobPart.prototype.addManager = function($manager){
-			this._managers.push($manager);
+		    L.log('adding manager: ' + $manager, '@manager');
+		    this._managers.push($manager);
 	    };
 
 	    BlobPart.prototype.removeManager = function($manager){
 			var idx = this._managers.indexOf($manager);
+		    L.log('Remove Manager Called', '@manager');
 		    if(idx !== -1){
 			    //remove
+			    L.log('removing manager: ' + $manager, '@manager');
 			    this._managers.splice(idx,1);
 		    } else {
 			    //not found, warn

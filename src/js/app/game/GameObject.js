@@ -21,6 +21,8 @@ function(EventDispatcher,ObjUtils,GameObjEvent, JacEvent){
 
 	        this.destroyedEvent = new JacEvent(GameObjEvent.DESTROYED);
 
+	        this.isDead = false;
+
         }
         
         //Inherit / Extend

@@ -55,7 +55,7 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 	     * @param {BlobPart} $blobPart
 	     */
 	    BlobManager.prototype.removeObject = function($blobPart){
-			this._blobList.delNodeByObject($blobPart);
+			this._blobList.removeNodeByObject($blobPart);
 		    $blobPart.removeManager(this);
 	    };
 

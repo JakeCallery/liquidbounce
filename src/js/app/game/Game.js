@@ -35,6 +35,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    this.doc = $doc;
 		    this.window = $window;
+			this.gameWidth = $gameWidth;
+		    this.gameHeight = $gameHeight;
 
 		    this.stats = new Stats();
 		    this.stats.setMode(0);
@@ -78,7 +80,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    var handleGameObjDestroyed = function($e){
 			    L.log('Caught Game Obj Destroyed: ' + $e.target, '@game');
-			    self.removeGameObj($e.target);
+			    var gameObj = $e.target;
+			    self.removeGameObj(gameObj);
 		    };
 
 		    var updateGame = function(){
@@ -93,6 +96,12 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 					obj = blobParts[i];
 				    obj.renderX = obj.x + obj.renderOffsetX;
 				    obj.renderY = obj.y + obj.renderOffsetY;
+				    if(obj.renderX < -obj.renderWidth || obj.renderX > (self.gameWidth + obj.renderWidth) ||
+					   obj.renderY < obj.renderHeight || obj.renderY > (self.gameHeight + obj.renderHeight)){
+					    //out of bounds, remove
+					    L.log('Setting obj to dead: ' + obj, '@dead');
+					    obj.isDead = true;
+				    }
 			    }
 
 		    };
@@ -108,6 +117,17 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    var updatePhysics = function(){
 			    self.influenceManager.tickInfluenceLists(1); //TODO: delta ticks might need to be dynamic in the future, for now just 1
 			    self.blobManager.updateBlobParts(1);
+		    };
+
+		    var cullDead = function(){
+			    var gameObj = null;
+			    for(var i = 0, l = blobParts.length; i < l; i++){
+				    gameObj = blobParts[i];
+				    if(gameObj.isDead === true){
+					    L.log('Destroying Obj: ' + gameObj, '@dead');
+					    gameObj.destroy();
+				    }
+			    }
 		    };
 
 		    this.init = function(){
@@ -130,6 +150,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    self.updateId = self.window.requestAnimationFrame(self.update);
 			    }
 
+			    cullDead();
 			    updatePhysics();
 			    updateGame();
 			    renderGame();
