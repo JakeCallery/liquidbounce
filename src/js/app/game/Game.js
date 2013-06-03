@@ -70,8 +70,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
 			    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
 
-				self.blobManager.addBlobPart(bp);
-			    self.influenceManager.addInfluenceable(bp);
+				self.blobManager.addObject(bp);
+			    self.influenceManager.addObject(bp);
 
 			    return bp;
 		    };
@@ -183,8 +183,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    case ($objToRemove instanceof BlobPart):
 					    var idx = blobParts.indexOf($objToRemove);
 					    if(idx != -1){
-						    self.blobManager.removeBlobPart($objToRemove);
-						    self.influenceManager.removeInfluenceable($objToRemove);
+						    self.blobManager.removeObject($objToRemove);
+						    self.influenceManager.removeObject($objToRemove);
 							blobPartPool.recycle($objToRemove);
 						    blobParts.splice(idx, 1);
 						    $objToRemove.removeAllHandlersByType(GameObjEvent.DESTROYED);

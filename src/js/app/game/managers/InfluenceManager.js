@@ -10,12 +10,14 @@ define([
 'jac/logger/Logger',
 'app/physicsEngine/IInfluenceable',
 'jac/utils/InterfaceUtils',
-'app/physicsEngine/InfluenceObject'],
-function(EventDispatcher,ObjUtils,InfluenceList, L, IInfluenceable, InterfaceUtils, InfluenceObject){
+'app/physicsEngine/InfluenceObject',
+'app/game/managers/IManager'],
+function(EventDispatcher,ObjUtils,InfluenceList, L, IInfluenceable, InterfaceUtils, InfluenceObject, IManager){
     return (function(){
         /**
          * Creates a InfluenceManager object
          * @extends {EventDispatcher}
+         * @implements {IManager}
          * @constructor
          */
         function InfluenceManager(){
@@ -32,22 +34,24 @@ function(EventDispatcher,ObjUtils,InfluenceList, L, IInfluenceable, InterfaceUti
         //Inherit / Extend
         ObjUtils.inheritPrototype(InfluenceManager,EventDispatcher);
 
-	    InfluenceManager.prototype.addInfluenceable = function($influenceableObj){
+	    InfluenceManager.prototype.addObject = function($influenceableObj){
 		    var result = InterfaceUtils.objectImplements($influenceableObj, IInfluenceable);
 		    if(result === true){
 			    this.influenceableObjs.push($influenceableObj);
+			    $influenceableObj.addManager(this);
 		    } else {
 			    throw new Error(result);
 		    }
 
 	    };
 
-	    InfluenceManager.prototype.removeInfluenceable = function($influenceableObj){
+	    InfluenceManager.prototype.removeObject = function($influenceableObj){
 		    var idx = this.influenceableObjs.indexOf($influenceableObj);
 
 		    if(idx !== -1){
 			    //remove
 			    this.influenceableObjs.splice(idx, 1);
+			    $influenceableObj.removeManager(this);
 		    } else {
 			    L.warn('influence list not found in physics engine, could not remove...');
 		    }

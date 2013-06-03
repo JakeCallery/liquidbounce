@@ -22,11 +22,18 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
          * @implements {IPoolable}
          * @implements {IBitmapRenderable}
          * @implements {IInfluenceable}
+         * @implements {IManageable}
          * @constructor
          */
         function BlobPart(){
             //super
             GameObject.call(this);
+
+	        /**
+	         * @type {Array.<IManager>
+	         * @private
+	         */
+	        this._managers = [];
 
 	        this.x = 0;
 	        this.y = 0;
@@ -84,6 +91,22 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 			this.x = this.prevX = -1;
 		    this.y = this.prevY = -1;
 		    L.log('Recycle BlobPart', '@bpart');
+	    };
+
+	    //// IManageable ////
+	    BlobPart.prototype.addManager = function($manager){
+			this._managers.push($manager);
+	    };
+
+	    BlobPart.prototype.removeManager = function($manager){
+			var idx = this._managers.indexOf($manager);
+		    if(idx !== -1){
+			    //remove
+			    this._managers.splice(idx,1);
+		    } else {
+			    //not found, warn
+			    L.warn('Manager not found in blob part, could not remove');
+		    }
 	    };
 
         //Return constructor

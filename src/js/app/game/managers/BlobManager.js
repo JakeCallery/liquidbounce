@@ -13,13 +13,16 @@ define([
 'app/physicsEngine/InfluenceObject',
 'app/parts/blob/BlobPart',
 'jac/linkedList/ILinkedListable',
-'jac/linkedList/LinkedList'],
+'jac/linkedList/LinkedList',
+'app/game/managers/IManager'],
 function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
-         InterfaceUtils, InfluenceObject, BlobPart, ILinkedListable, LinkedList){
+         InterfaceUtils, InfluenceObject, BlobPart, ILinkedListable, LinkedList,
+		 IManager){
     return (function(){
         /**
          * Creates a BlobManager object
          * @extends {EventDispatcher}
+         * @implements IManager
          * @constructor
          */
         function BlobManager(){
@@ -42,16 +45,18 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 	     *
 	     * @param {BlobPart} $blobPart
 	     */
-	    BlobManager.prototype.addBlobPart = function($blobPart){
+	    BlobManager.prototype.addObject = function($blobPart){
 			this._blobList.addNode($blobPart);
+		    $blobPart.addManager(this);
 	    };
 
 	    /**
 	     *
 	     * @param {BlobPart} $blobPart
 	     */
-	    BlobManager.prototype.removeBlobPart = function($blobPart){
+	    BlobManager.prototype.removeObject = function($blobPart){
 			this._blobList.delNodeByObject($blobPart);
+		    $blobPart.removeManager(this);
 	    };
 
 	    /**
