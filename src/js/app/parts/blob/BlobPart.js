@@ -30,7 +30,7 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
             GameObject.call(this);
 
 	        /**
-	         * @type {Array.<IManager>
+	         * @type {Array.<IManager>}
 	         * @private
 	         */
 	        this._managers = [];
@@ -62,6 +62,9 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
         //Inherit / Extend
         ObjUtils.inheritPrototype(BlobPart,GameObject);
 
+	    /**
+	     * @override
+	     */
 	    BlobPart.prototype.destroy = function(){
 		    BlobPart.superClass.destroy.call(this);
 		    L.log('Destroy Blobpart', '@dead');
@@ -81,8 +84,8 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 		    this.renderImg = $renderSource.srcImage;
 		    this.renderWidth = $renderSource.width;
 		    this.renderHeight = $renderSource.height;
-		    this.renderOffsetX = -(Math.round((this.renderWidth/2)));
-		    this.renderOffsetY = -(Math.round((this.renderHeight/2)));
+		    this.renderOffsetX = -(Math.round(this.renderWidth/2));
+		    this.renderOffsetY = -(Math.round(this.renderHeight/2));
 
 		    L.log('Init Blobpart', '@bpart');
 	    };

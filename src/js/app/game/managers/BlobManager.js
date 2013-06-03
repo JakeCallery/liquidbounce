@@ -22,7 +22,7 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
         /**
          * Creates a BlobManager object
          * @extends {EventDispatcher}
-         * @implements IManager
+         * @implements {IManager}
          * @constructor
          */
         function BlobManager(){

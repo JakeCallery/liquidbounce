@@ -16,10 +16,12 @@ define([
 'stats',
 'app/physicsEngine/PhysicsEngine',
 'app/game/managers/BlobManager',
-'app/game/managers/InfluenceManager'],
+'app/game/managers/InfluenceManager',
+'app/game/managers/DispenserManager',
+'app/parts/dispenser/BaseDispenser'],
 function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
          EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine,
-		 BlobManager, InfluenceManager){
+		 BlobManager, InfluenceManager, DispenserManager, BaseDispenser){
     return (function(){
 
 	    /**
@@ -47,6 +49,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    /**@type {Array.<BlobPart>}*/
 		    var blobParts = [];
+			var dispensers = [];
 
 		    var delegateMap = {};
 		    var blobPartPool = new Pool(BlobPart);
@@ -57,6 +60,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			this.physicsEngine = new PhysicsEngine();
 		    this.blobManager = new BlobManager();
 		    this.influenceManager = new InfluenceManager();
+		    this.dispenserManager = new DispenserManager();
 
 		    /**
 		     * create and add a blob part to the game
@@ -76,6 +80,10 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    self.influenceManager.addObject(bp);
 
 			    return bp;
+		    };
+
+		    var createAndAddDispenser = function($configObj, $renderSource){
+			    /**@type {BlobPart|Object}*/var disp = blobPartPool.getObject($configObj, $renderSource);
 		    };
 
 		    var handleGameObjDestroyed = function($e){
@@ -104,13 +112,22 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    }
 			    }
 
+			    //Dispensers
+			    for(i = 0, l = dispensers.length; i < l; i++){
+				    obj = dispensers[i];
+				    obj.renderX = obj.x + obj.renderOffsetX;
+				    obj.renderY = obj.y + obj.renderOffsetY;
+			    }
+
 		    };
 
 		    var renderGame = function(){
 			    //L.log('Render Game', '@frame');
 
 			    self.renderEngine.clearFrame();
+			    self.renderEngine.renderDispensers(dispensers);
 			    self.renderEngine.renderBlobParts(blobParts);
+
 
 		    };
 
@@ -187,6 +204,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    case GameObjTypes.BLOB_PART:
 					    obj = createAndAddBlobPart.apply(self, $args);
 					    obj.addHandler(GameObjEvent.DESTROYED, handleGameObjDestroyed);
+					    dispensers.push(obj);
 					    break;
 
 				    default:
@@ -195,6 +213,22 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    }
 
 			    return obj;
+		    };
+
+		    /**
+		     * add a premade object to the game
+		     * @param {Object} $obj
+		     */
+		    this.addGameObject = function($obj){
+			    if($obj instanceof BaseDispenser){
+				    //add dispenser
+				    dispensers.push($obj);
+				    self.dispenserManager.addObject($obj);
+
+			    } else {
+				    //unknown obj
+				    L.error('Unknown Game Obj Type: ' + $obj, true);
+			    }
 		    };
 
 		    this.removeGameObj = function($objToRemove){

@@ -58,6 +58,19 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 
 	    };
 
+	    /**
+	     * Renders dispensers
+	     * @param {Array.<Dispenser>} $dispensers
+	     */
+	    RenderEngine.prototype.renderDispensers = function($dispensers){
+			var self = this;
+		    var item = null;
+		    for(var i = 0, l = $dispensers.length; i < l; i++){
+			    item = $dispensers[i];
+			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+		    }
+	    };
+
         //Return constructor
         return RenderEngine;
     })();

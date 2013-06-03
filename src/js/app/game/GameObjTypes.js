@@ -9,7 +9,8 @@ function(){
         var GameObjTypes = {};
 
 	    GameObjTypes.BLOB_PART = 'blobpart';
-        
+	    GameObjTypes.DISPENSER = 'dispenser';
+
         //Return object
         return GameObjTypes;
     })();
