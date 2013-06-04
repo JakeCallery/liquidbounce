@@ -37,6 +37,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 
 	//TMP///////////
 	//Set up blob
+	/*
 	var testBlobSrc = new BlobRenderSource(30,30,'#0000FF');
 	var testBlobConfig = {};
 	testBlobConfig.x = 50;
@@ -48,10 +49,10 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	//var infObj = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,10,'testPush');
 	//var infObj = new InfluenceObject(new Vec2DObj(0,0.3),0.01,InfluenceObject.INFINITE_LIFETIME,'testPush');
 	bp.influenceList.addInfluence(infObj);
-
+	*/
 	//set up dispenser
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
-	var testDispenser = new BaseDispenser(200,200,testDispenserSrc,60);
+	var testDispenser = new BaseDispenser(game, 200,200,testDispenserSrc,60);
 	game.addGameObject(testDispenser);
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');

@@ -9,17 +9,25 @@ define([
 'jac/utils/ObjUtils',
 'app/game/managers/IManageable',
 'app/renderEngine/IBitmapRenderable',
-'app/renderEngine/RenderTypes'],
-function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,RenderTypes){
+'app/renderEngine/RenderTypes',
+'app/physicsEngine/InfluenceObject',
+'app/game/GameObjTypes',
+'app/parts/blob/BlobRenderSource',
+'jac/math/Vec2DObj'],
+function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
+         RenderTypes,InfluenceObject,GameObjTypes, BlobRenderSource,
+		 Vec2DObj){
     return (function(){
         /**
          * Creates a BaseDispenser object
          * @extends {EventDispatcher}
          * @constructor
          */
-        function BaseDispenser($x, $y, $renderSource, $waitTicks){
+        function BaseDispenser($game, $x, $y, $renderSource, $waitTicks){
             //super
             GameObject.call(this);
+
+	        this.game = $game;
 
 	        /**
 	         * @type {Array.<IManager>}
@@ -29,6 +37,11 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,RenderTypes){
 
 	        this.pastTicks = 0;
 	        this.waitTicks = $waitTicks;
+
+            this.dispenseXOffset = 30;
+	        this.dispenseYOffset = 65;
+			this.blobSrc = new BlobRenderSource(30,30,'#FF0000');
+	        this.blobCfg = {x:0,y:0};
 
 	        this.x = $x;
 	        this.y = $y;
@@ -56,10 +69,23 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,RenderTypes){
 
 	    /**
 	     * dispense particles
-	     * @param {Boolean}[$resetWaitTicks=true]
+	     * @param {Boolean}[$resetPastTicks=false]
 	     */
-	    BaseDispenser.prototype.dispense = function($resetWaitTicks){
+	    BaseDispenser.prototype.dispense = function($resetPastTicks){
 		    L.log('Dispense!', '@dispenser');
+
+			var bp = this.game.createGameObj(GameObjTypes.BLOB_PART, this.blobCfg, this.blobSrc);
+		    bp.transportTo((this.x + this.dispenseXOffset),(this.y + this.dispenseYOffset));
+
+		    //Gravity influence
+		    var gravityInfluence = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,InfluenceObject.INFINITE_LIFETIME,'testDispense');
+			bp.influenceList.addInfluence(gravityInfluence);
+
+		    if($resetPastTicks === true){
+			    this.pastTicks = 0;
+		    }
+
+
 	    };
 
 	    //// IManageable ////

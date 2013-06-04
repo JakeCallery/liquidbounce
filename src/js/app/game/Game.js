@@ -82,10 +82,6 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    return bp;
 		    };
 
-		    var createAndAddDispenser = function($configObj, $renderSource){
-			    /**@type {BlobPart|Object}*/var disp = blobPartPool.getObject($configObj, $renderSource);
-		    };
-
 		    var handleGameObjDestroyed = function($e){
 			    L.log('Caught Game Obj Destroyed: ' + $e.target, '@game');
 			    var gameObj = $e.target;
@@ -132,6 +128,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    };
 
 		    var updatePhysics = function(){
+			    self.dispenserManager.updateDispensers(1);
 			    self.influenceManager.tickInfluenceLists(1); //TODO: delta ticks might need to be dynamic in the future, for now just 1
 			    self.blobManager.updateBlobParts(1);
 		    };
@@ -204,7 +201,6 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    case GameObjTypes.BLOB_PART:
 					    obj = createAndAddBlobPart.apply(self, $args);
 					    obj.addHandler(GameObjEvent.DESTROYED, handleGameObjDestroyed);
-					    dispensers.push(obj);
 					    break;
 
 				    default:

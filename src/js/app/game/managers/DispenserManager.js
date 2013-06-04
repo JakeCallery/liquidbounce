@@ -59,6 +59,7 @@ function(EventDispatcher, ObjUtils, L){
 				if(disp.pastTicks >= disp.waitTicks){
 					//Dispense
 					disp.dispense();
+					disp.pastTicks = 0;
 				}
 
 		    }

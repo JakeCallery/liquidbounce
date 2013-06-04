@@ -62,6 +62,16 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
         //Inherit / Extend
         ObjUtils.inheritPrototype(BlobPart,GameObject);
 
+	    BlobPart.prototype.transportTo = function($newX, $newY){
+		    var diffX = this.x - this.prevX;
+		    var diffY = this.y - this.prevY;
+
+		    this.x = $newX;
+		    this.y = $newY;
+		    this.prevX = this.x - diffX;
+		    this.prevY = this.y - diffY;
+	    };
+
 	    /**
 	     * @override
 	     */
@@ -87,12 +97,15 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 		    this.renderOffsetX = -(Math.round(this.renderWidth/2));
 		    this.renderOffsetY = -(Math.round(this.renderHeight/2));
 
+		    this.isDead = false;
+
 		    L.log('Init Blobpart', '@bpart');
 	    };
 
 	    BlobPart.prototype.recycle = function(){
 			this.x = this.prevX = -1;
 		    this.y = this.prevY = -1;
+		    this.influenceList.clear();
 		    L.log('Recycle BlobPart', '@bpart');
 	    };
 
