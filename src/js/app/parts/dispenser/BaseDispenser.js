@@ -99,8 +99,7 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
 		    vect.x = dispX;
 		    vect.y = dispY;
 		    Vec2D.multScalar(vect, 5);
-		    //var dispInf = new InfluenceObject(vect, InfluenceObject.NO_DECAY, 1, 'dispPush');
-		    var dispInf = new InfluenceObject(vect, InfluenceObject.NO_DECAY, InfluenceObject.ONESHOT_LIFETIME, 'dispPush')
+		    var dispInf = new InfluenceObject(vect, InfluenceObject.NO_DECAY, InfluenceObject.ONESHOT_LIFETIME, 'dispPush');
 			bp.influenceList.addInfluence(dispInf);
 
 		    if($resetPastTicks === true){

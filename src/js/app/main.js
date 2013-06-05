@@ -5,7 +5,6 @@
 
 
 //TODO: NEXT
-//Dispensers
 //Rework creating and adding objects, don't do it in the 'game', create an object and ask the game to add it.
 
 //TODO: PERFORMANCE
