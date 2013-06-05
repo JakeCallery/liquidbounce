@@ -106,7 +106,6 @@ function(Vec2D,Vec2DObj,L){
 		    if(!isNaN($lifetimeInTicks)){
 			    this.maxLifetime = $lifetimeInTicks;
 		    } else if(isNaN($lifetimeInTicks)){
-		        this.expireNextTick = true;
 			    this.maxLifetime = InfluenceObject.ONESHOT_LIFETIME;
 		    }
 

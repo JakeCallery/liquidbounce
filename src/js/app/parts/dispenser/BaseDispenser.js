@@ -13,10 +13,12 @@ define([
 'app/physicsEngine/InfluenceObject',
 'app/game/GameObjTypes',
 'app/parts/blob/BlobRenderSource',
-'jac/math/Vec2DObj'],
+'jac/math/Vec2DObj',
+'jac/utils/MathUtils',
+'jac/math/Vec2D'],
 function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
          RenderTypes,InfluenceObject,GameObjTypes, BlobRenderSource,
-		 Vec2DObj){
+		 Vec2DObj, MathUtils, Vec2D){
     return (function(){
         /**
          * Creates a BaseDispenser object
@@ -42,6 +44,8 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
 	        this.dispenseYOffset = 65;
 			this.blobSrc = new BlobRenderSource(30,30,'#FF0000');
 	        this.blobCfg = {x:0,y:0};
+			this.dispenseAngleMin = -45;
+	        this.dispenseAngleMax = 0;
 
 	        this.x = $x;
 	        this.y = $y;
@@ -78,8 +82,26 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
 		    bp.transportTo((this.x + this.dispenseXOffset),(this.y + this.dispenseYOffset));
 
 		    //Gravity influence
-		    var gravityInfluence = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,InfluenceObject.INFINITE_LIFETIME,'testDispense');
+		    var gravityInfluence = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,InfluenceObject.INFINITE_LIFETIME,'dispGrav');
+			//TODO: put gravity back (infact, refactor so everything follows a global gravity)
 			bp.influenceList.addInfluence(gravityInfluence);
+
+		    //Dispense influence
+		    //TODO: Totally refactor the angle/mag calc for dispense
+		    var ang = MathUtils.rand(this.dispenseAngleMin, this.dispenseAngleMax);
+		    L.log('ang: ' + ang, '@dispenser');
+		    ang = MathUtils.degToRad(ang);
+		    var vect = new Vec2DObj(1,0);
+		    var cosTheta = Math.cos(ang);
+		    var sinTheta = Math.sin(ang);
+		    var dispX = (vect.x * cosTheta) - (vect.y * sinTheta);
+		    var dispY = (vect.x * sinTheta) + (vect.y * cosTheta);
+		    vect.x = dispX;
+		    vect.y = dispY;
+		    Vec2D.multScalar(vect, 5);
+		    //var dispInf = new InfluenceObject(vect, InfluenceObject.NO_DECAY, 1, 'dispPush');
+		    var dispInf = new InfluenceObject(vect, InfluenceObject.NO_DECAY, InfluenceObject.ONESHOT_LIFETIME, 'dispPush')
+			bp.influenceList.addInfluence(dispInf);
 
 		    if($resetPastTicks === true){
 			    this.pastTicks = 0;

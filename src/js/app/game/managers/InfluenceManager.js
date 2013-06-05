@@ -70,7 +70,7 @@ function(EventDispatcher,ObjUtils,InfluenceList, L, IInfluenceable, InterfaceUti
 			    for(var k = 0, c = ifl.getLength(); k < c; k++){
 				    ifo = iflList[k];
 				    /**@type {Number}*/var mag = ifo.getMagnitude();
-				    if(mag === 0 && isNaN(ifo.maxLifetime)){
+				    if(ifo.expireNextTick === true || (mag === 0 && isNaN(ifo.maxLifetime))){
 					    //force expire
 					    ifo.expire();
 				    }
@@ -99,14 +99,17 @@ function(EventDispatcher,ObjUtils,InfluenceList, L, IInfluenceable, InterfaceUti
 						    }
 					    } else if(isNaN(ifo.maxLifetime)){
 						    //ONE_SHOT, expire now
-						    ifo.expire();
+						    //ifo.expire();
+						    ifo.expireNextTick = true;
 					    }
 
+					    /*
 					    //deal with expire on next tick if needed
 					    if(ifo.expireNextTick === true){
 						    //expire now
 						    ifo.expire();
 					    }
+					    */
 				    }
 
 				    if(ifo.isExpired){

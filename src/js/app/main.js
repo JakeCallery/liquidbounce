@@ -8,6 +8,8 @@
 //Dispensers
 //Rework creating and adding objects, don't do it in the 'game', create an object and ask the game to add it.
 
+//TODO: PERFORMANCE
+//pool influence objects
 
 define([
 'jac/logger/Logger',
@@ -30,6 +32,10 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!');
+	L.isEnabled = true;
+	L.isTagFilterEnabled = true;
+	L.addTag('@influence');
+	L.addTag('@dispenser');
 
 	var mainCanvas = document.getElementById('gameCanvas');
 	var game = new Game(document, window, mainCanvas, 600, 600);
@@ -52,7 +58,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	*/
 	//set up dispenser
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
-	var testDispenser = new BaseDispenser(game, 200,200,testDispenserSrc,60);
+	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,120);
 	game.addGameObject(testDispenser);
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');

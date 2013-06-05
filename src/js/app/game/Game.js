@@ -135,10 +135,15 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    var cullDead = function(){
 			    var gameObj = null;
-			    for(var i = 0, l = blobParts.length; i < l; i++){
+			    for(var i = blobParts.length-1, l = 0; i >= l; i--){
 				    gameObj = blobParts[i];
+				    if(gameObj === undefined){
+					    debugger;
+				    }
 				    if(gameObj.isDead === true){
 					    L.log('Destroying Obj: ' + gameObj, '@dead');
+					    //TODO: This has a bad side effect of removing this object from the blobParts array.
+					    //Might not want to do that during remove, but after this loop?
 					    gameObj.destroy();
 				    }
 			    }
