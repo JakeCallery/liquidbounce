@@ -3,8 +3,6 @@
  * User: Jake
  */
 
-//TODO: Abstract this out to DispenserRenderSource
-
 define([
 'libs/domReady!',
 'jac/events/EventDispatcher',

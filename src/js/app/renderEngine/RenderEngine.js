@@ -60,13 +60,24 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 
 	    /**
 	     * Renders dispensers
-	     * @param {Array.<Dispenser>} $dispensers
+	     * @param {Array.<BaseDispenser>} $dispensers
 	     */
 	    RenderEngine.prototype.renderDispensers = function($dispensers){
-			var self = this;
 		    var item = null;
 		    for(var i = 0, l = $dispensers.length; i < l; i++){
 			    item = $dispensers[i];
+			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+		    }
+	    };
+
+	    /**
+	     * render deflectors
+	     * @param {Array.<BaseDeflector>}$deflectors
+	     */
+	    RenderEngine.prototype.renderDeflectors = function($deflectors){
+		    var item = null;
+		    for(var i = 0, l = $deflectors.length; i < l; i++){
+			    item = $deflectors[i];
 			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
 		    }
 	    };

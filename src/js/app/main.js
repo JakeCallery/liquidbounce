@@ -24,17 +24,20 @@ define([
 'app/physicsEngine/InfluenceObject',
 'jac/math/Vec2DObj',
 'app/parts/dispenser/BaseDispenser',
-'app/parts/dispenser/TestDispenserRenderSource'],
+'app/parts/dispenser/TestDispenserRenderSource',
+'app/parts/deflector/BaseDeflector',
+'app/parts/deflector/TestDeflectorRenderSource'],
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
          GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject,
-		 Vec2DObj,BaseDispenser,TestDispenserRenderSource){
+		 Vec2DObj,BaseDispenser,TestDispenserRenderSource, BaseDeflector, TestDeflectorRenderSource){
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
 	L.isEnabled = true;
-	L.isTagFilterEnabled = true;
+	L.isTagFilterEnabled = false;
 	L.isShowingUnTagged = false;
 	L.addTag('@main');
+	L.addTag('@deflector');
 	//L.addTag('@influence');
 	//L.addTag('@dispenser');
 
@@ -58,11 +61,19 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	//var infObj = new InfluenceObject(new Vec2DObj(0,0.3),0.01,InfluenceObject.INFINITE_LIFETIME,'testPush');
 	bp.influenceList.addInfluence(infObj);
 	*/
-	//set up dispenser
+
+	//set up test dispenser
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
 	testDispenserSrc.init();
 	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,2);
 	game.addGameObject(testDispenser);
+
+	//set up test deflector
+	var testDeflectorSrc = new TestDeflectorRenderSource(80,20, '#0000FF');
+	testDeflectorSrc.init();
+	var testDeflector = new BaseDeflector(125, 450, testDeflectorSrc);
+	game.addGameObject(testDeflector);
+
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');
 	EventUtils.addDomListener(stepButtonEl, 'click', function(e){
@@ -85,5 +96,6 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	});
 
 	//auto start game
-	//game.startGame();
+	game.startGame();
+	game.pauseGame();
 });

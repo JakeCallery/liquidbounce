@@ -18,10 +18,13 @@ define([
 'app/game/managers/BlobManager',
 'app/game/managers/InfluenceManager',
 'app/game/managers/DispenserManager',
-'app/parts/dispenser/BaseDispenser'],
+'app/parts/dispenser/BaseDispenser',
+'app/game/managers/CollisionManager',
+'app/parts/deflector/BaseDeflector'],
 function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
          EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine,
-		 BlobManager, InfluenceManager, DispenserManager, BaseDispenser){
+		 BlobManager, InfluenceManager, DispenserManager, BaseDispenser,
+		 CollisionManager, BaseDeflector){
     return (function(){
 
 	    /**
@@ -50,6 +53,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    /**@type {Array.<BlobPart>}*/
 		    var blobParts = [];
 			var dispensers = [];
+			var deflectors = [];
 
 		    var delegateMap = {};
 		    var blobPartPool = new Pool(BlobPart);
@@ -61,6 +65,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.blobManager = new BlobManager();
 		    this.influenceManager = new InfluenceManager();
 		    this.dispenserManager = new DispenserManager();
+		    this.collisionManager = new CollisionManager();
 
 		    /**
 		     * create and add a blob part to the game
@@ -115,6 +120,13 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    obj.renderY = obj.y + obj.renderOffsetY;
 			    }
 
+			    //Deflectors
+			    for(i = 0, l = deflectors.length; i < l; i++){
+				    obj = deflectors[i];
+				    obj.renderX = obj.x + obj.renderOffsetX;
+				    obj.renderY = obj.y + obj.renderOffsetY;
+			    }
+
 		    };
 
 		    var renderGame = function(){
@@ -123,6 +135,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    self.renderEngine.clearFrame();
 			    self.renderEngine.renderDispensers(dispensers);
 			    self.renderEngine.renderBlobParts(blobParts);
+			    self.renderEngine.renderDeflectors(deflectors);
 
 
 		    };
@@ -226,6 +239,9 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    dispensers.push($obj);
 				    self.dispenserManager.addObject($obj);
 
+			    } else if($obj instanceof BaseDeflector){
+				    deflectors.push($obj);
+				    self.collisionManager.addObject($obj);
 			    } else {
 				    //unknown obj
 				    L.error('Unknown Game Obj Type: ' + $obj, true);

@@ -3,8 +3,12 @@
  * User: Jake
  */
 
-define(['jac/events/EventDispatcher','jac/utils/ObjUtils'],
-function(EventDispatcher,ObjUtils){
+define([
+'jac/events/EventDispatcher',
+'jac/utils/ObjUtils',
+'app/game/collision/CollisionSides',
+'jac/logger/Logger'],
+function(EventDispatcher,ObjUtils, CollisionSides, L){
     return (function(){
         /**
          * Creates a BaseDeflector object
@@ -19,6 +23,17 @@ function(EventDispatcher,ObjUtils){
         function BaseDeflector($x, $y, $renderSource){
             //super
             EventDispatcher.call(this);
+
+	        this.isDirty = true;
+	        this.isBlocking = true;
+	        this.collisionSide = CollisionSides.RIGHT;
+
+	        this.x = $x;
+	        this.y = $y;
+	        this.prevX = 0;
+	        this.prevY = 0;
+	        this.vx = 0;
+	        this.vy = 0;
 
 	        //// IManageable ////
 	        this._managers = [];
@@ -40,6 +55,10 @@ function(EventDispatcher,ObjUtils){
         
         //Inherit / Extend
         ObjUtils.inheritPrototype(BaseDeflector,EventDispatcher);
+
+	    BaseDeflector.prototype.buildCollisionShell = function(){
+			//TODO: START HERE AS WELL
+	    };
 
 	    //// IManageable ////
 		BaseDeflector.prototype.addManager = function($manager){
