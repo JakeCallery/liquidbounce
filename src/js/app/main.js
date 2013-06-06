@@ -30,11 +30,14 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 		 Vec2DObj,BaseDispenser,TestDispenserRenderSource){
 
 	L.addLogTarget(new ConsoleTarget());
-    L.log('New Main!');
+    L.log('New Main!','@main');
 	L.isEnabled = true;
 	L.isTagFilterEnabled = true;
-	L.addTag('@influence');
-	L.addTag('@dispenser');
+	L.isShowingUnTagged = false;
+	L.addTag('@main');
+	//L.addTag('@influence');
+	//L.addTag('@dispenser');
+
 
 	var mainCanvas = document.getElementById('gameCanvas');
 	var game = new Game(document, window, mainCanvas, 600, 600);
@@ -57,7 +60,8 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	*/
 	//set up dispenser
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
-	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,120);
+	testDispenserSrc.init();
+	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,2);
 	game.addGameObject(testDispenser);
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');

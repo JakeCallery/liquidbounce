@@ -12,7 +12,7 @@ function(){
 		var IBitmapRenderable = {};
 
 		IBitmapRenderable.renderSrc = {};
-		IBitmapRenderable.renderImgData = {};
+		IBitmapRenderable.renderImg = {};
 		IBitmapRenderable.renderWidth = 0;
 		IBitmapRenderable.renderHeight = 0;
 		IBitmapRenderable.renderX = 0;

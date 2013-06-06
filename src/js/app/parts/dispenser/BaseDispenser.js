@@ -22,7 +22,14 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
     return (function(){
         /**
          * Creates a BaseDispenser object
+         * @param {Game} $game
+         * @param {Number} $x
+         * @param {Number} $y
+         * @param {TestDispenserRenderSource} $renderSource
+         * @param {int} $waitTicks delay between dispenses
          * @extends {EventDispatcher}
+         * @implements {IBitmapRenderable}
+         * @implements {IManageable}
          * @constructor
          */
         function BaseDispenser($game, $x, $y, $renderSource, $waitTicks){
