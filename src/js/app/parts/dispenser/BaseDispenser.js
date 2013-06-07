@@ -44,7 +44,7 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
 	         */
 	        this._managers = [];
 
-	        this.pastTicks = 0;
+	        this.pastTicks = $waitTicks-1;
 	        this.waitTicks = $waitTicks;
 
             this.dispenseXOffset = 30;

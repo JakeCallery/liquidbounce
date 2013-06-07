@@ -15,8 +15,8 @@ function(){
          * @constructor
          */
         function Vec2DObj($x, $y, $xOffset, $yOffset){
-	        if($offsetX === undefined){$offsetX = 0;}
-	        if($offsetY === undefined){$offsetY = 0;}
+	        if($xOffset === undefined){$xOffset = 0;}
+	        if($yOffset === undefined){$yOffset = 0;}
 	        this.x = $x;
 	        this.y = $y;
 	        this.xOffset = $xOffset;

@@ -68,7 +68,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle){
 			    var x1 = bp.prevX;
 			    var y1 = bp.prevY;
 			    var x2 = bp.x;
-			    var y2 = bp.x;
+			    var y2 = bp.y;
 
 			    //Sort dimensions
 			    if(x1 > x2){maxX=x1;minX=x2}else{maxX=x2;minX=x1;}
@@ -85,8 +85,20 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle){
 			    if(rect.height == 0){rect.height = 1;}
 
 			    //Then check those rects against collision objects
-			    //TODO: Start here (collision stuff)
-			    if(rect.intersectsRect())
+			    for(var i = 0, l = this._colObjList.length; i < l; i++){
+				    var obj = this._colObjList[i];
+				    var colRect = obj.colRect;
+				    colRect.x = obj.renderX;
+				    colRect.y = obj.renderY;
+				    //TODO: Start here (collision stuff)
+				    if(rect.intersectsRect(obj.colRect)){
+					    L.log('---- possible collision, dig deeper ----', '@collision');
+				    } else {
+					    //skip
+					    L.log('No chance of collision, skipping', '@collision');
+				    }
+			    }
+
 
 			    //if intersecting, do a proper collision detection
 			    node = $blobList.getNext();

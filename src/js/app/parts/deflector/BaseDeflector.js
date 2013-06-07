@@ -7,8 +7,11 @@ define([
 'jac/events/EventDispatcher',
 'jac/utils/ObjUtils',
 'app/game/collision/CollisionSides',
-'jac/logger/Logger'],
-function(EventDispatcher,ObjUtils, CollisionSides, L){
+'jac/logger/Logger',
+'jac/math/Vec2DObj',
+'jac/geometry/Rectangle',
+'jac/math/LineSeg2DObj'],
+function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DObj){
     return (function(){
         /**
          * Creates a BaseDeflector object
@@ -30,6 +33,7 @@ function(EventDispatcher,ObjUtils, CollisionSides, L){
 	        this.collisionSide = CollisionSides.BOTH;
 	        this.shellSegList = [];
 	        this.shellVecList = [];
+			this.colRect = null;
 
 	        this.x = $x;
 	        this.y = $y;
@@ -39,7 +43,7 @@ function(EventDispatcher,ObjUtils, CollisionSides, L){
 	        this.vy = 0;
 
 	        //// IManageable ////
-	        this._managers = [];
+	        /**@private*/this._managers = [];
 
 	        //// IBitmapRenderable ////
 	        /**@type {CanvasRenderingContext2D}*/
@@ -61,7 +65,44 @@ function(EventDispatcher,ObjUtils, CollisionSides, L){
 
 	    BaseDeflector.prototype.buildCollisionShell = function(){
 			//Top flat (left to right, clockwise)
-		    this.shellVectList.push(new Vec2DObj(this.renderWidth,0,0,0));
+		    this.shellVecList.push(new Vec2DObj(this.renderWidth,0,0,0));
+
+		    //manually build col rect for now
+		    var minX, minY, maxX, maxY;
+		    minX = minY = maxX = maxY = NaN;
+
+		    var lineSeg = new LineSeg2DObj(0,0,0,0);
+			var vec = null;
+
+		    for(var i = 0, l = this.shellVecList.length; i < l; i++){
+			    vec = this.shellVecList[i];
+			    lineSeg.ax = vec.xOffset;
+			    lineSeg.ay = vec.yOffset;
+			    lineSeg.bx = vec.x + vec.xOffset;
+			    lineSeg.by = vec.y + vec.yOffset;
+
+			    //TODO: Optimize (this check only needs to happen on the first time through the loop
+			    if(i == 0){
+				    minX = lineSeg.ax;
+				    maxX = lineSeg.ay;
+				    minY = lineSeg.bx;
+				    maxY = lineSeg.by;
+			    }
+
+			    if(lineSeg.ax < minX){minX = lineSeg.ax;}
+			    else if(lineSeg.ax > maxX){maxX = lineSeg.ax;}
+			    if(lineSeg.ay < minY){minY = lineSeg.ay;}
+			    else if(lineSeg.ay > maxY){maxY = lineSeg.ay;}
+			    if(lineSeg.bx < minX){minX = lineSeg.bx;}
+			    else if(lineSeg.bx > maxX){maxX = lineSeg.bx;}
+			    if(lineSeg.by < minY){minY = lineSeg.by;}
+			    else if(lineSeg.by > maxY){maxY = lineSeg.by;}
+		    }
+
+		    this.colRect = new Rectangle(minX, minY, (maxX - minX), (maxY - minY));
+		    if(this.colRect.width <= 0){this.colRect.width = 1;}
+		    if(this.colRect.height <= 0){this.colRect.height = 1;}
+
 	    };
 
 	    //// IManageable ////

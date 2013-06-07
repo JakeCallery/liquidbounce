@@ -26,10 +26,12 @@ define([
 'app/parts/dispenser/BaseDispenser',
 'app/parts/dispenser/TestDispenserRenderSource',
 'app/parts/deflector/BaseDeflector',
-'app/parts/deflector/TestDeflectorRenderSource'],
+'app/parts/deflector/TestDeflectorRenderSource',
+'app/parts/deflector/TestDeflector'],
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
          GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject,
-		 Vec2DObj,BaseDispenser,TestDispenserRenderSource, BaseDeflector, TestDeflectorRenderSource){
+		 Vec2DObj,BaseDispenser,TestDispenserRenderSource, BaseDeflector, TestDeflectorRenderSource,
+		 TestDeflector){
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
@@ -66,13 +68,13 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	//set up test dispenser
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
 	testDispenserSrc.init();
-	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,2);
+	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,60);
 	game.addGameObject(testDispenser);
 
 	//set up test deflector
 	var testDeflectorSrc = new TestDeflectorRenderSource(80,20, '#0000FF');
 	testDeflectorSrc.init();
-	var testDeflector = new BaseDeflector(175, 450, testDeflectorSrc);
+	var testDeflector = new TestDeflector(175, 450, testDeflectorSrc);
 	game.addGameObject(testDeflector);
 
 	///////////////////////////////////////////////////////////////////////////////
