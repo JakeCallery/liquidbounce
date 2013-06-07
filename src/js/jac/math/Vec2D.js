@@ -72,6 +72,21 @@ function(FastMath, Vec2DObj){
 		    return ($vec2Da.x * $vec2Db.x) + ($vec2Da.y * $vec2Db.y);
 	    };
 
+	    Vec2D.scaledDot = function($vec2Da, $vec2Db){
+		    var len = Vec2D.lengthOf($vec2Db);
+		    return ($vec2Da.x * ($vec2Db.x / len) + ($vec2Db.y * ($vec2Db.y / len)));
+	    };
+
+	    Vec2D.projectVectorOnVector = function($targetVec2D, $vec2Da, $vec2Db){
+		    var dot = Vec2D.scaledDot($vec2Da, $vec2Db);
+		    var len = Vec2D.lengthOf($vec2Db);
+		    $targetVec2D.x = dot * ($vec2Db.x/len);
+		    $targetVec2D.y = dot * ($vec2Db.y/len);
+	    };
+
+	    //TODO: add functions to get left and right normals from a vector
+	    
+
 	    Vec2D.lengthOf = function($vec2D){
 			return Math.sqrt(($vec2D.x * $vec2D.x) + ($vec2D.y * $vec2D.y));
 	    };
