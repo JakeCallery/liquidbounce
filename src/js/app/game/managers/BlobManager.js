@@ -25,7 +25,7 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
          * @implements {IManager}
          * @constructor
          */
-        function BlobManager(){
+        function BlobManager($blobList){
             //super
             EventDispatcher.call(this);
 
@@ -34,7 +34,7 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 	         * @type {LinkedList}
 	         * @private
 	         */
-	        this._blobList = new LinkedList();
+	        this._blobList = $blobList;
 
         }
         

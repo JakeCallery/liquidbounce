@@ -20,11 +20,12 @@ define([
 'app/game/managers/DispenserManager',
 'app/parts/dispenser/BaseDispenser',
 'app/game/managers/CollisionManager',
-'app/parts/deflector/BaseDeflector'],
+'app/parts/deflector/BaseDeflector',
+'jac/linkedList/LinkedList'],
 function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
          EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine,
 		 BlobManager, InfluenceManager, DispenserManager, BaseDispenser,
-		 CollisionManager, BaseDeflector){
+		 CollisionManager, BaseDeflector, LinkedList){
     return (function(){
 
 	    /**
@@ -50,6 +51,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    /**@type int*/
 		    var blobPartNextIndex = -1;
 
+		    var blobList = new LinkedList();
 		    /**@type {Array.<BlobPart>}*/
 		    var blobParts = [];
 			var dispensers = [];
@@ -62,7 +64,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    //this.updateDelegate = EventUtils.bind(self, self.update);
 		    this.renderEngine = new RenderEngine($gameCanvas, $gameWidth, $gameHeight);
 			this.physicsEngine = new PhysicsEngine();
-		    this.blobManager = new BlobManager();
+		    this.blobManager = new BlobManager(blobList);
 		    this.influenceManager = new InfluenceManager();
 		    this.dispenserManager = new DispenserManager();
 		    this.collisionManager = new CollisionManager();
@@ -146,6 +148,10 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    self.blobManager.updateBlobParts(1);
 		    };
 
+		    var updateCollisions = function(){
+			    self.collisionManager.calcCollisions(blobList,1);
+		    };
+
 		    var cullDead = function(){
 			    var gameObj = null;
 			    for(var i = blobParts.length-1, l = 0; i >= l; i--){
@@ -184,6 +190,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 			    cullDead();
 			    updatePhysics();
+			    updateCollisions();
 			    updateGame();
 			    renderGame();
 			    self.stats.update();

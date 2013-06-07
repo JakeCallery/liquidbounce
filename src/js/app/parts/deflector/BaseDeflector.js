@@ -18,6 +18,7 @@ function(EventDispatcher,ObjUtils, CollisionSides, L){
          * @extends {EventDispatcher}
          * @implements {IManageable}
          * @implements {IBitmapRenderable}
+         * @implements {ICollideable}
          * @constructor
          */
         function BaseDeflector($x, $y, $renderSource){
@@ -26,7 +27,9 @@ function(EventDispatcher,ObjUtils, CollisionSides, L){
 
 	        this.isDirty = true;
 	        this.isBlocking = true;
-	        this.collisionSide = CollisionSides.RIGHT;
+	        this.collisionSide = CollisionSides.BOTH;
+	        this.shellSegList = [];
+	        this.shellVecList = [];
 
 	        this.x = $x;
 	        this.y = $y;
@@ -42,8 +45,8 @@ function(EventDispatcher,ObjUtils, CollisionSides, L){
 	        /**@type {CanvasRenderingContext2D}*/
 	        this.renderSrc = $renderSource;
 	        this.renderImg = this.renderSrc.srcImage;
-	        this.renderWidth = 0;
-	        this.renderHeight = 0;
+	        this.renderWidth = this.renderSrc.width;
+	        this.renderHeight = this.renderSrc.height;
 	        this.renderX = 0;
 	        this.renderY = 0;
 	        this.renderZ = 0;
@@ -57,7 +60,8 @@ function(EventDispatcher,ObjUtils, CollisionSides, L){
         ObjUtils.inheritPrototype(BaseDeflector,EventDispatcher);
 
 	    BaseDeflector.prototype.buildCollisionShell = function(){
-			//TODO: START HERE AS WELL
+			//Top flat (left to right, clockwise)
+		    this.shellVectList.push(new Vec2DObj(this.renderWidth,0,0,0));
 	    };
 
 	    //// IManageable ////

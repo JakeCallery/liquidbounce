@@ -34,10 +34,11 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
 	L.isEnabled = true;
-	L.isTagFilterEnabled = false;
+	L.isTagFilterEnabled = true;
 	L.isShowingUnTagged = false;
 	L.addTag('@main');
 	L.addTag('@deflector');
+	L.addTag('@collision');
 	//L.addTag('@influence');
 	//L.addTag('@dispenser');
 
@@ -71,7 +72,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	//set up test deflector
 	var testDeflectorSrc = new TestDeflectorRenderSource(80,20, '#0000FF');
 	testDeflectorSrc.init();
-	var testDeflector = new BaseDeflector(125, 450, testDeflectorSrc);
+	var testDeflector = new BaseDeflector(175, 450, testDeflectorSrc);
 	game.addGameObject(testDeflector);
 
 	///////////////////////////////////////////////////////////////////////////////

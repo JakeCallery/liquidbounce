@@ -85,6 +85,11 @@ function(FastMath, Vec2DObj){
 		    $targetVec2D.y = $vec2Da.y + ($vec2Db.y - $vec2Da.y) * $value;
 	    };
 
+	    Vec2D.move = function($targetVec2D, $xOffset, $yOffset){
+		    $targetVec2D.xOffset = $xOffset;
+		    $targetVec2D.yOffset = $yOffset;
+	    };
+
 	    //Return constructor
         return Vec2D;
     })();
