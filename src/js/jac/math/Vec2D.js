@@ -74,7 +74,7 @@ function(FastMath, Vec2DObj){
 
 	    Vec2D.scaledDot = function($vec2Da, $vec2Db){
 		    var len = Vec2D.lengthOf($vec2Db);
-		    return ($vec2Da.x * ($vec2Db.x / len) + ($vec2Db.y * ($vec2Db.y / len)));
+		    return ($vec2Da.x * ($vec2Db.x / len) + ($vec2Da.y * ($vec2Db.y / len)));
 	    };
 
 	    Vec2D.projectVectorOnVector = function($targetVec2D, $vec2Da, $vec2Db){
@@ -84,8 +84,15 @@ function(FastMath, Vec2DObj){
 		    $targetVec2D.y = dot * ($vec2Db.y/len);
 	    };
 
-	    //TODO: add functions to get left and right normals from a vector
+	    Vec2D.leftNormal = function($targetVec2D, $vec2D){
+			$targetVec2D.x = $vec2D.y;
+		    $targetVec2D.y = -$vec2D.x;
+	    };
 
+	    Vec2D.rightNormal = function($targetVec2D, $vec2D){
+			$targetVec2D.x = -$vec2D.y;
+		    $targetVec2D.y = $vec2D.x;
+	    };
 
 	    Vec2D.lengthOf = function($vec2D){
 			return Math.sqrt(($vec2D.x * $vec2D.x) + ($vec2D.y * $vec2D.y));
@@ -103,6 +110,16 @@ function(FastMath, Vec2DObj){
 	    Vec2D.move = function($targetVec2D, $xOffset, $yOffset){
 		    $targetVec2D.xOffset = $xOffset;
 		    $targetVec2D.yOffset = $yOffset;
+	    };
+
+	    Vec2D.vecFromLineSeg = function($targetVec2D, $x1, $y1, $x2, $y2){
+		    var xDiff = $x2 - $x1;
+		    var yDiff = $y2 - $y1;
+
+		    $targetVec2D.x = xDiff;
+		    $targetVec2D.y = yDiff;
+		    $targetVec2D.xOffset = $x1;
+		    $targetVec2D.yOffset = $y1;
 	    };
 
 	    //Return constructor

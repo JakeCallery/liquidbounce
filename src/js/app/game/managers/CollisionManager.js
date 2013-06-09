@@ -93,6 +93,9 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle){
 				    //TODO: Start here (collision stuff)
 				    if(rect.intersectsRect(obj.colRect)){
 					    L.log('---- possible collision, dig deeper ----', '@collision');
+
+					    
+
 				    } else {
 					    //skip
 					    L.log('No chance of collision, skipping', '@collision');

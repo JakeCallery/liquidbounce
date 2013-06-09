@@ -23,6 +23,14 @@ function(){
 	        this.yOffset = $yOffset;
         }
 
+	    /**
+	     *
+	     * @returns {{x1: {Number}, y1: {Number}, x2: {Number}, y2: {Number}}}
+	     */
+	    Vec2DObj.prototype.getLineSeg = function(){
+		    return {x1:this.xOffset, y1:this.yOffset, x2:(this.x + this.xOffset), y2:(this.y + this.yOffset)};
+	    };
+
         //Return constructor
         return Vec2DObj;
     })();
