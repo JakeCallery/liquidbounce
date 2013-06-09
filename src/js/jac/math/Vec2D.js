@@ -85,7 +85,7 @@ function(FastMath, Vec2DObj){
 	    };
 
 	    //TODO: add functions to get left and right normals from a vector
-	    
+
 
 	    Vec2D.lengthOf = function($vec2D){
 			return Math.sqrt(($vec2D.x * $vec2D.x) + ($vec2D.y * $vec2D.y));
