@@ -8,8 +8,10 @@ define([
 'jac/utils/ObjUtils',
 'app/game/managers/IManager',
 'jac/logger/Logger',
-'jac/geometry/Rectangle'],
-function(EventDispatcher,ObjUtils,IManager,L,Rectangle){
+'jac/geometry/Rectangle',
+'jac/math/Vec2D',
+'jac/math/Vec2DObj'],
+function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj){
     return (function(){
         /**
          * Creates a CollisionManager object
@@ -93,8 +95,23 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle){
 				    //TODO: Start here (collision stuff)
 				    if(rect.intersectsRect(obj.colRect)){
 					    L.log('---- possible collision, dig deeper ----', '@collision');
+						var blobMoveVec = new Vec2DObj(0,0,0,0);
+						var shellVec = null;
+						var baseVec = new Vec2DObj(0,0,0,0);
+						var shellVecLn = null;
+					    //check against all shell vects
+					    for(var v = 0, c = obj.shellVecList.length; v < c; v++){
+						    shellVec = obj.shellVecList[v];
+						    shellVecLn = Vec2D.duplicate(shellVec);
+						    Vec2D.getLeft(shellVecLn, shellVec);
+							Vec2D.vecFromLineSeg(baseVec, obj.x, obj.y, shellVec.xOffset, shellVec.yOffset);
+						    var dp1 = Vec2D.scaledDot(baseVec, shellVec);
+						    var dp2 = Vec2D.scaledDot(baseVec, shellVecLn);
 
-					    
+						    //TODO: Continue Here (pg. 123) START HERE
+
+					    }
+
 
 				    } else {
 					    //skip
