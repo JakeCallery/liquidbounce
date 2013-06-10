@@ -66,7 +66,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 
 		    while(node !== null){
 			    /**@type {BlobPart}*/bp = node.obj;
-			    L.log('calc collisions', '@collision');
+			    //L.log('calc collisions', '@collision');
 			    //Loop through blob parts and build position rects
 				var minX,maxX;
 			    var minY,maxY;
@@ -96,9 +96,10 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 				    colRect.x = obj.renderX;
 				    colRect.y = obj.renderY;
 
-				    if(rect.intersectsRect(obj.colRect)){
-					    L.log('---- possible collision, dig deeper ----', '@collision');
+				    if(rect.intersectsRect(obj.colRect) || true){  //DEBUG remove || true
+					    //L.log('---- possible collision, dig deeper ----', '@collision');
 						var blobMoveVec = new Vec2DObj(0,0,0,0);
+					    Vec2D.vecFromLineSeg(blobMoveVec, bp.prevX, bp.prevY, bp.x, bp.y);
 						var shellVec = null;
 						var baseVec = new Vec2DObj(0,0,0,0);
 						var shellVecLn = null;
@@ -107,11 +108,16 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 						    shellVec = obj.shellVecList[v];
 						    shellVecLn = Vec2D.duplicate(shellVec);
 						    Vec2D.calcLeftNormal(shellVecLn, shellVec);
-							Vec2D.vecFromLineSeg(baseVec, obj.x, obj.y, shellVec.xOffset, shellVec.yOffset);
+							Vec2D.vecFromLineSeg(baseVec, bp.x, bp.y, shellVec.xOffset, shellVec.yOffset);
 						    var dp1 = Vec2D.scaledDot(baseVec, shellVec);
 						    var dp2 = Vec2D.scaledDot(baseVec, shellVecLn);
 
+						    L.log('DP1: ' + dp1, '@collision');
+						    L.log('DP2: ' + dp2, '@collision');
+						    L.log('ShellVec Length: ' + Vec2D.lengthOf(shellVec), '@collision');
+
 						    //DEBUG
+						    ddt.drawLine(blobMoveVec.xOffset, blobMoveVec.yOffset, (blobMoveVec.x + blobMoveVec.xOffset), (blobMoveVec.y + blobMoveVec.yOffset), '#00FFFF');
 						    ddt.drawLine(baseVec.xOffset, baseVec.yOffset, (baseVec.x + baseVec.xOffset), (baseVec.y + baseVec.yOffset), '#FFFFFF');
 						    ddt.drawLine(shellVec.xOffset, shellVec.yOffset, (shellVec.x + shellVec.xOffset), (shellVec.y + shellVec.yOffset), '#FF00FF');
 						    ddt.drawLine(shellVecLn.xOffset, shellVecLn.yOffset, (shellVecLn.x + shellVecLn.xOffset), (shellVecLn.y + shellVecLn.yOffset), '#FFFF00');
@@ -121,8 +127,8 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 						    //Check to see if the point is within the scope of the shell vector line segment
 						    if(dp1 > -(Vec2D.lengthOf(shellVec)) && dp1 < 0){
 							    //has the point crossed from from left to right
-							    if(dp2 <= 0){
-								    L.log('---- !!COLLIDED!! ----');
+							    if(dp2 >= 0){
+								    L.log('---- !!COLLIDED!! ----', '@collision');
 							    }
 
 						    }
