@@ -124,9 +124,14 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 						    ddt.drawLine(shellVecLn.xOffset, shellVecLn.yOffset, (shellVecLn.x + shellVecLn.xOffset), (shellVecLn.y + shellVecLn.yOffset), '#FFFF00');
 						    ////////////////////
 
-						    //TODO: Continue Here (pg. 123) START HERE
 						    //Check to see if the point is within the scope of the shell vector line segment
 						    if(dp1 > -(Vec2D.lengthOf(shellVec)) && dp1 < 0){
+
+							    //TODO: Continue Here (pg. 143) START HERE
+							    //get the current 'side', if the new side is different from the old side, we have collided
+							    //then determine how far to adjust the object to get it back to the collision point
+							    //then adjust the previous position so that the next velocity calc will be a bounce
+
 							    //has the point crossed from from left to right
 							    L.log('-- IN SCOPE --', '@collision');
 							    if(dp2 >= 0){
