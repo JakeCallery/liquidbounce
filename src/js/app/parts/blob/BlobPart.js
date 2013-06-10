@@ -57,6 +57,8 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 	        /** @type {InfluenceList} */
 	        this.influenceList = new InfluenceList();
 
+	        this.prevLineSideDict = {};
+
         }
         
         //Inherit / Extend

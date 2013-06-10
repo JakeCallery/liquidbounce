@@ -96,13 +96,14 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 				    colRect.x = obj.renderX;
 				    colRect.y = obj.renderY;
 
-				    if(rect.intersectsRect(obj.colRect) || true){  //DEBUG remove || true
+				    if(rect.intersectsRect(obj.colRect)){
 					    //L.log('---- possible collision, dig deeper ----', '@collision');
 						var blobMoveVec = new Vec2DObj(0,0,0,0);
 					    Vec2D.vecFromLineSeg(blobMoveVec, bp.prevX, bp.prevY, bp.x, bp.y);
 						var shellVec = null;
 						var baseVec = new Vec2DObj(0,0,0,0);
 						var shellVecLn = null;
+
 					    //check against all shell vects
 					    for(var v = 0, c = obj.shellVecList.length; v < c; v++){
 						    shellVec = obj.shellVecList[v];
@@ -127,6 +128,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 						    //Check to see if the point is within the scope of the shell vector line segment
 						    if(dp1 > -(Vec2D.lengthOf(shellVec)) && dp1 < 0){
 							    //has the point crossed from from left to right
+							    L.log('-- IN SCOPE --', '@collision');
 							    if(dp2 >= 0){
 								    L.log('---- !!COLLIDED!! ----', '@collision');
 							    }
