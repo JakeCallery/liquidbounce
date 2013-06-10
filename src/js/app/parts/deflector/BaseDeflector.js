@@ -65,7 +65,7 @@ function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DO
 
 	    BaseDeflector.prototype.buildCollisionShell = function(){
 			//Top flat (left to right, clockwise)
-		    this.shellVecList.push(new Vec2DObj(this.renderWidth,0,0,0));
+		    this.shellVecList.push(new Vec2DObj(this.renderWidth,0,this.x + this.renderOffsetX,this.y + this.renderOffsetY));
 
 		    //manually build col rect for now
 		    var minX, minY, maxX, maxY;
@@ -81,7 +81,6 @@ function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DO
 			    lineSeg.bx = vec.x + vec.xOffset;
 			    lineSeg.by = vec.y + vec.yOffset;
 
-			    //TODO: Optimize (this check only needs to happen on the first time through the loop
 			    if(i == 0){
 				    minX = lineSeg.ax;
 				    maxX = lineSeg.ay;

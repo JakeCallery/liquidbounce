@@ -21,11 +21,12 @@ define([
 'app/parts/dispenser/BaseDispenser',
 'app/game/managers/CollisionManager',
 'app/parts/deflector/BaseDeflector',
-'jac/linkedList/LinkedList'],
+'jac/linkedList/LinkedList',
+'app/debug/DebugDrawTool'],
 function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
          EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine,
 		 BlobManager, InfluenceManager, DispenserManager, BaseDispenser,
-		 CollisionManager, BaseDeflector, LinkedList){
+		 CollisionManager, BaseDeflector, LinkedList, DebugDrawTool){
     return (function(){
 
 	    /**
@@ -43,10 +44,14 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.window = $window;
 			this.gameWidth = $gameWidth;
 		    this.gameHeight = $gameHeight;
+			this.gameCanvas = $gameCanvas;
+		    this.gameCtx = $gameCanvas.getContext('2d');
 
 		    this.stats = new Stats();
 		    this.stats.setMode(0);
 			this.doc.getElementById('statsDiv').appendChild(this.stats.domElement);
+
+		    var ddt = new DebugDrawTool();
 
 		    /**@type int*/
 		    var blobPartNextIndex = -1;
@@ -62,7 +67,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    this.updateId = -1;
 		    //this.updateDelegate = EventUtils.bind(self, self.update);
-		    this.renderEngine = new RenderEngine($gameCanvas, $gameWidth, $gameHeight);
+		    this.renderEngine = new RenderEngine(this.gameCanvas, $gameWidth, $gameHeight);
 			this.physicsEngine = new PhysicsEngine();
 		    this.blobManager = new BlobManager(blobList);
 		    this.influenceManager = new InfluenceManager();
@@ -194,6 +199,9 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    updateGame();
 			    renderGame();
 			    self.stats.update();
+
+			    //debug draw
+			    ddt.draw(self.gameCtx);
 		    };
 
 		    this.stepGame = function(){

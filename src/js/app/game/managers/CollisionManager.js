@@ -10,8 +10,9 @@ define([
 'jac/logger/Logger',
 'jac/geometry/Rectangle',
 'jac/math/Vec2D',
-'jac/math/Vec2DObj'],
-function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj){
+'jac/math/Vec2DObj',
+'app/debug/DebugDrawTool'],
+function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawTool){
     return (function(){
         /**
          * Creates a CollisionManager object
@@ -57,6 +58,8 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj){
 
 		    var bp = null;
 
+		    ddt = new DebugDrawTool();
+
 		    $blobList.resetCurrent();
 		    var node = $blobList.getNext();
 			/**@type {Rectangle}*/var rect = new Rectangle(0,0,1,1);
@@ -92,7 +95,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj){
 				    var colRect = obj.colRect;
 				    colRect.x = obj.renderX;
 				    colRect.y = obj.renderY;
-				    //TODO: Start here (collision stuff)
+
 				    if(rect.intersectsRect(obj.colRect)){
 					    L.log('---- possible collision, dig deeper ----', '@collision');
 						var blobMoveVec = new Vec2DObj(0,0,0,0);
@@ -103,12 +106,26 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj){
 					    for(var v = 0, c = obj.shellVecList.length; v < c; v++){
 						    shellVec = obj.shellVecList[v];
 						    shellVecLn = Vec2D.duplicate(shellVec);
-						    Vec2D.getLeft(shellVecLn, shellVec);
+						    Vec2D.calcLeftNormal(shellVecLn, shellVec);
 							Vec2D.vecFromLineSeg(baseVec, obj.x, obj.y, shellVec.xOffset, shellVec.yOffset);
 						    var dp1 = Vec2D.scaledDot(baseVec, shellVec);
 						    var dp2 = Vec2D.scaledDot(baseVec, shellVecLn);
 
+						    //DEBUG
+						    ddt.drawLine(baseVec.xOffset, baseVec.yOffset, (baseVec.x + baseVec.xOffset), (baseVec.y + baseVec.yOffset), '#FFFFFF');
+						    ddt.drawLine(shellVec.xOffset, shellVec.yOffset, (shellVec.x + shellVec.xOffset), (shellVec.y + shellVec.yOffset), '#FF00FF');
+						    ddt.drawLine(shellVecLn.xOffset, shellVecLn.yOffset, (shellVecLn.x + shellVecLn.xOffset), (shellVecLn.y + shellVecLn.yOffset), '#FFFF00');
+						    ////////////////////
+
 						    //TODO: Continue Here (pg. 123) START HERE
+						    //Check to see if the point is within the scope of the shell vector line segment
+						    if(dp1 > -(Vec2D.lengthOf(shellVec)) && dp1 < 0){
+							    //has the point crossed from from left to right
+							    if(dp2 <= 0){
+								    L.log('---- !!COLLIDED!! ----');
+							    }
+
+						    }
 
 					    }
 

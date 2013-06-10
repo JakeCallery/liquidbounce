@@ -65,7 +65,7 @@ function(FastMath, Vec2DObj){
 	    };
 
 	    Vec2D.duplicate = function($vec2D){
-		    return new Vec2DObj($vec2D.x, $vec2D.y);
+		    return new Vec2DObj($vec2D.x, $vec2D.y, $vec2D.xOffset, $vec2D.yOffset);
 	    };
 
 	    Vec2D.dot = function($vec2Da, $vec2Db){
@@ -84,12 +84,12 @@ function(FastMath, Vec2DObj){
 		    $targetVec2D.y = dot * ($vec2Db.y/len);
 	    };
 
-	    Vec2D.leftNormal = function($targetVec2D, $vec2D){
+	    Vec2D.calcLeftNormal = function($targetVec2D, $vec2D){
 			$targetVec2D.x = $vec2D.y;
 		    $targetVec2D.y = -$vec2D.x;
 	    };
 
-	    Vec2D.rightNormal = function($targetVec2D, $vec2D){
+	    Vec2D.calcRightNormal = function($targetVec2D, $vec2D){
 			$targetVec2D.x = -$vec2D.y;
 		    $targetVec2D.y = $vec2D.x;
 	    };
