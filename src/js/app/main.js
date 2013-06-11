@@ -68,7 +68,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	//set up test dispenser
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
 	testDispenserSrc.init();
-	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,60);
+	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,1);
 	game.addGameObject(testDispenser);
 
 	//set up test deflector

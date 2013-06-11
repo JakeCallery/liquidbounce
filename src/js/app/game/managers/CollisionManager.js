@@ -98,8 +98,8 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 					    colRect.x = obj.renderX;
 					    colRect.y = obj.renderY;
 
-					    ddt.drawRectangle(rect.x, rect.y, rect.width, rect.height,'#AAAAAA');
-					    ddt.drawRectangle(obj.colRect.x, obj.colRect.y, obj.colRect.width, obj.colRect.height, '#AA00AA');
+					    //ddt.drawRectangle(rect.x, rect.y, rect.width, rect.height,'#AAAAAA');
+					    //ddt.drawRectangle(obj.colRect.x, obj.colRect.y, obj.colRect.width, obj.colRect.height, '#AA00AA');
 
 					    //if intersecting, do a proper collision detection
 					    if(rect.intersectsRect(obj.colRect)){
@@ -186,7 +186,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 									    //Calc bounce
 									    var bounce_x = p1_x + p2_x;
 									    var bounce_y = p1_y + p2_y;
-									    ddt.drawLine(bp.x, bp.y, bp.x + bounce_x, bp.y + bounce_y,'#FFFF00');
+									    //ddt.drawLine(bp.x, bp.y, bp.x + bounce_x, bp.y + bounce_y,'#FFFF00');
 
 									    //Reset prevX/Y to 'bounce' the particle
 										bp.prevX = bp.x + (bounce_x * -1);
