@@ -122,26 +122,22 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 							    var dp2 = Vec2D.scaledDot(baseVec, shellVecLeftNormal);
 							    var dp3 = Vec2D.scaledDot(prevBaseVec, shellVecLeftNormal);
 
-							    L.log('DP1: ' + dp1, '@collision');
-							    L.log('DP2: ' + dp2, '@collision');
-							    L.log('DP3: ' + dp3, '@collision');
-							    L.log('ShellVec Length: ' + Vec2D.lengthOf(shellVec), '@collision');
+							    //L.log('DP1: ' + dp1, '@collision');
+							    //L.log('DP2: ' + dp2, '@collision');
+							    //L.log('DP3: ' + dp3, '@collision');
+							    //L.log('ShellVec Length: ' + Vec2D.lengthOf(shellVec), '@collision');
 
 							    //DEBUG
-							    ddt.drawLine(blobMoveVec.xOffset, blobMoveVec.yOffset, (blobMoveVec.x + blobMoveVec.xOffset), (blobMoveVec.y + blobMoveVec.yOffset), '#00FFFF');
-							    ddt.drawLine(baseVec.xOffset, baseVec.yOffset, (baseVec.x + baseVec.xOffset), (baseVec.y + baseVec.yOffset), '#FFFFFF');
-							    ddt.drawLine(shellVec.xOffset, shellVec.yOffset, (shellVec.x + shellVec.xOffset), (shellVec.y + shellVec.yOffset), '#FF00FF');
-							    ddt.drawLine(shellVecLeftNormal.xOffset, shellVecLeftNormal.yOffset, (shellVecLeftNormal.x + shellVecLeftNormal.xOffset), (shellVecLeftNormal.y + shellVecLeftNormal.yOffset), '#FFFF00');
+							    //ddt.drawLine(blobMoveVec.xOffset, blobMoveVec.yOffset, (blobMoveVec.x + blobMoveVec.xOffset), (blobMoveVec.y + blobMoveVec.yOffset), '#00FFFF');
+							    //ddt.drawLine(baseVec.xOffset, baseVec.yOffset, (baseVec.x + baseVec.xOffset), (baseVec.y + baseVec.yOffset), '#FFFFFF');
+							    //ddt.drawLine(shellVec.xOffset, shellVec.yOffset, (shellVec.x + shellVec.xOffset), (shellVec.y + shellVec.yOffset), '#FF00FF');
+							    //ddt.drawLine(shellVecLeftNormal.xOffset, shellVecLeftNormal.yOffset, (shellVecLeftNormal.x + shellVecLeftNormal.xOffset), (shellVecLeftNormal.y + shellVecLeftNormal.yOffset), '#FFFF00');
 							    ////////////////////
 
 							    //Check to see if the point is within the scope of the shell vector line segment
 							    if(dp1 > -(Vec2D.lengthOf(shellVec)) && dp1 < 0){
-								    L.log('-- IN SCOPE --', '@collision');
+								    //L.log('-- IN SCOPE --', '@collision');
 
-								    //TODO: Continue Here (pg. 143) START HERE
-								    //get the current 'side', if the new side is different from the old side, we have collided
-								    //then determine how far to adjust the object to get it back to the collision point
-								    //then adjust the previous position so that the next velocity calc will be a bounce
 									var prevSide = CollisionSides.NONE;
 								    var currentSide = CollisionSides.NONE;
 
@@ -160,7 +156,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 
 								    //has the point crossed from from left to right
 								    if(dp2 === 0 || (currentSide !== prevSide)){
-									    L.log('---- !!COLLIDED!! ----', '@collision');
+									    //L.log('---- !!COLLIDED!! ----', '@collision');
 
 									    //Move blob to actual collision point
 									    var moveLen = Vec2D.lengthOf(blobMoveVec);
@@ -207,7 +203,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 
 					    } else {
 						    //skip
-						    L.log('No chance of collision, skipping', '@collision');
+						    //L.log('No chance of collision, skipping', '@collision');
 					    }
 				    }
 
