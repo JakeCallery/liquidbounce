@@ -57,7 +57,9 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 	        /** @type {InfluenceList} */
 	        this.influenceList = new InfluenceList();
 
-	        this.prevLineSideDict = {};
+	        //this is set to true after a collision
+	        //the collision on the next tick is ignored, and this is set to false again
+	        this.ignoreNextCollision = false;
 
         }
         
