@@ -159,6 +159,41 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 							    //has the point crossed from from left to right
 							    if(dp2 === 0 || (currentSide !== prevSide)){
 								    L.log('---- !!COLLIDED!! ----', '@collision');
+
+								    //Move blob to actual collision point
+								    var moveLen = Vec2D.lengthOf(blobMoveVec);
+								    var colForceX = (blobMoveVec.x / moveLen) * Math.abs(dp2);
+								    var colForceY = (blobMoveVec.y / moveLen) * Math.abs(dp2);
+								    var colVec = new Vec2DObj(colForceX, colForceY);
+									bp.x -= colForceX;
+								    bp.y -= colForceY;
+
+								    //Calc bounce vector
+									var movecolDP = Vec2D.scaledDot(blobMoveVec, colVec);
+
+								    //Find projections
+								    var colLen = Vec2D.lengthOf(colVec);
+								    var colLeftNormal = Vec2D.duplicate(colVec);
+								    Vec2D.calcLeftNormal(colLeftNormal, colVec);
+								    var p1_x = movecolDP * colVec.x / colLen;
+								    var p1_y = movecolDP * colVec.y / colLen;
+
+								    var movcollenDP = Vec2D.scaledDot(blobMoveVec, colLeftNormal);
+									var colLeftNormalLen = Vec2D.lengthOf(colLeftNormal);
+								    var p2_x = movcollenDP * colLeftNormal.x / colLeftNormalLen;
+								    var p2_y = movcollenDP * colLeftNormal.y / colLeftNormalLen;
+
+								    //Reverse projections
+								    p2_x *= -1;
+								    p2_y *= -1;
+
+								    //Calc bounce
+								    var bounce_x = p1_x + p2_x;
+								    var bounce_y = p1_y + p2_y;
+
+								    //Reset prevX/Y to 'bounce' the particle
+									ddt.drawLine(bp.x, bp.y, bp.x + bounce_x * 20, bp.y + bounce_y * 20,'#FFFF00');
+
 							    }
 
 						    }
