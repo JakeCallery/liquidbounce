@@ -10,6 +10,7 @@ function(){
 
 	    CollisionSides.LEFT = 'leftside';
 	    CollisionSides.RIGHT = 'rightside';
+	    CollisionSides.NONE = 'noside';
 	    CollisionSides.BOTH = 'bothsides';
 
         //Return constructor

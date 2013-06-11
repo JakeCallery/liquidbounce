@@ -11,8 +11,9 @@ define([
 'jac/geometry/Rectangle',
 'jac/math/Vec2D',
 'jac/math/Vec2DObj',
-'app/debug/DebugDrawTool'],
-function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawTool){
+'app/debug/DebugDrawTool',
+'app/game/collision/CollisionSides'],
+function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawTool,CollisionSides){
     return (function(){
         /**
          * Creates a CollisionManager object
@@ -96,12 +97,16 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 				    colRect.x = obj.renderX;
 				    colRect.y = obj.renderY;
 
+				    ddt.drawRectangle(rect.x, rect.y, rect.width, rect.height,'#AAAAAA');
+				    ddt.drawRectangle(obj.colRect.x, obj.colRect.y, obj.colRect.width, obj.colRect.height, '#AA00AA');
+
 				    if(rect.intersectsRect(obj.colRect)){
 					    //L.log('---- possible collision, dig deeper ----', '@collision');
 						var blobMoveVec = new Vec2DObj(0,0,0,0);
 					    Vec2D.vecFromLineSeg(blobMoveVec, bp.prevX, bp.prevY, bp.x, bp.y);
 						var shellVec = null;
 						var baseVec = new Vec2DObj(0,0,0,0);
+						var prevBaseVec = new Vec2DObj(0,0,0,0);
 						var shellVecLn = null;
 
 					    //check against all shell vects
@@ -109,12 +114,15 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 						    shellVec = obj.shellVecList[v];
 						    shellVecLn = Vec2D.duplicate(shellVec);
 						    Vec2D.calcLeftNormal(shellVecLn, shellVec);
-							Vec2D.vecFromLineSeg(baseVec, bp.x, bp.y, shellVec.xOffset, shellVec.yOffset);
+						    Vec2D.vecFromLineSeg(prevBaseVec, bp.prevX, bp.prevY, shellVec.xOffset, shellVec.yOffset);
+						    Vec2D.vecFromLineSeg(baseVec, bp.x, bp.y, shellVec.xOffset, shellVec.yOffset);
 						    var dp1 = Vec2D.scaledDot(baseVec, shellVec);
 						    var dp2 = Vec2D.scaledDot(baseVec, shellVecLn);
+						    var dp3 = Vec2D.scaledDot(prevBaseVec, shellVecLn);
 
 						    L.log('DP1: ' + dp1, '@collision');
 						    L.log('DP2: ' + dp2, '@collision');
+						    L.log('DP3: ' + dp3, '@collision');
 						    L.log('ShellVec Length: ' + Vec2D.lengthOf(shellVec), '@collision');
 
 						    //DEBUG
@@ -126,15 +134,30 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 
 						    //Check to see if the point is within the scope of the shell vector line segment
 						    if(dp1 > -(Vec2D.lengthOf(shellVec)) && dp1 < 0){
+							    L.log('-- IN SCOPE --', '@collision');
 
 							    //TODO: Continue Here (pg. 143) START HERE
 							    //get the current 'side', if the new side is different from the old side, we have collided
 							    //then determine how far to adjust the object to get it back to the collision point
 							    //then adjust the previous position so that the next velocity calc will be a bounce
+								var prevSide = CollisionSides.NONE;
+							    var currentSide = CollisionSides.NONE;
+
+							    if(dp2 > 0){
+								    currentSide = CollisionSides.RIGHT;
+							    } else {
+								    currentSide = CollisionSides.LEFT;
+							    }
+
+							    if(dp3 > 0){
+								    prevSide = CollisionSides.RIGHT;
+							    } else {
+								    prevSide = CollisionSides.LEFT
+							    }
+
 
 							    //has the point crossed from from left to right
-							    L.log('-- IN SCOPE --', '@collision');
-							    if(dp2 >= 0){
+							    if(dp2 === 0 || (currentSide !== prevSide)){
 								    L.log('---- !!COLLIDED!! ----', '@collision');
 							    }
 

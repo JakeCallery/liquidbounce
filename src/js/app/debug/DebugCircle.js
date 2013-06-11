@@ -26,8 +26,10 @@ function(DebugDrawInstruction,ObjUtils){
 
 	    DebugCircle.prototype.draw = function($ctx){
 		    $ctx.beginPath();
+		    $ctx.strokeStyle = this.color;
 		    $ctx.arc(this.x, this.y, this.radius,0,2*Math.PI,false);
-		    $ctx.fillStyle = this.color;
+		    //$ctx.fillStyle = this.color;
+		    $ctx.stroke();
 		    $ctx.closePath();
 	    };
 

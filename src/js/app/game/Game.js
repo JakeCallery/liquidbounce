@@ -162,7 +162,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    for(var i = blobParts.length-1, l = 0; i >= l; i--){
 				    gameObj = blobParts[i];
 				    if(gameObj === undefined){
-					    debugger;
+					    L.error('something broke while culling dead game objects', true);
 				    }
 				    if(gameObj.isDead === true){
 					    L.log('Destroying Obj: ' + gameObj, '@dead');

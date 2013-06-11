@@ -83,8 +83,8 @@ function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DO
 
 			    if(i == 0){
 				    minX = lineSeg.ax;
-				    maxX = lineSeg.ay;
-				    minY = lineSeg.bx;
+				    maxX = lineSeg.bx;
+				    minY = lineSeg.ay;
 				    maxY = lineSeg.by;
 			    }
 
@@ -101,6 +101,8 @@ function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DO
 		    this.colRect = new Rectangle(minX, minY, (maxX - minX), (maxY - minY));
 		    if(this.colRect.width <= 0){this.colRect.width = 1;}
 		    if(this.colRect.height <= 0){this.colRect.height = 1;}
+
+		    debugger;
 
 	    };
 

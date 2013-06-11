@@ -27,8 +27,11 @@ function(DebugDrawInstruction,ObjUtils){
         ObjUtils.inheritPrototype(DebugRectangle,DebugDrawInstruction);
 
 	    DebugRectangle.prototype.draw = function($ctx){
-		    $ctx.fillStyle = this.color;
-		    $ctx.fillRect(this.x, this.y, this.width, this.height);
+		    $ctx.beginPath();
+		    $ctx.strokeStyle = this.color;
+		    $ctx.strokeRect(this.x, this.y, this.width, this.height);
+		    $ctx.stroke();
+		    $ctx.closePath();
 	    };
 
         //Return constructor
