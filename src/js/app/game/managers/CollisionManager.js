@@ -94,12 +94,9 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 				    //Then check those rects against collision objects
 				    for(var i = 0, l = this._colObjList.length; i < l; i++){
 					    var obj = this._colObjList[i];
-					    var colRect = obj.colRect;
-					    colRect.x = obj.renderX;
-					    colRect.y = obj.renderY;
 
 					    //ddt.drawRectangle(rect.x, rect.y, rect.width, rect.height,'#AAAAAA');
-					    //ddt.drawRectangle(obj.colRect.x, obj.colRect.y, obj.colRect.width, obj.colRect.height, '#AA00AA');
+					   // ddt.drawRectangle(obj.colRect.x, obj.colRect.y, obj.colRect.width, obj.colRect.height, '#AA00AA');
 
 					    //if intersecting, do a proper collision detection
 					    if(rect.intersectsRect(obj.colRect)){
@@ -136,7 +133,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 
 							    //Check to see if the point is within the scope of the shell vector line segment
 							    if(dp1 > -(Vec2D.lengthOf(shellVec)) && dp1 < 0){
-								    //L.log('-- IN SCOPE --', '@collision');
+								   // L.log('-- IN SCOPE --', '@collision');
 
 									var prevSide = CollisionSides.NONE;
 								    var currentSide = CollisionSides.NONE;
@@ -155,6 +152,8 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 
 
 								    //has the point crossed from from left to right
+								    //L.log('PrevSide: ' + prevSide, '@collision');
+								    //L.log('CurrentSide: ' + currentSide, '@collision');
 								    if(dp2 === 0 || (currentSide !== prevSide)){
 									    //L.log('---- !!COLLIDED!! ----', '@collision');
 
@@ -186,7 +185,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 									    //Calc bounce
 									    var bounce_x = p1_x + p2_x;
 									    var bounce_y = p1_y + p2_y;
-									    //ddt.drawLine(bp.x, bp.y, bp.x + bounce_x, bp.y + bounce_y,'#FFFF00');
+									    //ddt.drawLine(bp.x, bp.y, (bp.x + bounce_x) * 2, (bp.y + bounce_y) * 2,'#FFFF00');
 
 									    //Reset prevX/Y to 'bounce' the particle
 										bp.prevX = bp.x + (bounce_x * -1);

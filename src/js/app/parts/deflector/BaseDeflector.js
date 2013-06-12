@@ -105,7 +105,7 @@ function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DO
 			        vec.updateFromLineSeg(x1+this.x, y1+this.y, x2+this.x, y2+this.y);
 		        }
 
-
+				this.updateCollisionRect();
 
 
 	        };
@@ -118,13 +118,17 @@ function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DO
 	    BaseDeflector.prototype.buildCollisionShell = function(){
 			//Top flat (left to right, clockwise)
 		    this.shellVecList.push(new Vec2DObj(this.renderWidth,0,this.x + this.renderOffsetX,this.y + this.renderOffsetY));
+			this.updateCollisionRect();
 
+	    };
+
+	    BaseDeflector.prototype.updateCollisionRect = function(){
 		    //manually build col rect for now
 		    var minX, minY, maxX, maxY;
 		    minX = minY = maxX = maxY = NaN;
 
 		    var lineSeg = new LineSeg2DObj(0,0,0,0);
-			var vec = null;
+		    var vec = null;
 
 		    for(var i = 0, l = this.shellVecList.length; i < l; i++){
 			    vec = this.shellVecList[i];
