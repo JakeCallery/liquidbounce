@@ -77,7 +77,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var testDeflector = new TestDeflector(150, 450, testDeflectorSrc);
 	testDeflector.setRotation(10);
 	game.addGameObject(testDeflector);
-	var testDeflector2 = new TestDeflector(430, 450, testDeflectorSrc);
+	var testDeflector2 = new TestDeflector(450, 450, testDeflectorSrc);
 	game.addGameObject(testDeflector2);
 	testDeflector2.setRotation(-30);
 

@@ -80,11 +80,17 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 		    var item = null;
 		    for(var i = 0, l = $deflectors.length; i < l; i++){
 			    item = $deflectors[i];
-			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+
+			    this.renderCtx.save();
+			    this.renderCtx.translate(item.x, item.y);
+			    this.renderCtx.rotate(item.getRotationInRadians());
+			    this.renderCtx.drawImage(item.renderImg, item.renderOffsetX, item.renderOffsetY);
+			    this.renderCtx.restore();
 
 			    //Debug
-			    var vec = item.shellVecList[0];
-			    this.ddt.drawLine(vec.xOffset, vec.yOffset, vec.x+vec.xOffset, vec.y+vec.yOffset, '#00FFFF');
+			    //var vec = item.shellVecList[0];
+			    //this.ddt.drawLine(vec.xOffset, vec.yOffset, vec.x+vec.xOffset, vec.y+vec.yOffset, '#00FFFF');
+			    ///////////////////////////////////////////////////////////
 		    }
 	    };
 

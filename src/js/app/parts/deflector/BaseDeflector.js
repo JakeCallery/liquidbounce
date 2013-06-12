@@ -65,6 +65,10 @@ function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DO
 		        return MathUtils.radToDeg(_rotation);
 	        };
 
+	        this.getRotationInRadians = function(){
+				return _rotation;
+	        };
+
 	        this.setRotation = function($angleInDegrees){
 		        var rads = MathUtils.degToRad($angleInDegrees);
                 var diff =  rads - _rotation;
