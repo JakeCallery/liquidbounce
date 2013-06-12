@@ -76,6 +76,8 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	testDeflectorSrc.init();
 	var testDeflector = new TestDeflector(175, 450, testDeflectorSrc);
 	game.addGameObject(testDeflector);
+	var testDeflector2 = new TestDeflector(375, 450, testDeflectorSrc);
+	game.addGameObject(testDeflector2);
 
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');
