@@ -75,9 +75,11 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var testDeflectorSrc = new TestDeflectorRenderSource(80,20, '#0000FF');
 	testDeflectorSrc.init();
 	var testDeflector = new TestDeflector(175, 450, testDeflectorSrc);
+	testDeflector.setRotation(0);
 	game.addGameObject(testDeflector);
 	var testDeflector2 = new TestDeflector(375, 450, testDeflectorSrc);
 	game.addGameObject(testDeflector2);
+	testDeflector2.setRotation(-30);
 
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');

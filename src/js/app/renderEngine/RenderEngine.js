@@ -7,8 +7,9 @@ define([
 'jac/events/EventDispatcher',
 'jac/utils/ObjUtils',
 'jac/utils/InterfaceUtils',
-'app/renderEngine/IBitmapRenderable'],
-function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
+'app/renderEngine/IBitmapRenderable',
+'app/debug/DebugDrawTool'],
+function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawTool){
     return (function(){
         /**
          * Creates a RenderEngine object
@@ -27,6 +28,8 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 
 	        /**@type {canvas}*/this.renderCanvas = $renderCanvas;
 	        this.renderCtx = this.renderCanvas.getContext('2d');
+
+	        this.ddt = new DebugDrawTool();
 
         }
 
@@ -51,7 +54,6 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 
 		    for(var i = 0, l = $blobPartList.length; i < l; i++){
 				item = $blobPartList[i];
-
 			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
 		    }
 
@@ -79,6 +81,10 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable){
 		    for(var i = 0, l = $deflectors.length; i < l; i++){
 			    item = $deflectors[i];
 			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+
+			    //Debug
+			    var vec = item.shellVecList[0];
+			    this.ddt.drawLine(vec.xOffset, vec.yOffset, vec.x+vec.xOffset, vec.y+vec.yOffset, '#00FFFF');
 		    }
 	    };
 

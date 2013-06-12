@@ -10,8 +10,9 @@ define([
 'jac/logger/Logger',
 'jac/math/Vec2DObj',
 'jac/geometry/Rectangle',
-'jac/math/LineSeg2DObj'],
-function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DObj){
+'jac/math/LineSeg2DObj',
+'jac/utils/MathUtils'],
+function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DObj,MathUtils){
     return (function(){
         /**
          * Creates a BaseDeflector object
@@ -57,6 +58,57 @@ function(EventDispatcher,ObjUtils,CollisionSides,L,Vec2DObj,Rectangle,LineSeg2DO
 
 	        this.renderOffsetX = -(Math.round(this.renderWidth/2));
 	        this.renderOffsetY = -(Math.round(this.renderHeight/2));
+
+	        var _rotation = 0;
+
+	        this.getRotation = function(){
+		        return MathUtils.radToDeg(_rotation);
+	        };
+
+	        this.setRotation = function($angleInDegrees){
+		        var rads = MathUtils.degToRad($angleInDegrees);
+                var diff =  rads - _rotation;
+		        if(diff === 0){return;} //no change, bail
+
+		        //save off new angle (in radians)
+		        _rotation = rads;
+
+		        //Calc thetas
+		        var cosTheta = Math.cos(diff);
+		        var sinTheta = Math.sin(diff);
+
+		        var seg = null;
+		        var vec = null;
+		        var x1 = NaN;
+		        var y1 = NaN;
+		        var x2 = NaN;
+		        var y2 = NaN;
+
+		        for(var i = 0,l = this.shellVecList.length; i < l; i++){
+	                vec = this.shellVecList[i];
+	                //Convert to line segment for easy thinking (this can be optimized)
+			        seg = vec.getLineSeg();
+
+			        //recenter segment (shift to rotate around deflector's x,y)
+			        seg.x1 -= this.x;
+			        seg.y1 -= this.y;
+			        seg.x2 -= this.x;
+			        seg.y2 -= this.y;
+
+			        //Rotate points
+			        x1 = seg.x1 * cosTheta - seg.y1 * sinTheta;
+			        y1 = seg.x1 * sinTheta + seg.y1 * cosTheta;
+			        x2 = seg.x2 * cosTheta - seg.y2 * sinTheta;
+			        y2 = seg.x2 * sinTheta + seg.y2 * cosTheta;
+
+			        //update vector, and push back into canvas space (this can probably be optimized out, see note above)
+			        vec.updateFromLineSeg(x1+this.x, y1+this.y, x2+this.x, y2+this.y);
+		        }
+
+
+
+
+	        };
 
         }
         
