@@ -6,8 +6,9 @@
 define([
 'app/game/GameObject',
 'jac/utils/ObjUtils',
-'jac/logger/Logger'],
-function(GameObject,ObjUtils,L){
+'jac/logger/Logger',
+'jac/geometry/Rectangle'],
+function(GameObject,ObjUtils,L,Rectangle){
     return (function(){
         /**
          * Creates a BaseField object
@@ -16,13 +17,14 @@ function(GameObject,ObjUtils,L){
          * @param {Number} $y
          * @param {Number} $minDist
          * @param {Number} $maxDist
+         * @param {String} $polarity
          * @param {BitmapRenderSource} $renderSource
          * @implements {IManageable}
          * @implements {IBitmapRenderable}
          * @extends {GameObject}
          * @constructor
          */
-        function BaseField($game,$x,$y,$minDist,$maxDist,$renderSource){
+        function BaseField($game,$x,$y,$minDist,$maxDist,$polarity,$renderSource){
             //super
             GameObject.call(this);
 
@@ -31,6 +33,7 @@ function(GameObject,ObjUtils,L){
 	        this.y = $y;
 	        this.minDist = $minDist;
 	        this.maxDist = $maxDist;
+	        this.polarity = $polarity;
 	        this.renderSrc = $renderSource;
 	        this.renderImg = this.renderSrc.srcImage;
 	        this.renderWidth = this.renderSrc.width;
@@ -38,9 +41,9 @@ function(GameObject,ObjUtils,L){
 	        this.renderX = 0;
 	        this.renderY = 0;
 	        this.renderZ = 0;
-
 	        this.renderOffsetX = -(Math.round(this.renderWidth/2));
 	        this.renderOffsetY = -(Math.round(this.renderHeight/2));
+	        this.boundsRect = new Rectangle(this.x + this.renderOffsetX, this.y + this.renderOffsetY, this.renderWidth, this.renderHeight);
 
 	        /**@type {Array.<IManager>}
 	         * @private

@@ -5,8 +5,10 @@
 
 define([
 'jac/events/EventDispatcher',
-'jac/utils/ObjUtils'],
-function(EventDispatcher,ObjUtils){
+'jac/utils/ObjUtils',
+'app/parts/field/Polarity',
+'jac/logger/Logger'],
+function(EventDispatcher,ObjUtils,Polarity,L){
     return (function(){
         /**
          * Creates a FieldManager object
@@ -43,12 +45,45 @@ function(EventDispatcher,ObjUtils){
 
 	    FieldManager.prototype.calcFieldInfluences = function($blobList, $tickDelta){
 		    var bp = null;
-
+			var field = null;
+			var boundsRect = null;
+		    var tmpVec = new Vec2DObj(0,0,0,0);
 		    $blobList.resetCurrent();
 		    var node = $blobList.getNext();
 
 		    while(node !== null){
 				//TODO: add field effect onto cached influenceList vector
+				bp = node.obj;
+
+			    //Loop through each field
+			    for(var f = 0, l = this._fields.length; f < l; f++){
+					field = this._fields[f];
+					boundsRect = field.boundsRect;
+
+				    if(!(bp.x > boundsRect.getRight() || bp.x < boundsRect.getLeft() ||
+					     bp.y > boundsRect.getBottom() || bp.y < boundsRect.getTop())){
+					    //within bounding rect, keep checking
+						if(this.polarity === Polarity.REPEL){
+							tmpVec.x = bp.x - field.x;
+							tmpVec.y = bp.y - field.y;
+						} else if(this.polarity === Polarity.ATTRACT){
+							tmpVec.x = field.x - bp.x;
+							tmpVec.y = field.y = bp.y;
+						} else {
+							L.error('Bad Polarity Type: ' + this.polarity, true);
+						}
+
+					    //Make sure we are within the circle of influence
+					    var tmpDist = Vec2D.lengthOf(tmpVec);
+					    if(tmpDist <= this.maxDist){
+						    //this field will affect the blob
+						    //TODO: START HERE!
+					    }
+
+				    }
+
+			    }
+
 			    node = $blobList.getNext();
 		    }
 

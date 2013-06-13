@@ -29,11 +29,12 @@ define([
 'app/parts/deflector/TestDeflectorRenderSource',
 'app/parts/deflector/TestDeflector',
 'app/parts/field/BaseField',
-'app/parts/field/TestFieldRenderSource'],
+'app/parts/field/TestFieldRenderSource',
+'app/parts/field/Polarity'],
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
          GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject,
 		 Vec2DObj,BaseDispenser,TestDispenserRenderSource, BaseDeflector, TestDeflectorRenderSource,
-		 TestDeflector,BaseField,TestFieldRenderSource){
+		 TestDeflector,BaseField,TestFieldRenderSource,Polarity){
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
@@ -72,7 +73,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
 	testDispenserSrc.init();
 
-	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,1);
+	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,120);
 	game.addGameObject(testDispenser);
 
 	//// set up test deflectors ////
@@ -91,7 +92,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var testFieldSrc = new TestFieldRenderSource(10,'#00FF00');
 	testFieldSrc.init();
 
-	var testField = new BaseField(game,400,250,50,100,testFieldSrc);
+	var testField = new BaseField(game,400,250,50,100,Polarity.ATTRACT,testFieldSrc);
 	game.addGameObject(testField);
 
 	///////////////////////////////////////////////////////////////////////////////

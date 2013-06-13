@@ -26,7 +26,7 @@ function(){
 	    };
 
 	    Rectangle.prototype.getBottom = function(){
-		    return this.x + this.height;
+		    return this.y + this.height;
 	    };
 
 	    Rectangle.prototype.getLeft = function(){
