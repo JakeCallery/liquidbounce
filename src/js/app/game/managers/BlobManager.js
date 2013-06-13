@@ -97,6 +97,10 @@ function(EventDispatcher,ObjUtils, InfluenceList, L, IInfluenceable,
 
 				    bp.vx += bp.influenceList.cachedResult.x;
 				    bp.vy += bp.influenceList.cachedResult.y;
+
+				    //Add in Field influences
+				    bp.vx += bp.fieldInfluenceVec.x;
+				    bp.vy += bp.fieldInfluenceVec.y;
 			    }
 
 			    //Move the object

@@ -49,7 +49,7 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
 
             this.dispenseXOffset = 30;
 	        this.dispenseYOffset = 65;
-			this.blobSrc = new BlobRenderSource(30,30,'#FF0000');
+			this.blobSrc = new BlobRenderSource(10,10,'#FF0000');
 	        this.blobCfg = {x:0,y:0};
 			this.dispenseAngleMin = -45;
 	        this.dispenseAngleMax = 0;

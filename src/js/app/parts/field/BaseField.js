@@ -18,13 +18,14 @@ function(GameObject,ObjUtils,L,Rectangle){
          * @param {Number} $minDist
          * @param {Number} $maxDist
          * @param {String} $polarity
+         * @param {Number} $strength
          * @param {BitmapRenderSource} $renderSource
          * @implements {IManageable}
          * @implements {IBitmapRenderable}
          * @extends {GameObject}
          * @constructor
          */
-        function BaseField($game,$x,$y,$minDist,$maxDist,$polarity,$renderSource){
+        function BaseField($game,$x,$y,$minDist,$maxDist,$polarity,$strength,$renderSource){
             //super
             GameObject.call(this);
 
@@ -34,6 +35,7 @@ function(GameObject,ObjUtils,L,Rectangle){
 	        this.minDist = $minDist;
 	        this.maxDist = $maxDist;
 	        this.polarity = $polarity;
+	        this.strength = $strength;
 	        this.renderSrc = $renderSource;
 	        this.renderImg = this.renderSrc.srcImage;
 	        this.renderWidth = this.renderSrc.width;
@@ -43,7 +45,7 @@ function(GameObject,ObjUtils,L,Rectangle){
 	        this.renderZ = 0;
 	        this.renderOffsetX = -(Math.round(this.renderWidth/2));
 	        this.renderOffsetY = -(Math.round(this.renderHeight/2));
-	        this.boundsRect = new Rectangle(this.x + this.renderOffsetX, this.y + this.renderOffsetY, this.renderWidth, this.renderHeight);
+	        this.boundsRect = new Rectangle(this.x - (this.maxDist), this.y - (this.maxDist), this.maxDist*2, this.maxDist*2);
 
 	        /**@type {Array.<IManager>}
 	         * @private

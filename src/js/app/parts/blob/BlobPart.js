@@ -12,9 +12,10 @@ define([
 'app/renderEngine/RenderTypes',
 'app/physicsEngine/InfluenceObject',
 'app/physicsEngine/InfluenceList',
-'app/physicsEngine/IInfluenceable'],
+'app/physicsEngine/IInfluenceable',
+'jac/math/Vec2DObj'],
 function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, InfluenceObject,
-         InfluenceList, IInfluenceable){
+         InfluenceList, IInfluenceable, Vec2DObj){
     return (function(){
         /**
          * Creates a BlobPart object
@@ -56,6 +57,7 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 
 	        /** @type {InfluenceList} */
 	        this.influenceList = new InfluenceList();
+			this.fieldInfluenceVec = new Vec2DObj(0,0,0,0);
 
 	        //this is set to true after a collision
 	        //the collision on the next tick is ignored, and this is set to false again

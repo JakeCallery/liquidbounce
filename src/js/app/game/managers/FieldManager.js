@@ -8,8 +8,10 @@ define([
 'jac/utils/ObjUtils',
 'app/parts/field/Polarity',
 'jac/logger/Logger',
-'jac/math/Vec2DObj'],
-function(EventDispatcher,ObjUtils,Polarity,L,Vec2DObj){
+'jac/math/Vec2DObj',
+'jac/math/Vec2D',
+'app/debug/DebugDrawTool'],
+function(EventDispatcher,ObjUtils,Polarity,L,Vec2DObj,Vec2D,DebugDrawTool){
     return (function(){
         /**
          * Creates a FieldManager object
@@ -23,6 +25,8 @@ function(EventDispatcher,ObjUtils,Polarity,L,Vec2DObj){
 
 	        /**@private*/
 	        this._fields = [];
+
+	        this.ddt = new DebugDrawTool();
         }
         
         //Inherit / Extend
@@ -53,33 +57,47 @@ function(EventDispatcher,ObjUtils,Polarity,L,Vec2DObj){
 		    var node = $blobList.getNext();
 
 		    while(node !== null){
-				//TODO: add field effect onto cached influenceList vector
 				bp = node.obj;
+
+			    //clear past field influences
+				bp.fieldInfluenceVec.x = 0;
+			    bp.fieldInfluenceVec.y = 0;
+			    bp.fieldInfluenceVec.xOffset = 0;
+			    bp.fieldInfluenceVec.yOffset = 0;
 
 			    //Loop through each field
 			    for(var f = 0, l = this._fields.length; f < l; f++){
 					field = this._fields[f];
 					boundsRect = field.boundsRect;
-
+					this.ddt.drawRectangle(boundsRect.x, boundsRect.y, boundsRect.width, boundsRect.height, '#00FF00');
 				    if(!(bp.x > boundsRect.getRight() || bp.x < boundsRect.getLeft() ||
 					     bp.y > boundsRect.getBottom() || bp.y < boundsRect.getTop())){
 					    //within bounding rect, keep checking
-						if(this.polarity === Polarity.REPEL){
+						if(field.polarity === Polarity.REPEL){
 							tmpVec.x = bp.x - field.x;
 							tmpVec.y = bp.y - field.y;
-						} else if(this.polarity === Polarity.ATTRACT){
+						} else if(field.polarity === Polarity.ATTRACT){
 							tmpVec.x = field.x - bp.x;
 							tmpVec.y = field.y - bp.y;
 						} else {
-							L.error('Bad Polarity Type: ' + this.polarity, true);
+							L.error('Bad Polarity Type: ' + field.polarity, true);
 						}
 
 					    //Make sure we are within the circle of influence
 					    var tmpDist = Vec2D.lengthOf(tmpVec);
-					    if(tmpDist <= this.maxDist){
+					    if(tmpDist <= field.maxDist){
 						    //this field will affect the blob
-						    //TODO: START HERE!
-						    
+						    //Cap at min if needed
+						    if(tmpDist < field.minDist){tmpDist = 0;}
+
+						    var strengthPercent = (1 - (tmpDist / field.maxDist));
+						    Vec2D.normalize(tmpVec);
+						    Vec2D.multScalar(tmpVec,(field.strength * strengthPercent));
+
+						    //Apply
+							bp.fieldInfluenceVec.x += tmpVec.x;
+							bp.fieldInfluenceVec.y += tmpVec.y;
+
 					    }
 
 				    }

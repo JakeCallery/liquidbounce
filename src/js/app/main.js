@@ -73,7 +73,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
 	testDispenserSrc.init();
 
-	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,120);
+	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,1);
 	game.addGameObject(testDispenser);
 
 	//// set up test deflectors ////
@@ -92,7 +92,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var testFieldSrc = new TestFieldRenderSource(10,'#00FF00');
 	testFieldSrc.init();
 
-	var testField = new BaseField(game,400,250,50,100,Polarity.ATTRACT,testFieldSrc);
+	var testField = new BaseField(game,400,250,50,100,Polarity.ATTRACT,1,testFieldSrc);
 	game.addGameObject(testField);
 
 	///////////////////////////////////////////////////////////////////////////////
