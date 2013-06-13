@@ -94,6 +94,19 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 		    }
 	    };
 
+	    RenderEngine.prototype.renderFields = function($fields){
+		    var item = null;
+
+		    for(var i = 0, l = $fields.length; i < l; i++){
+			    item = $fields[i];
+			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+
+			    //DEBUG
+			    this.ddt.drawCircle(item.x, item.y, item.maxDist,'#00FF00');
+			    //////////////////////////
+		    }
+	    };
+
         //Return constructor
         return RenderEngine;
     })();

@@ -22,11 +22,14 @@ define([
 'app/game/managers/CollisionManager',
 'app/parts/deflector/BaseDeflector',
 'jac/linkedList/LinkedList',
-'app/debug/DebugDrawTool'],
+'app/debug/DebugDrawTool',
+'app/game/managers/FieldManager',
+'app/parts/field/BaseField'],
 function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
          EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine,
 		 BlobManager, InfluenceManager, DispenserManager, BaseDispenser,
-		 CollisionManager, BaseDeflector, LinkedList, DebugDrawTool){
+		 CollisionManager, BaseDeflector, LinkedList, DebugDrawTool,
+		 FieldManager,BaseField){
     return (function(){
 
 	    /**
@@ -61,6 +64,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    var blobParts = [];
 			var dispensers = [];
 			var deflectors = [];
+		    var fields = [];
 
 		    var delegateMap = {};
 		    var blobPartPool = new Pool(BlobPart);
@@ -73,6 +77,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.influenceManager = new InfluenceManager();
 		    this.dispenserManager = new DispenserManager();
 		    this.collisionManager = new CollisionManager();
+		    this.fieldManager = new FieldManager();
 
 		    /**
 		     * create and add a blob part to the game
@@ -134,6 +139,13 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    obj.renderY = obj.y + obj.renderOffsetY;
 			    }
 
+			    //Fields
+			    for(i = 0, l = fields.length; i < l; i++){
+				    obj = fields[i];
+				    obj.renderX = obj.x + obj.renderOffsetX;
+				    obj.renderY = obj.y + obj.renderOffsetY;
+			    }
+
 		    };
 
 		    var renderGame = function(){
@@ -143,6 +155,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    self.renderEngine.renderDispensers(dispensers);
 			    self.renderEngine.renderBlobParts(blobParts);
 			    self.renderEngine.renderDeflectors(deflectors);
+			    self.renderEngine.renderFields(fields);
 
 
 		    };
@@ -150,6 +163,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    var updatePhysics = function(){
 			    self.dispenserManager.updateDispensers(1);
 			    self.influenceManager.tickInfluenceLists(1); //TODO: delta ticks might need to be dynamic in the future, for now just 1
+			    self.fieldManager.calcFieldInfluences(blobList,1);
 			    self.blobManager.updateBlobParts(1);
 		    };
 
@@ -253,10 +267,12 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    //add dispenser
 				    dispensers.push($obj);
 				    self.dispenserManager.addObject($obj);
-
 			    } else if($obj instanceof BaseDeflector){
 				    deflectors.push($obj);
 				    self.collisionManager.addObject($obj);
+			    } else if($obj instanceof BaseField){
+				    fields.push($obj);
+				    self.fieldManager.addObject($obj);
 			    } else {
 				    //unknown obj
 				    L.error('Unknown Game Obj Type: ' + $obj, true);

@@ -27,7 +27,7 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
          * @param {Number} $y
          * @param {TestDispenserRenderSource} $renderSource
          * @param {int} $waitTicks delay between dispenses
-         * @extends {EventDispatcher}
+         * @extends {GameObject}
          * @implements {IBitmapRenderable}
          * @implements {IManageable}
          * @constructor

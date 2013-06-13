@@ -27,11 +27,13 @@ define([
 'app/parts/dispenser/TestDispenserRenderSource',
 'app/parts/deflector/BaseDeflector',
 'app/parts/deflector/TestDeflectorRenderSource',
-'app/parts/deflector/TestDeflector'],
+'app/parts/deflector/TestDeflector',
+'app/parts/field/BaseField',
+'app/parts/field/TestFieldRenderSource'],
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
          GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject,
 		 Vec2DObj,BaseDispenser,TestDispenserRenderSource, BaseDeflector, TestDeflectorRenderSource,
-		 TestDeflector){
+		 TestDeflector,BaseField,TestFieldRenderSource){
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
@@ -41,6 +43,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	L.addTag('@main');
 	L.addTag('@deflector');
 	L.addTag('@collision');
+	L.addTag('@render');
 	//L.addTag('@influence');
 	//L.addTag('@dispenser');
 
@@ -65,21 +68,31 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	bp.influenceList.addInfluence(infObj);
 	*/
 
-	//set up test dispenser
+	//// set up test dispenser ////
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
 	testDispenserSrc.init();
+
 	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,1);
 	game.addGameObject(testDispenser);
 
-	//set up test deflector
+	//// set up test deflectors ////
 	var testDeflectorSrc = new TestDeflectorRenderSource(80,20, '#0000FF');
 	testDeflectorSrc.init();
+
 	var testDeflector = new TestDeflector(150, 450, testDeflectorSrc);
 	testDeflector.setRotation(10);
 	game.addGameObject(testDeflector);
+
 	var testDeflector2 = new TestDeflector(450, 450, testDeflectorSrc);
 	game.addGameObject(testDeflector2);
 	testDeflector2.setRotation(-30);
+
+	//// set up test field ////
+	var testFieldSrc = new TestFieldRenderSource(10,'#00FF00');
+	testFieldSrc.init();
+
+	var testField = new BaseField(game,400,250,50,100,testFieldSrc);
+	game.addGameObject(testField);
 
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');

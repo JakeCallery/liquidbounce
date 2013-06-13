@@ -59,7 +59,7 @@ function(EventDispatcher,ObjUtils,IManager,L,Rectangle,Vec2D,Vec2DObj,DebugDrawT
 
 		    var bp = null;
 
-		    ddt = new DebugDrawTool();
+		    //var ddt = new DebugDrawTool();
 
 		    $blobList.resetCurrent();
 		    var node = $blobList.getNext();
