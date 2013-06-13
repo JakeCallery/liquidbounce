@@ -7,8 +7,9 @@ define([
 'jac/events/EventDispatcher',
 'jac/utils/ObjUtils',
 'app/parts/field/Polarity',
-'jac/logger/Logger'],
-function(EventDispatcher,ObjUtils,Polarity,L){
+'jac/logger/Logger',
+'jac/math/Vec2DObj'],
+function(EventDispatcher,ObjUtils,Polarity,L,Vec2DObj){
     return (function(){
         /**
          * Creates a FieldManager object
@@ -68,7 +69,7 @@ function(EventDispatcher,ObjUtils,Polarity,L){
 							tmpVec.y = bp.y - field.y;
 						} else if(this.polarity === Polarity.ATTRACT){
 							tmpVec.x = field.x - bp.x;
-							tmpVec.y = field.y = bp.y;
+							tmpVec.y = field.y - bp.y;
 						} else {
 							L.error('Bad Polarity Type: ' + this.polarity, true);
 						}
@@ -78,6 +79,7 @@ function(EventDispatcher,ObjUtils,Polarity,L){
 					    if(tmpDist <= this.maxDist){
 						    //this field will affect the blob
 						    //TODO: START HERE!
+						    
 					    }
 
 				    }
