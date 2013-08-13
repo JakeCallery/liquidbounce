@@ -30,22 +30,23 @@ define([
 'app/parts/deflector/TestDeflector',
 'app/parts/field/BaseField',
 'app/parts/field/TestFieldRenderSource',
-'app/parts/field/Polarity',
-'leap'],
+'app/parts/field/Polarity'],
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
          GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject,
 		 Vec2DObj,BaseDispenser,TestDispenserRenderSource, BaseDeflector, TestDeflectorRenderSource,
-		 TestDeflector,BaseField,TestFieldRenderSource,Polarity,Leap){
+		 TestDeflector,BaseField,TestFieldRenderSource,Polarity){
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
 	L.isEnabled = true;
-	L.isTagFilterEnabled = true;
+	L.isTagFilterEnabled = false;
 	L.isShowingUnTagged = false;
 	L.addTag('@main');
 	L.addTag('@deflector');
 	L.addTag('@collision');
 	L.addTag('@render');
+	L.addTag('@input');
+	L.addTag('@leap');
 	//L.addTag('@influence');
 	//L.addTag('@dispenser');
 

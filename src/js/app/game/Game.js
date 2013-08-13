@@ -24,12 +24,13 @@ define([
 'jac/linkedList/LinkedList',
 'app/debug/DebugDrawTool',
 'app/game/managers/FieldManager',
-'app/parts/field/BaseField'],
+'app/parts/field/BaseField',
+'app/input/InputManager'],
 function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
          EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine,
 		 BlobManager, InfluenceManager, DispenserManager, BaseDispenser,
 		 CollisionManager, BaseDeflector, LinkedList, DebugDrawTool,
-		 FieldManager,BaseField){
+		 FieldManager,BaseField,InputManager){
     return (function(){
 
 	    /**
@@ -78,6 +79,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.dispenserManager = new DispenserManager();
 		    this.collisionManager = new CollisionManager();
 		    this.fieldManager = new FieldManager();
+			this.inputManager = new InputManager();
 
 		    /**
 		     * create and add a blob part to the game
