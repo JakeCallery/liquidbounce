@@ -8,12 +8,13 @@
     <link href="css/main.css" rel="stylesheet"/>
 
     <script>
-        var USE_COMPILED = false;
+        var USE_COMPILED = true;
         var require = {
             baseUrl: './js',
             paths: {
                 json2:'libs/json2',
-                stats:'libs/stats'
+                stats:'libs/stats',
+                leap:'libs/leap'
             },
             shim: {
                 json2: {
@@ -21,6 +22,9 @@
                 },
                 stats: {
                     exports: 'Stats'
+                },
+                leap: {
+                    exports: 'Leap'
                 }
             }
         }

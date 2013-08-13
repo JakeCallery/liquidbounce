@@ -30,11 +30,12 @@ define([
 'app/parts/deflector/TestDeflector',
 'app/parts/field/BaseField',
 'app/parts/field/TestFieldRenderSource',
-'app/parts/field/Polarity'],
+'app/parts/field/Polarity',
+'leap'],
 function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
          GameObjTypes, RenderEngine, BlobRenderSource, EventUtils, InfluenceObject,
 		 Vec2DObj,BaseDispenser,TestDispenserRenderSource, BaseDeflector, TestDeflectorRenderSource,
-		 TestDeflector,BaseField,TestFieldRenderSource,Polarity){
+		 TestDeflector,BaseField,TestFieldRenderSource,Polarity,Leap){
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
