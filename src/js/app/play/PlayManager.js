@@ -41,7 +41,7 @@ function(EventDispatcher,ObjUtils,EventUtils,L,TestFieldRenderSource,Polarity,Ba
 
 	    PlayManager.prototype.handleFingerAdded = function($e){
 		    L.log('Handle Finger Added: ' + $e.data.id, '@play');
-		    var testField = new BaseField(this.game,$e.data.x,$e.data.y,1,20,Polarity.ATTRACT,1,this.testFieldSrc);
+		    var testField = new BaseField(this.game,$e.data.x,$e.data.y,1,50,Polarity.ATTRACT,3,this.testFieldSrc);
 		    this.game.addGameObject(testField);
 
 		    this.fieldsByFingerId[$e.data.id] = testField;

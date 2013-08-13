@@ -5,6 +5,7 @@
 
 
 //TODO: NEXT
+//Update field placement and size based on finger position
 //Rework creating and adding objects, don't do it in the 'game', create an object and ask the game to add it.
 
 //TODO: PERFORMANCE
