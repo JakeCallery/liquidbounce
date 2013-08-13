@@ -92,6 +92,7 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils){
 					    pointable.stabilizedTipPosition[2],
 					    pointable.id);
 				    self.fingers.push(finger);
+				    this.dispatchEvent(new JacEvent('addedFinger',finger));
 			    }
 		    }
 

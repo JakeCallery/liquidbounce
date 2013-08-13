@@ -25,12 +25,13 @@ define([
 'app/debug/DebugDrawTool',
 'app/game/managers/FieldManager',
 'app/parts/field/BaseField',
-'app/input/InputManager'],
+'app/input/InputManager',
+'app/play/PlayManager'],
 function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
          EventUtils, GameObjEvent, RenderEngine, Stats, PhysicsEngine,
 		 BlobManager, InfluenceManager, DispenserManager, BaseDispenser,
 		 CollisionManager, BaseDeflector, LinkedList, DebugDrawTool,
-		 FieldManager,BaseField,InputManager){
+		 FieldManager,BaseField,InputManager,PlayManager){
     return (function(){
 
 	    /**
@@ -80,6 +81,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.collisionManager = new CollisionManager();
 		    this.fieldManager = new FieldManager();
 			this.inputManager = new InputManager();
+		    this.playManager = new PlayManager(this.inputManager,self);
 
 		    /**
 		     * create and add a blob part to the game

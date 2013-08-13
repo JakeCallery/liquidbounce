@@ -91,12 +91,14 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	game.addGameObject(testDeflector2);
 	testDeflector2.setRotation(-30);
 
+	/*
 	//// set up test field ////
 	var testFieldSrc = new TestFieldRenderSource(10,'#00FF00');
 	testFieldSrc.init();
 
 	var testField = new BaseField(game,400,250,50,100,Polarity.ATTRACT,1,testFieldSrc);
 	game.addGameObject(testField);
+	*/
 
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');
