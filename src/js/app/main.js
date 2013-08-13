@@ -39,14 +39,15 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
 	L.isEnabled = true;
-	L.isTagFilterEnabled = false;
+	L.isTagFilterEnabled = true;
 	L.isShowingUnTagged = false;
 	L.addTag('@main');
-	L.addTag('@deflector');
-	L.addTag('@collision');
-	L.addTag('@render');
+//	L.addTag('@deflector');
+//	L.addTag('@collision');
+//	L.addTag('@render');
 	L.addTag('@input');
 	L.addTag('@leap');
+	//L.addTag('@finger');
 	//L.addTag('@influence');
 	//L.addTag('@dispenser');
 

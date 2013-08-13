@@ -210,6 +210,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    }
 
 			    cullDead();
+			    self.inputManager.update();
 			    updatePhysics();
 			    updateCollisions();
 			    updateGame();
