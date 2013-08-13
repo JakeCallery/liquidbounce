@@ -10,8 +10,9 @@ define([
 'jac/pool/Pool',
 'jac/logger/Logger',
 'app/input/Finger',
-'jac/utils/ArrayUtils'],
-function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils){
+'jac/utils/ArrayUtils',
+'jac/events/JacEvent'],
+function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent){
     return (function(){
         /**
          * Creates a InputManager object
@@ -28,7 +29,7 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils){
 
 	        L.log('New Input Manager', '@input');
 
-	        this.controller = new Leap.Controller({host:'192.168.1.95', port:6437, enableGestures:false, frameEventName:'animationFrame'});
+	        this.controller = new Leap.Controller({host:'127.0.0.1', port:6437, enableGestures:false, frameEventName:'animationFrame'});
 
 	        this.controller.on('connect', function(){
 		        L.log('Leap Connected', '@leap');
@@ -61,6 +62,8 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils){
 	    InputManager.prototype.update = function($data){
 			if($data === undefined){$data = this.controller.frame();}
 
+		    //L.log('Input Update','@input');
+
 		    var self = this;
 		    var i, l,finger,pointable;
 
@@ -73,6 +76,7 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils){
 		    //match up with active fingers,
 		    //set matching fingers as active
 		    //add new fingers if needed
+
 		    for(i = 0, l = $data.pointables.length; i < l; i++){
 			    pointable = $data.pointables[i];
 			    finger = ArrayUtils.findFirstObjWithProp(self.fingers,'id',pointable.id);
@@ -101,13 +105,12 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils){
 			    finger = self.fingers[i];
 			    if(!finger.isActive){
 				    L.log('Removing Finger: ' + finger.id, '@leap');
+				    this.dispatchEvent(new JacEvent('removedFinger', finger));
 				    finger.destroy();
 				    self.fingers.splice(i,1);
 				    self.fingerPool.recycle(finger);
 			    }
 		    }
-
-
 
 	    };
 

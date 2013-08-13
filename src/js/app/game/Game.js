@@ -81,7 +81,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.collisionManager = new CollisionManager();
 		    this.fieldManager = new FieldManager();
 			this.inputManager = new InputManager();
-		    this.playManager = new PlayManager(this.inputManager,self);
+		    this.playManager = new PlayManager(self.inputManager,self);
 
 		    /**
 		     * create and add a blob part to the game
@@ -303,6 +303,14 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 					    } else {
 						    throw new Error('Can\'t remove obj, couldn\'t find in list');
+					    }
+					    break;
+
+				    case ($objToRemove instanceof BaseField):
+					    var idx = fields.indexOf($objToRemove);
+					    if(idx != -1){
+						    self.fieldManager.removeObject($objToRemove);
+						    fields.splice(idx,1);
 					    }
 					    break;
 
