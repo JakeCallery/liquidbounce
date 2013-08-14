@@ -19,11 +19,12 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent){
          * @extends {EventDispatcher}
          * @constructor
          */
-        function InputManager(){
+        function InputManager($game){
             //super
             EventDispatcher.call(this);
 
 	        var self = this;
+	        this.game = $game;
 	        this.fingers = [];
 	        this.fingerPool = new Pool(Finger);
 
@@ -72,29 +73,25 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent){
 			    self.fingers[i].isActive = false;
 		    }
 
-		    //Walk pointables,
-		    //match up with active fingers,
-		    //set matching fingers as active
-		    //add new fingers if needed
-
+		    //Map pointables to active fingers
 		    for(i = 0, l = $data.pointables.length; i < l; i++){
 			    pointable = $data.pointables[i];
 			    finger = ArrayUtils.findFirstObjWithProp(self.fingers,'id',pointable.id);
 			    if(finger !== null){
 				    //update finger's info
+				    /*
 				    finger.x = pointable.stabilizedTipPosition[0];
 				    finger.y = pointable.stabilizedTipPosition[1];
 				    finger.z = pointable.stabilizedTipPosition[2];
+				    */
+				    this.mapPointableCoordsToFinger(pointable,finger);
 				    finger.isActive = true;
-				    L.log('Update Active Finger Info: ' + finger.x, '@finger');
+				    //L.log('Update Active Finger Info: ' + finger.x, '@finger');
 			    } else {
 				    //new finger
-				    L.log('Adding new finger', '@leap');
-				    finger = self.fingerPool.getObject(
-					    pointable.stabilizedTipPosition[0],
-					    pointable.stabilizedTipPosition[1],
-					    pointable.stabilizedTipPosition[2],
-					    pointable.id);
+				    //L.log('Adding new finger', '@leap');
+				    finger = self.fingerPool.getObject(0,0,0,pointable.id);
+				    this.mapPointableCoordsToFinger(pointable,finger);
 				    self.fingers.push(finger);
 				    this.dispatchEvent(new JacEvent('addedFinger',finger));
 			    }
@@ -104,7 +101,7 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent){
 		    for(i = self.fingers.length-1; i >= 0; i--){
 			    finger = self.fingers[i];
 			    if(!finger.isActive){
-				    L.log('Removing Finger: ' + finger.id, '@leap');
+				    //L.log('Removing Finger: ' + finger.id, '@leap');
 				    this.dispatchEvent(new JacEvent('removedFinger', finger));
 				    finger.destroy();
 				    self.fingers.splice(i,1);
@@ -112,6 +109,12 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent){
 			    }
 		    }
 
+	    };
+
+	    InputManager.prototype.mapPointableCoordsToFinger = function($pointable, $finger){
+			$finger.x = $pointable.stabilizedTipPosition[0] + this.game.gameHalfWidth;
+			$finger.y = this.game.gameHeight - $pointable.stabilizedTipPosition[1];
+		    $finger.z = $pointable.stabilizedTipPosition[2];
 	    };
 
         //Return constructor

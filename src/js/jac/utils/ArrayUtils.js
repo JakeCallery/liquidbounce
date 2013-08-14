@@ -8,6 +8,19 @@ function(){
     return (function(){
 		var ArrayUtils = {};
 
+	    ArrayUtils.findFirstIndexObjWithProp = function($list, $propName, $propVal){
+		    for(var i = 0, l = $list.length;  i < l; i++){
+			    if($list[i].hasOwnProperty($propName)){
+				    if($propVal === undefined){
+					    return i;
+				    } else if($list[i][$propName] === $propVal){
+					    return i;
+				    }
+			    }
+		    }
+		    return -1;
+	    };
+
 		/**
 		 * Returns the first object that has the specified property in the list
 		 * if $propVal is set, it will return the first object where the val of the prop matches

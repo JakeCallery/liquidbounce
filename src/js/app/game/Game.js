@@ -49,6 +49,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.window = $window;
 			this.gameWidth = $gameWidth;
 		    this.gameHeight = $gameHeight;
+		    this.gameHalfWidth = Math.round(this.gameWidth/2);
+		    this.gameHalfHeight = Math.round(this.gameHeight/2);
 			this.gameCanvas = $gameCanvas;
 		    this.gameCtx = $gameCanvas.getContext('2d');
 
@@ -80,7 +82,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.dispenserManager = new DispenserManager();
 		    this.collisionManager = new CollisionManager();
 		    this.fieldManager = new FieldManager();
-			this.inputManager = new InputManager();
+			this.inputManager = new InputManager(self);
 		    this.playManager = new PlayManager(self.inputManager,self);
 
 		    /**
@@ -164,6 +166,11 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    };
 
+		    var updateInput = function(){
+			    self.inputManager.update();
+			    self.playManager.update();
+		    };
+
 		    var updatePhysics = function(){
 			    self.dispenserManager.updateDispensers(1);
 			    self.influenceManager.tickInfluenceLists(1); //TODO: delta ticks might need to be dynamic in the future, for now just 1
@@ -212,7 +219,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    }
 
 			    cullDead();
-			    self.inputManager.update();
+			    updateInput();
 			    updatePhysics();
 			    updateCollisions();
 			    updateGame();

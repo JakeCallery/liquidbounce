@@ -56,6 +56,16 @@ function(GameObject,ObjUtils,L,Rectangle){
         //Inherit / Extend
         ObjUtils.inheritPrototype(BaseField,GameObject);
 
+	    BaseField.prototype.updateLocation = function($x,$y,$z){
+		    this.x = $x;
+		    this.y = $y;
+		    //TODO: add in Z
+
+		    this.boundsRect.x = $x - this.maxDist;
+		    this.boundsRect.y = $y - this.maxDist;
+
+	    };
+
 	    //// IManageable ////
 	    BaseField.prototype.addManager = function($manager){
 		    L.log('adding manager: ' + $manager, '@manager');
