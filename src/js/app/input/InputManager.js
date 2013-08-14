@@ -108,9 +108,9 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent,MathUti
 	    };
 
 	    InputManager.prototype.mapPointableCoordsToFinger = function($pointable, $finger){
-			$finger.x = $pointable.stabilizedTipPosition[0] + this.game.gameHalfWidth;
-			$finger.y = this.game.gameHeight - $pointable.stabilizedTipPosition[1];
-		    $finger.z = MathUtils.clampToRange(-100,100,$pointable.stabilizedTipPosition[2]);
+			$finger.x = $pointable.tipPosition[0] + this.game.gameHalfWidth;
+			$finger.y = this.game.gameHeight - $pointable.tipPosition[1];
+		    $finger.z = MathUtils.clampToRange(-100,100,$pointable.tipPosition[2]);
 	    };
 
         //Return constructor
