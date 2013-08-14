@@ -44,9 +44,13 @@ function(doc, BitmapUtils, L, EventDispatcher, ObjUtils, EventUtils, JacEvent){
 	        };
 
 	        //Fill context with blob bitmap
+	        var grd = this.srcContext.createRadialGradient(this.width/2, this.width/2, 1, this.width/2,this.width/2,this.width/2);
+	        grd.addColorStop(0.1,"rgba(255,0,0,255)");
+	        grd.addColorStop(1,"rgba(255,0,0,0)");
 	        this.srcContext.beginPath();
 	        this.srcContext.arc(this.width/2, this.height/2, this.width/2, 0, 2*Math.PI,false);
-	        this.srcContext.fillStyle = this.color;
+	        //this.srcContext.fillStyle = this.color;
+	        this.srcContext.fillStyle = grd;
 	        this.srcContext.fill();
 
 			this.srcImage = BitmapUtils.imgFromCanvas(this.canvas);

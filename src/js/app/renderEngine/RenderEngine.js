@@ -9,8 +9,10 @@ define([
 'jac/utils/InterfaceUtils',
 'app/renderEngine/IBitmapRenderable',
 'app/debug/DebugDrawTool',
-'app/parts/field/Polarity'],
-function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawTool,Polarity){
+'app/parts/field/Polarity',
+'jac/bitmap/ThresholdFilter',
+'jac/logger/Logger'],
+function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawTool,Polarity,ThresholdFilter,L){
     return (function(){
         /**
          * Creates a RenderEngine object
@@ -30,6 +32,12 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 	        /**@type {canvas}*/this.renderCanvas = $renderCanvas;
 	        this.renderCtx = this.renderCanvas.getContext('2d');
 
+	        this.blobCanvas = document.createElement('canvas');
+	        this.blobCanvas.width = this.canvasWidth;
+	        this.blobCanvas.height = this.canvasHeight;
+
+	        this.blobCtx = this.blobCanvas.getContext('2d');
+
 	        this.ddt = new DebugDrawTool();
 
         }
@@ -39,7 +47,7 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 
 	    RenderEngine.prototype.clearFrame = function(){
 		    //Clear
-		    this.renderCtx.fillStyle = '#000000';
+		    this.renderCtx.fillStyle = 'rgba(0,0,0,255)';
 		    //this.renderCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 		    this.renderCtx.fillRect(0,0,this.canvasWidth, this.canvasHeight);
 	    };
@@ -53,11 +61,23 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 
 		    var item = null;
 
+		    this.blobCtx.clearRect(0,0,this.canvasWidth,this.canvasHeight);
+
 		    for(var i = 0, l = $blobPartList.length; i < l; i++){
 				item = $blobPartList[i];
-			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+			    this.blobCtx.drawImage(item.renderImg, item.renderX, item.renderY);
 		    }
 
+		    //console.time('getData');
+		    var srcData = this.blobCtx.getImageData(0,0,this.canvasWidth,this.canvasHeight);
+		    var dstData = this.renderCtx.getImageData(0,0,this.canvasWidth, this.canvasHeight);
+		    //console.timeEnd('getData');
+		    //console.time('filter');
+			ThresholdFilter.filter(srcData.data,dstData.data, '>=', 0x000000CC, 0xFF00FFFF, 0x000000FF,false);
+		    //console.timeEnd('filter');
+		    //console.time('putdata');
+		    this.renderCtx.putImageData(dstData,0,0);
+		    //console.timeEnd('putdata');
 
 	    };
 

@@ -39,7 +39,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
-	L.isEnabled = false;
+	L.isEnabled = true;
 	L.isTagFilterEnabled = true;
 	L.isShowingUnTagged = false;
 	L.addTag('@main');

@@ -34,7 +34,7 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent,MathUti
 	        this.controller = new Leap.Controller({host:'127.0.0.1', port:6437, enableGestures:false, frameEventName:'animationFrame'});
 
 	        this.controller.on('connect', function(){
-		        L.log('Leap Connected', '@leap');
+		        L.log('Connected to leap service', '@leap');
 	        });
 
 	        this.controller.on('ready', function(){

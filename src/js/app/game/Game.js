@@ -159,9 +159,9 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 			    self.renderEngine.clearFrame();
 			    self.renderEngine.renderDispensers(dispensers);
-			    self.renderEngine.renderBlobParts(blobParts);
 			    self.renderEngine.renderDeflectors(deflectors);
 			    self.renderEngine.renderFields(fields);
+			    self.renderEngine.renderBlobParts(blobParts);
 
 
 		    };
@@ -293,10 +293,10 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    this.removeGameObj = function($objToRemove){
 			    L.log('Remove game obj: ' + $objToRemove, '@game');
-
+				var idx = null;
 			    switch(true){
 				    case ($objToRemove instanceof BlobPart):
-					    var idx = blobParts.indexOf($objToRemove);
+					    idx = blobParts.indexOf($objToRemove);
 					    if(idx != -1){
 						    self.blobManager.removeObject($objToRemove);
 						    self.influenceManager.removeObject($objToRemove);
@@ -314,7 +314,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 					    break;
 
 				    case ($objToRemove instanceof BaseField):
-					    var idx = fields.indexOf($objToRemove);
+					    idx = fields.indexOf($objToRemove);
 					    if(idx != -1){
 						    self.fieldManager.removeObject($objToRemove);
 						    fields.splice(idx,1);
