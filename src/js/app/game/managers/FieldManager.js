@@ -69,7 +69,7 @@ function(EventDispatcher,ObjUtils,Polarity,L,Vec2DObj,Vec2D,DebugDrawTool){
 			    for(var f = 0, l = this._fields.length; f < l; f++){
 					field = this._fields[f];
 					boundsRect = field.boundsRect;
-					this.ddt.drawRectangle(boundsRect.x, boundsRect.y, boundsRect.width, boundsRect.height, '#00FF00');
+					//this.ddt.drawRectangle(boundsRect.x, boundsRect.y, boundsRect.width, boundsRect.height, '#00FFFF');
 				    if(!(bp.x > boundsRect.getRight() || bp.x < boundsRect.getLeft() ||
 					     bp.y > boundsRect.getBottom() || bp.y < boundsRect.getTop())){
 					    //within bounding rect, keep checking

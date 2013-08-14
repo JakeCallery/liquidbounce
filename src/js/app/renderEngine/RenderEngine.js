@@ -8,8 +8,9 @@ define([
 'jac/utils/ObjUtils',
 'jac/utils/InterfaceUtils',
 'app/renderEngine/IBitmapRenderable',
-'app/debug/DebugDrawTool'],
-function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawTool){
+'app/debug/DebugDrawTool',
+'app/parts/field/Polarity'],
+function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawTool,Polarity){
     return (function(){
         /**
          * Creates a RenderEngine object
@@ -102,7 +103,15 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
 
 			    //DEBUG
-			    this.ddt.drawCircle(item.x, item.y, item.maxDist,'#00FF00');
+			    var debugColor;
+			    if(item.polarity === Polarity.ATTRACT){
+				    debugColor = '#FF00FF';
+			    } else {
+				    debugColor = '#00FF00'
+			    }
+
+			    this.ddt.drawCircle(item.x, item.y, item.maxDist,debugColor);
+			    this.ddt.drawCircle(item.x, item.y, item.minDist,debugColor);
 			    //////////////////////////
 		    }
 	    };

@@ -49,6 +49,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	L.addTag('@input');
 	L.addTag('@leap');
 	L.addTag('@play');
+	L.addTag('@tmp');
 	//L.addTag('@finger');
 	//L.addTag('@influence');
 	//L.addTag('@dispenser');

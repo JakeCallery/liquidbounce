@@ -7,8 +7,10 @@ define([
 'app/game/GameObject',
 'jac/utils/ObjUtils',
 'jac/logger/Logger',
-'jac/geometry/Rectangle'],
-function(GameObject,ObjUtils,L,Rectangle){
+'jac/geometry/Rectangle',
+'app/parts/field/Polarity',
+'jac/math/FastMath'],
+function(GameObject,ObjUtils,L,Rectangle,Polarity,FastMath){
     return (function(){
         /**
          * Creates a BaseField object
@@ -57,12 +59,31 @@ function(GameObject,ObjUtils,L,Rectangle){
         ObjUtils.inheritPrototype(BaseField,GameObject);
 
 	    BaseField.prototype.updateLocation = function($x,$y,$z){
+		    //z expected to be -100 to 100
+		    //update center
 		    this.x = $x;
 		    this.y = $y;
-		    //TODO: add in Z
 
+		    //update polarity
+		    if($z > 0){
+				this.polarity = Polarity.REPEL;
+		    } else {
+			    this.polarity = Polarity.ATTRACT;
+		    }
+
+		    //update influence distances
+			this.maxDist = FastMath.abs($z);
+		    this.minDist = ~~(this.maxDist / 10);
+
+		    //update strength
+		    this.strength = 10 * (this.maxDist / 100);
+		    //L.log('Strength: ' + this.strength + '/' + this.minDist + '/' + this.maxDist, '@tmp');
+
+		    //update bounds
 		    this.boundsRect.x = $x - this.maxDist;
 		    this.boundsRect.y = $y - this.maxDist;
+		    this.boundsRect.width = this.maxDist * 2;
+		    this.boundsRect.height = this.maxDist * 2;
 
 	    };
 

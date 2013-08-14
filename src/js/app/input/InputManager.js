@@ -11,8 +11,9 @@ define([
 'jac/logger/Logger',
 'app/input/Finger',
 'jac/utils/ArrayUtils',
-'jac/events/JacEvent'],
-function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent){
+'jac/events/JacEvent',
+'jac/utils/MathUtils'],
+function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent,MathUtils){
     return (function(){
         /**
          * Creates a InputManager object
@@ -79,14 +80,9 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent){
 			    finger = ArrayUtils.findFirstObjWithProp(self.fingers,'id',pointable.id);
 			    if(finger !== null){
 				    //update finger's info
-				    /*
-				    finger.x = pointable.stabilizedTipPosition[0];
-				    finger.y = pointable.stabilizedTipPosition[1];
-				    finger.z = pointable.stabilizedTipPosition[2];
-				    */
 				    this.mapPointableCoordsToFinger(pointable,finger);
 				    finger.isActive = true;
-				    //L.log('Update Active Finger Info: ' + finger.x, '@finger');
+				    //L.log('Update Active Finger Info: ' + finger.z, '@tmp');
 			    } else {
 				    //new finger
 				    //L.log('Adding new finger', '@leap');
@@ -114,7 +110,7 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent){
 	    InputManager.prototype.mapPointableCoordsToFinger = function($pointable, $finger){
 			$finger.x = $pointable.stabilizedTipPosition[0] + this.game.gameHalfWidth;
 			$finger.y = this.game.gameHeight - $pointable.stabilizedTipPosition[1];
-		    $finger.z = $pointable.stabilizedTipPosition[2];
+		    $finger.z = MathUtils.clampToRange(-100,100,$pointable.stabilizedTipPosition[2]);
 	    };
 
         //Return constructor

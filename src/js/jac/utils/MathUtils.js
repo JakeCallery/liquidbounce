@@ -54,6 +54,27 @@ function(){
 		    return min + tmpVal;
 	    };
 
+	    MathUtils.clampToRange = function($min, $max, $val){
+	        var min,max,val;
+		    if($min > $max){
+			    max = $min;
+			    min = $max
+		    } else {
+			    min = $min;
+			    max = $max;
+		    }
+
+		    if($val < $min){
+			    val = min;
+		    } else if($val > $max){
+			    val = max;
+		    } else {
+			    val = $val;
+		    }
+
+		    return val;
+	    };
+
         //Return constructor
         return MathUtils;
     })();
