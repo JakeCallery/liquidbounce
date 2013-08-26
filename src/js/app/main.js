@@ -56,24 +56,8 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 
 
 	var mainCanvas = document.getElementById('gameCanvas');
-	var game = new Game(document, window, mainCanvas, mainCanvas.width, mainCanvas.height);
+	var game = new Game(document, window, mainCanvas, mainCanvas.width, mainCanvas.height, true);
 	game.init();
-
-	//TMP///////////
-	//Set up blob
-	/*
-	var testBlobSrc = new BlobRenderSource(30,30,'#0000FF');
-	var testBlobConfig = {};
-	testBlobConfig.x = 50;
-	testBlobConfig.y = 50;
-
-	var bp = game.createGameObj(GameObjTypes.BLOB_PART, testBlobConfig, testBlobSrc);
-
-	var infObj = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,InfluenceObject.INFINITE_LIFETIME,'testPush');
-	//var infObj = new InfluenceObject(new Vec2DObj(0,0.5),InfluenceObject.NO_DECAY,10,'testPush');
-	//var infObj = new InfluenceObject(new Vec2DObj(0,0.3),0.01,InfluenceObject.INFINITE_LIFETIME,'testPush');
-	bp.influenceList.addInfluence(infObj);
-	*/
 
 	//// set up test dispenser ////
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
@@ -93,15 +77,6 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var testDeflector2 = new TestDeflector(470, 300, testDeflectorSrc);
 	game.addGameObject(testDeflector2);
 	testDeflector2.setRotation(-30);
-
-	/*
-	//// set up test field ////
-	var testFieldSrc = new TestFieldRenderSource(10,'#00FF00');
-	testFieldSrc.init();
-
-	var testField = new BaseField(game,400,250,50,100,Polarity.ATTRACT,1,testFieldSrc);
-	game.addGameObject(testField);
-	*/
 
 	///////////////////////////////////////////////////////////////////////////////
 	var stepButtonEl = document.getElementById('stepButton');

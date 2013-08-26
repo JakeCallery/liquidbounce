@@ -11,8 +11,11 @@ define([
 'app/debug/DebugDrawTool',
 'app/parts/field/Polarity',
 'jac/bitmap/ThresholdFilter',
-'jac/logger/Logger'],
-function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawTool,Polarity,ThresholdFilter,L){
+'jac/logger/Logger',
+'jac/asyncGC/ArrayBufferGC'],
+function(EventDispatcher,ObjUtils, InterfaceUtils,
+        IBitmapRenderable, DebugDrawTool,Polarity,
+        ThresholdFilter,L,ArrayBufferGC){
     return (function(){
         /**
          * Creates a RenderEngine object
@@ -25,6 +28,10 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
         function RenderEngine($renderCanvas, $canvasWidth, $canvasHeight){
             //super
             EventDispatcher.call(this);
+
+	        this.arrayBufferGC = new ArrayBufferGC();
+			this.srcData = null;
+	        this.dstData = null;
 
 	        this.canvasWidth = $canvasWidth;
 	        this.canvasHeight = $canvasHeight;
@@ -55,8 +62,9 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 	    /**
 	     * Renders blobParts
 	     * @param {LinkedList} $blobPartList
+	     * @param {boolean} $makeBlobby
 	     */
-	    RenderEngine.prototype.renderBlobParts = function($blobPartList){
+	    RenderEngine.prototype.renderBlobParts = function($blobPartList, $makeBlobby){
 			var self = this;
 
 		    var item = null;
@@ -66,35 +74,34 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 			var node = $blobPartList.getNext();
 		    while(node !== null){
 			    item = node.obj;
-			    //this.blobCtx.drawImage(item.renderImg, item.renderX, item.renderY);
-			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+			    if($makeBlobby === true){
+				    this.blobCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+			    } else {
+				    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+			    }
+
+
 			    node = $blobPartList.getNext();
 		    }
 
-		    /*
-		    for(var i = 0, l = $blobPartList.length; i < l; i++){
-				item = $blobPartList[i];
-			    this.blobCtx.drawImage(item.renderImg, item.renderX, item.renderY);
-			    //this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+		    if($makeBlobby === true){
+			    //console.time('getData');
+			    this.srcData = this.blobCtx.getImageData(0,0,this.canvasWidth,this.canvasHeight);
+			    this.dstData = this.renderCtx.getImageData(0,0,this.canvasWidth, this.canvasHeight);
+			    //console.timeEnd('getData');
+			    // console.time('filter');
+			    ThresholdFilter.filter(this.srcData.data,this.dstData.data, '>=', 0x000000CC, 0xFF00FFFF, 0x000000FF,false);
+			    //console.timeEnd('filter');
+			    //console.time('putdata');
+			    this.renderCtx.putImageData(this.dstData,0,0);
+			    //console.timeEnd('putdata');
+
+			    this.arrayBufferGC.dispose(this.srcData);
+			    this.arrayBufferGC.dispose(this.dstData);
+
+			    this.srcData = null;
+			    this.dstData = null;
 		    }
-			*/
-
-		    //L.log('Num Blobs: ' + $blobPartList.length, '@tmp');
-
-		    /*
-		    //console.time('getData');
-		    var srcData = this.blobCtx.getImageData(0,0,this.canvasWidth,this.canvasHeight);
-		    var dstData = this.renderCtx.getImageData(0,0,this.canvasWidth, this.canvasHeight);
-		    var srcDataData = srcData.data;
-		    var dstDataData = dstData.data;
-		    //console.timeEnd('getData');
-		   // console.time('filter');
-			ThresholdFilter.filter(srcDataData,dstDataData, '>=', 0x000000CC, 0xFF00FFFF, 0x000000FF,false);
-		    //console.timeEnd('filter');
-		    //console.time('putdata');
-		    this.renderCtx.putImageData(dstData,0,0);
-		    //console.timeEnd('putdata');
-		    */
 	    };
 
 	    /**

@@ -39,7 +39,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
          * @extends {EventDispatcher}
          * @constructor
          */
-        function Game($doc, $window, $gameCanvas, $gameWidth, $gameHeight){
+        function Game($doc, $window, $gameCanvas, $gameWidth, $gameHeight, $renderAsBlobs){
             //super
             EventDispatcher.call(this);
 
@@ -53,7 +53,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.gameHalfHeight = Math.round(this.gameHeight/2);
 			this.gameCanvas = $gameCanvas;
 		    this.gameCtx = $gameCanvas.getContext('2d');
-
+			this.renderAsBlobs = $renderAsBlobs;
 		    this.stats = new Stats();
 		    this.stats.setMode(0);
 			this.doc.getElementById('statsDiv').appendChild(this.stats.domElement);
@@ -161,7 +161,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    self.renderEngine.renderDispensers(dispensers);
 			    self.renderEngine.renderDeflectors(deflectors);
 			    self.renderEngine.renderFields(fields);
-			    self.renderEngine.renderBlobParts(blobList);
+			    self.renderEngine.renderBlobParts(blobList, self.renderAsBlobs);
 
 		    };
 
