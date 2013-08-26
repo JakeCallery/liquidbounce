@@ -54,7 +54,7 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 
 	    /**
 	     * Renders blobParts
-	     * @param {Array.<BlobPart>} $blobPartList
+	     * @param {LinkedList} $blobPartList
 	     */
 	    RenderEngine.prototype.renderBlobParts = function($blobPartList){
 			var self = this;
@@ -62,23 +62,39 @@ function(EventDispatcher,ObjUtils, InterfaceUtils, IBitmapRenderable, DebugDrawT
 		    var item = null;
 
 		    this.blobCtx.clearRect(0,0,this.canvasWidth,this.canvasHeight);
+			$blobPartList.resetCurrent();
+			var node = $blobPartList.getNext();
+		    while(node !== null){
+			    item = node.obj;
+			    //this.blobCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+			    this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+			    node = $blobPartList.getNext();
+		    }
 
+		    /*
 		    for(var i = 0, l = $blobPartList.length; i < l; i++){
 				item = $blobPartList[i];
 			    this.blobCtx.drawImage(item.renderImg, item.renderX, item.renderY);
+			    //this.renderCtx.drawImage(item.renderImg, item.renderX, item.renderY);
 		    }
+			*/
 
+		    //L.log('Num Blobs: ' + $blobPartList.length, '@tmp');
+
+		    /*
 		    //console.time('getData');
 		    var srcData = this.blobCtx.getImageData(0,0,this.canvasWidth,this.canvasHeight);
 		    var dstData = this.renderCtx.getImageData(0,0,this.canvasWidth, this.canvasHeight);
+		    var srcDataData = srcData.data;
+		    var dstDataData = dstData.data;
 		    //console.timeEnd('getData');
-		    //console.time('filter');
-			ThresholdFilter.filter(srcData.data,dstData.data, '>=', 0x000000CC, 0xFF00FFFF, 0x000000FF,false);
+		   // console.time('filter');
+			ThresholdFilter.filter(srcDataData,dstDataData, '>=', 0x000000CC, 0xFF00FFFF, 0x000000FF,false);
 		    //console.timeEnd('filter');
 		    //console.time('putdata');
 		    this.renderCtx.putImageData(dstData,0,0);
 		    //console.timeEnd('putdata');
-
+		    */
 	    };
 
 	    /**

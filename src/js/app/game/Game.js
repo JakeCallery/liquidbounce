@@ -65,7 +65,6 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    var blobList = new LinkedList();
 		    /**@type {Array.<BlobPart>}*/
-		    var blobParts = [];
 			var dispensers = [];
 			var deflectors = [];
 		    var fields = [];
@@ -93,8 +92,6 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		     */
 		    var createAndAddBlobPart = function($configObj, $renderSource){
 				/**@type {BlobPart|Object}*/var bp = blobPartPool.getObject($configObj, $renderSource);
-			    blobParts.push(bp);
-
 			    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
 			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
 			    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
@@ -119,16 +116,19 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				var obj;
 
 			    //Blob Parts
-			    for(i = 0, l = blobParts.length; i < l; i++){
-					obj = blobParts[i];
+			    var node = blobList.getNext();
+			    while(node !== null){
+				    obj = node.obj;
 				    obj.renderX = obj.x + obj.renderOffsetX;
 				    obj.renderY = obj.y + obj.renderOffsetY;
 				    if(obj.renderX < -obj.renderWidth || obj.renderX > (self.gameWidth + obj.renderWidth) ||
-					   obj.renderY < obj.renderHeight || obj.renderY > (self.gameHeight + obj.renderHeight)){
+					    obj.renderY < obj.renderHeight || obj.renderY > (self.gameHeight + obj.renderHeight)){
 					    //out of bounds, remove
 					    L.log('Setting obj to dead: ' + obj, '@dead');
 					    obj.isDead = true;
 				    }
+
+				    node = blobList.getNext();
 			    }
 
 			    //Dispensers
@@ -161,8 +161,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 			    self.renderEngine.renderDispensers(dispensers);
 			    self.renderEngine.renderDeflectors(deflectors);
 			    self.renderEngine.renderFields(fields);
-			    self.renderEngine.renderBlobParts(blobParts);
-
+			    self.renderEngine.renderBlobParts(blobList);
 
 		    };
 
@@ -184,18 +183,26 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    var cullDead = function(){
 			    var gameObj = null;
-			    for(var i = blobParts.length-1, l = 0; i >= l; i--){
-				    gameObj = blobParts[i];
+			    var node = null;
+			    var deadNode = null;
+			    blobList.resetCurrent();
+			    node = blobList.getNext();
+			    while(node !== null){
+					gameObj = node.obj;
 				    if(gameObj === undefined){
 					    L.error('something broke while culling dead game objects', true);
 				    }
 				    if(gameObj.isDead === true){
-					    L.log('Destroying Obj: ' + gameObj, '@dead');
-					    //TODO: This has a bad side effect of removing this object from the blobParts array.
-					    //Might not want to do that during remove, but after this loop?
+						deadNode = node;
+					    node = blobList.getNext();
+					    blobList.removeNode(deadNode);
 					    gameObj.destroy();
+				    } else {
+					    node = blobList.getNext();
 				    }
+
 			    }
+
 		    };
 
 		    this.init = function(){
@@ -293,24 +300,16 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 
 		    this.removeGameObj = function($objToRemove){
 			    L.log('Remove game obj: ' + $objToRemove, '@game');
-				var idx = null;
 			    switch(true){
 				    case ($objToRemove instanceof BlobPart):
-					    idx = blobParts.indexOf($objToRemove);
-					    if(idx != -1){
-						    self.blobManager.removeObject($objToRemove);
-						    self.influenceManager.removeObject($objToRemove);
-							blobPartPool.recycle($objToRemove);
-						    blobParts.splice(idx, 1);
-						    $objToRemove.removeAllHandlersByType(GameObjEvent.DESTROYED);
-						    L.log('BlobParts Length: ' + blobParts.length, '@game');
-						    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
-						    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
-						    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
+					    self.blobManager.removeObject($objToRemove);
+					    self.influenceManager.removeObject($objToRemove);
+						blobPartPool.recycle($objToRemove);
+					    $objToRemove.removeAllHandlersByType(GameObjEvent.DESTROYED);
+					    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
+					    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
+					    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
 
-					    } else {
-						    throw new Error('Can\'t remove obj, couldn\'t find in list');
-					    }
 					    break;
 
 				    case ($objToRemove instanceof BaseField):

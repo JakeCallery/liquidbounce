@@ -39,7 +39,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 
 	L.addLogTarget(new ConsoleTarget());
     L.log('New Main!','@main');
-	L.isEnabled = true;
+	L.isEnabled = false;
 	L.isTagFilterEnabled = true;
 	L.isShowingUnTagged = false;
 	L.addTag('@main');
@@ -56,7 +56,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 
 
 	var mainCanvas = document.getElementById('gameCanvas');
-	var game = new Game(document, window, mainCanvas, 600, 600);
+	var game = new Game(document, window, mainCanvas, mainCanvas.width, mainCanvas.height);
 	game.init();
 
 	//TMP///////////
@@ -79,18 +79,18 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 	var testDispenserSrc = new TestDispenserRenderSource(60,60,'#00FF00');
 	testDispenserSrc.init();
 
-	var testDispenser = new BaseDispenser(game, 20,250,testDispenserSrc,1);
+	var testDispenser = new BaseDispenser(game, 20,20,testDispenserSrc,1);
 	game.addGameObject(testDispenser);
 
 	//// set up test deflectors ////
 	var testDeflectorSrc = new TestDeflectorRenderSource(80,20, '#0000FF');
 	testDeflectorSrc.init();
 
-	var testDeflector = new TestDeflector(150, 450, testDeflectorSrc);
+	var testDeflector = new TestDeflector(150, 200, testDeflectorSrc);
 	testDeflector.setRotation(10);
 	game.addGameObject(testDeflector);
 
-	var testDeflector2 = new TestDeflector(450, 450, testDeflectorSrc);
+	var testDeflector2 = new TestDeflector(470, 300, testDeflectorSrc);
 	game.addGameObject(testDeflector2);
 	testDeflector2.setRotation(-30);
 
