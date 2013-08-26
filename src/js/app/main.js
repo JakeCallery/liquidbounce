@@ -56,7 +56,7 @@ function(L, ConsoleTarget, JSON, RequestAnimationFrame, BrowserUtils, Game,
 
 
 	var mainCanvas = document.getElementById('gameCanvas');
-	var game = new Game(document, window, mainCanvas, mainCanvas.width, mainCanvas.height, true);
+	var game = new Game(document, window, mainCanvas, mainCanvas.width, mainCanvas.height, false);
 	game.init();
 
 	//// set up test dispenser ////
