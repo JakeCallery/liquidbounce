@@ -29,24 +29,24 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent,MathUti
 	        this.fingers = [];
 	        this.fingerPool = new Pool(Finger);
 
-	        L.log('New Input Manager', '@input');
+	        //L.log('New Input Manager', '@input');
 
 	        this.controller = new Leap.Controller({host:'127.0.0.1', port:6437, enableGestures:false, frameEventName:'animationFrame'});
 
 	        this.controller.on('connect', function(){
-		        L.log('Connected to leap service', '@leap');
+		        //L.log('Connected to leap service', '@leap');
 	        });
 
 	        this.controller.on('ready', function(){
-		        L.log('Protocol to socket server selected.', '@leap');
+		        //L.log('Protocol to socket server selected.', '@leap');
 	        });
 
 	        this.controller.on('deviceConnected', function(){
-		        L.log('A Leap device has been connected.', '@leap');
+		        //L.log('A Leap device has been connected.', '@leap');
 	        });
 
 	        this.controller.on('deviceDisconnected', function(){
-		        L.log('A Leap device has been disconnected', '@leap');
+		        //L.log('A Leap device has been disconnected', '@leap');
 	        });
 
 	        /* -- This is now handled externally via this.update() below
@@ -54,7 +54,7 @@ function(EventDispatcher,ObjUtils,Leap,Pool,L,Finger,ArrayUtils,JacEvent,MathUti
 				self.update($data);
 	        });
 			*/
-	        L.log('Trying to connect to Leap Device', '@leap');
+	        //L.log('Trying to connect to Leap Device', '@leap');
 	        this.controller.connect();
         }
         

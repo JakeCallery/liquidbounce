@@ -56,7 +56,7 @@ function(EventDispatcher,ObjUtils,EventUtils,L,TestFieldRenderSource,Polarity,Ba
 	    PlayManager.prototype.handleFingerAdded = function($e){
 		    //$e.data needs to be a 'Finger' object
 
-		    L.log('Handle Finger Added: ' + $e.data.id, '@finger');
+		    //L.log('Handle Finger Added: ' + $e.data.id, '@finger');
 		    var testField = new BaseField(this.game,$e.data.x,$e.data.y,20,50,Polarity.ATTRACT,5,this.testFieldSrc);
 		    this.game.addGameObject(testField);
 
@@ -67,14 +67,14 @@ function(EventDispatcher,ObjUtils,EventUtils,L,TestFieldRenderSource,Polarity,Ba
 	    };
 
 	    PlayManager.prototype.handleFingerRemoved = function($e){
-		    L.log('Handle Finger Removed: ' + $e.data.id, '@finger');
+		    //L.log('Handle Finger Removed: ' + $e.data.id, '@finger');
 		    var index = ArrayUtils.findFirstIndexObjWithProp(this.fingerList,'id',$e.data.id);
 		    var field = this.fieldList[index];
 		    this.game.removeGameObj(field);
 		    this.fieldList.splice(index,1);
 		    this.fingerList.splice(index,1);
 
-		    L.log('List Lengths: ' + this.fieldList.length + '/' + this.fingerList.length, '@finger');
+		    //L.log('List Lengths: ' + this.fieldList.length + '/' + this.fingerList.length, '@finger');
 	    };
 
         //Return constructor

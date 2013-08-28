@@ -33,7 +33,7 @@ define([
 				this.srcImage = null;
 
 				this.handleImageLoaded = function(){
-					L.log('Bitmap Image Ready: ' + this.width + ',' + this.height, '@render');
+					//L.log('Bitmap Image Ready: ' + this.width + ',' + this.height, '@render');
 					this.isReady = true;
 					this.dispatchEvent(new JacEvent('ready'));
 				};

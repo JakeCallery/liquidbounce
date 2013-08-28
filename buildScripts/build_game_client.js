@@ -7,9 +7,10 @@
     generateSourceMaps: false,
     optimize: 'uglify2',
     paths: {
-        requireLib: 'libs/require',
-	    json2: 'libs/json2',
-	    stats: 'libs/stats'
+	    requireLib: 'libs/require',
+	    json2:'libs/json2',
+	    stats:'libs/stats',
+	    leap:'libs/leap'
     },
 	shim: {
 		json2: {
@@ -17,6 +18,9 @@
 		},
 		stats: {
 			exports: 'Stats'
+		},
+		leap: {
+			exports: 'Leap'
 		}
 	},
     include: 'requireLib'

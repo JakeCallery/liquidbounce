@@ -89,16 +89,16 @@ function(GameObject,ObjUtils,L,Rectangle,Polarity,FastMath){
 
 	    //// IManageable ////
 	    BaseField.prototype.addManager = function($manager){
-		    L.log('adding manager: ' + $manager, '@manager');
+		    //L.log('adding manager: ' + $manager, '@manager');
 		    this._managers.push($manager);
 	    };
 
 	    BaseField.prototype.removeManager = function($manager){
 		    var idx = this._managers.indexOf($manager);
-		    L.log('Remove Manager Called', '@manager');
+		    //L.log('Remove Manager Called', '@manager');
 		    if(idx !== -1){
 			    //remove
-			    L.log('removing manager: ' + $manager, '@manager');
+			    //L.log('removing manager: ' + $manager, '@manager');
 			    this._managers.splice(idx,1);
 		    } else {
 			    //not found, warn

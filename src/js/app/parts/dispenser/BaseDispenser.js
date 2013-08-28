@@ -83,7 +83,7 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
 	     * @param {Boolean}[$resetPastTicks=false]
 	     */
 	    BaseDispenser.prototype.dispense = function($resetPastTicks){
-		    L.log('Dispense!', '@dispenser');
+		    //L.log('Dispense!', '@dispenser');
 
 			var bp = this.game.createGameObj(GameObjTypes.BLOB_PART, this.blobCfg, this.blobSrc);
 		    bp.transportTo((this.x + this.dispenseXOffset),(this.y + this.dispenseYOffset));
@@ -96,7 +96,7 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
 		    //Dispense influence
 		    //TODO: Totally refactor the angle/mag calc for dispense
 		    var ang = MathUtils.rand(this.dispenseAngleMin, this.dispenseAngleMax);
-		    L.log('ang: ' + ang, '@dispenser');
+		    //L.log('ang: ' + ang, '@dispenser');
 		    ang = MathUtils.degToRad(ang);
 		    var vect = new Vec2DObj(1,0);
 		    var cosTheta = Math.cos(ang);
@@ -118,16 +118,16 @@ function(L, GameObject,ObjUtils,IManageable,IBitmapRenderable,
 
 	    //// IManageable ////
 	    BaseDispenser.prototype.addManager = function($manager){
-		    L.log('adding manager: ' + $manager, '@manager');
+		    //L.log('adding manager: ' + $manager, '@manager');
 		    this._managers.push($manager);
 	    };
 
 	    BaseDispenser.prototype.removeManager = function($manager){
 		    var idx = this._managers.indexOf($manager);
-		    L.log('Remove Manager Called', '@manager');
+		    //L.log('Remove Manager Called', '@manager');
 		    if(idx !== -1){
 			    //remove
-			    L.log('removing manager: ' + $manager, '@manager');
+			    //L.log('removing manager: ' + $manager, '@manager');
 			    this._managers.splice(idx,1);
 		    } else {
 			    //not found, warn

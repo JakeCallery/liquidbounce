@@ -38,7 +38,7 @@ function(doc, BitmapUtils, L, EventDispatcher, ObjUtils, EventUtils, JacEvent){
 	        this.srcImage = null;
 
 	        this.handleImageLoaded = function(){
-		        L.log('Blob Image Ready');
+		        //L.log('Blob Image Ready');
 		        this.isReady = true;
 		        this.dispatchEvent(new JacEvent('ready'));
 	        };

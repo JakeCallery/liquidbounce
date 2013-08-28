@@ -83,7 +83,7 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 	     */
 	    BlobPart.prototype.destroy = function(){
 		    BlobPart.superClass.destroy.call(this);
-		    L.log('Destroy Blobpart', '@dead');
+		    //L.log('Destroy Blobpart', '@dead');
 	    };
 
 	    //// IPoolable ////
@@ -105,28 +105,28 @@ function(GameObject,ObjUtils,IPoolable,L, IBitmapRenderable, RenderTypes, Influe
 
 		    this.isDead = false;
 
-		    L.log('Init Blobpart', '@bpart');
+		    //L.log('Init Blobpart', '@bpart');
 	    };
 
 	    BlobPart.prototype.recycle = function(){
 			this.x = this.prevX = -1;
 		    this.y = this.prevY = -1;
 		    this.influenceList.clear();
-		    L.log('Recycle BlobPart', '@bpart');
+		    //L.log('Recycle BlobPart', '@bpart');
 	    };
 
 	    //// IManageable ////
 	    BlobPart.prototype.addManager = function($manager){
-		    L.log('adding manager: ' + $manager, '@manager');
+		    //L.log('adding manager: ' + $manager, '@manager');
 		    this._managers.push($manager);
 	    };
 
 	    BlobPart.prototype.removeManager = function($manager){
 			var idx = this._managers.indexOf($manager);
-		    L.log('Remove Manager Called', '@manager');
+		    //L.log('Remove Manager Called', '@manager');
 		    if(idx !== -1){
 			    //remove
-			    L.log('removing manager: ' + $manager, '@manager');
+			    //L.log('removing manager: ' + $manager, '@manager');
 			    this._managers.splice(idx,1);
 		    } else {
 			    //not found, warn

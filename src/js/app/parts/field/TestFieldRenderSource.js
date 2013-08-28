@@ -29,7 +29,7 @@ function(BitmapRenderSource,ObjUtils,EventUtils,BitmapUtils,L){
 	    TestFieldRenderSource.prototype.init = function(){
 		    var self = this;
 
-		    L.log('Init TestFieldRenderSource', '@render');
+		    //L.log('Init TestFieldRenderSource', '@render');
 
 		    //Make image
 		    this.srcContext.fillStyle = this.color;

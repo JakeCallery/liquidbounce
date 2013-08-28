@@ -113,7 +113,7 @@ function(Vec2D,Vec2DObj,L){
 
 	    InfluenceObject.prototype.expire = function(){
 		    this.isExpired = true;
-		    L.log(this.id + ' Expired!', '@influence');
+		    //L.log(this.id + ' Expired!', '@influence');
 	    };
         
         //Return constructor

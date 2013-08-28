@@ -92,9 +92,9 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		     */
 		    var createAndAddBlobPart = function($configObj, $renderSource){
 				/**@type {BlobPart|Object}*/var bp = blobPartPool.getObject($configObj, $renderSource);
-			    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
-			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
-			    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
+			    //L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
+			    //L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
+			    //L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
 
 				self.blobManager.addObject(bp);
 			    self.influenceManager.addObject(bp);
@@ -103,7 +103,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    };
 
 		    var handleGameObjDestroyed = function($e){
-			    L.log('Caught Game Obj Destroyed: ' + $e.target, '@game');
+			    //L.log('Caught Game Obj Destroyed: ' + $e.target, '@game');
 			    var gameObj = $e.target;
 			    self.removeGameObj(gameObj);
 		    };
@@ -124,7 +124,7 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 				    if(obj.renderX < -obj.renderWidth || obj.renderX > (self.gameWidth + obj.renderWidth) ||
 					    obj.renderY < obj.renderHeight || obj.renderY > (self.gameHeight + obj.renderHeight)){
 					    //out of bounds, remove
-					    L.log('Setting obj to dead: ' + obj, '@dead');
+					    //L.log('Setting obj to dead: ' + obj, '@dead');
 					    obj.isDead = true;
 				    }
 
@@ -208,8 +208,8 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    this.init = function(){
 			    //blobPartPool.fill(100,{x:0,y:0});
 
-			    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
-			    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
+			    //L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
+			    //L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
 		    };
 
 		    /**
@@ -238,17 +238,17 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    };
 
 		    this.stepGame = function(){
-			    L.log('Stepping Game 1 Tick...');
+			    //L.log('Stepping Game 1 Tick...');
 			    self.update(true);
 		    };
 
 		    this.startGame = function(){
-			    L.log('Starting Game...', '@game');
+			    //L.log('Starting Game...', '@game');
 			    self.update();
 		    };
 
 		    this.pauseGame = function(){
-			    L.log('Pausing Game...', '@game');
+			    //L.log('Pausing Game...', '@game');
 			    self.window.cancelAnimationFrame(self.updateId);
 		    };
 
@@ -299,16 +299,16 @@ function(EventDispatcher,ObjUtils, GameObjTypes, L, BlobPart ,Pool,
 		    };
 
 		    this.removeGameObj = function($objToRemove){
-			    L.log('Remove game obj: ' + $objToRemove, '@game');
+			    //L.log('Remove game obj: ' + $objToRemove, '@game');
 			    switch(true){
 				    case ($objToRemove instanceof BlobPart):
 					    self.blobManager.removeObject($objToRemove);
 					    self.influenceManager.removeObject($objToRemove);
 						blobPartPool.recycle($objToRemove);
 					    $objToRemove.removeAllHandlersByType(GameObjEvent.DESTROYED);
-					    L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
-					    L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
-					    L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
+					    //L.log('Total: ' + blobPartPool.getNumTotal(), '@game');
+					    //L.log('Avail: ' + blobPartPool.getNumFree(), '@game');
+					    //L.log('In Use: ' + blobPartPool.getNumUsed(), '@game');
 
 					    break;
 
